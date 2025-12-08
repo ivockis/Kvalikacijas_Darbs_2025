@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <form method="POST" action="{{ route('projects.store') }}">
+                    <form method="POST" action="{{ route('projects.store') }}" enctype="multipart/form-data">
                         @csrf
 
                         <!-- Title -->
@@ -53,6 +53,42 @@
                                 @endforeach
                             </select>
                             <x-input-error :messages="$errors->get('tools')" class="mt-2" />
+                        </div>
+
+                        <!-- Images -->
+                        <div x-data="{ images: [], imageCount: 0 }">
+                            <x-input-label for="images" :value="__('Images')" />
+                            <input id="images" name="images[]" type="file" class="block mt-1 w-full" multiple
+                                @change="
+                                    imageCount = $event.target.files.length;
+                                    if (imageCount > 10) {
+                                        alert('You can only upload a maximum of 10 images.');
+                                        $event.target.value = '';
+                                        imageCount = 0;
+                                        images = [];
+                                    } else {
+                                        images = [];
+                                        for (let i = 0; i < imageCount; i++) {
+                                            let reader = new FileReader();
+                                            reader.onload = (e) => {
+                                                images.push(e.target.result);
+                                            };
+                                            reader.readAsDataURL($event.target.files[i]);
+                                        }
+                                    }
+                                "
+                            />
+                            <x-input-error :messages="$errors->get('images')" class="mt-2" />
+                            <x-input-error :messages="$errors->get('images.*')" class="mt-2" />
+
+                            <!-- Previews -->
+                            <div class="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4" x-show="images.length > 0">
+                                <template x-for="image in images">
+                                    <div class="relative">
+                                        <img :src="image" class="rounded-lg shadow-md w-full h-32 object-cover">
+                                    </div>
+                                </template>
+                            </div>
                         </div>
 
                         <!-- Is Public -->

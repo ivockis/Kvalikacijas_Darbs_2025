@@ -1,26 +1,28 @@
 <?php
 
+// Verified update: 2025-12-08 15:15:00
+
 namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Tool;
 use App\Models\Project;
+use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ProjectController extends Controller
 {
     use AuthorizesRequests;
+
     public function index()
     {
         $projects = Auth::user()->projects()->latest()->get();
         return view('projects.index', compact('projects'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $categories = Category::all();
@@ -28,20 +30,19 @@ class ProjectController extends Controller
         return view('projects.create', compact('categories', 'tools'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'materials' => 'nullable|string',
-            'is_public' => '',
+            'is_public' => 'sometimes|boolean',
             'categories' => 'nullable|array',
             'categories.*' => 'exists:categories,id',
             'tools' => 'nullable|array',
             'tools.*' => 'exists:tools,id',
+            'images' => 'required|array|min:1|max:10',
+            'images.*' => 'mimes:jpeg,png,jpg',
         ]);
 
         $project = Auth::user()->projects()->create([
@@ -49,7 +50,7 @@ class ProjectController extends Controller
             'description' => $validated['description'],
             'materials' => $validated['materials'] ?? null,
             'is_public' => $request->has('is_public'),
-            'creation_time' => now(), // Automātiski iestatām izveides laiku
+            'creation_time' => now(),
         ]);
 
         if (isset($validated['categories'])) {
@@ -60,33 +61,41 @@ class ProjectController extends Controller
             $project->tools()->sync($validated['tools']);
         }
 
+        if ($request->hasFile('images')) {
+            $isFirstImage = true;
+            foreach ($request->file('images') as $imageFile) {
+                $path = $imageFile->store('project-images', 'public');
+                $image = $project->images()->create([
+                    'path' => $path,
+                    'is_cover' => $isFirstImage,
+                ]);
+                $isFirstImage = false;
+            }
+        }
+
         return redirect(route('projects.index'))->with('status', 'Project created successfully!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Project $project)
     {
-        //
+        if (!$project->is_public && (!Auth::check() || (!Auth::user()->is_admin && Auth::user()->id !== $project->user_id))) {
+            abort(403, 'Unauthorized access to this project.');
+        }
+
+        $project->load(['user', 'categories', 'tools', 'images', 'likers']);
+        $liked = Auth::check() ? $project->likers->contains(Auth::user()->id) : false;
+
+        return view('projects.show', compact('project', 'liked'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Project $project)
     {
         $this->authorize('update', $project);
-
         $categories = Category::all();
         $tools = Tool::all();
-
         return view('projects.edit', compact('project', 'categories', 'tools'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Project $project)
     {
         $this->authorize('update', $project);
@@ -95,11 +104,13 @@ class ProjectController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'materials' => 'nullable|string',
-            'is_public' => '',
+            'is_public' => 'sometimes|boolean',
             'categories' => 'nullable|array',
             'categories.*' => 'exists:categories,id',
             'tools' => 'nullable|array',
             'tools.*' => 'exists:tools,id',
+            'images' => 'nullable|array|max:10',
+            'images.*' => 'mimes:jpeg,png,jpg',
         ]);
 
         $project->update([
@@ -121,18 +132,32 @@ class ProjectController extends Controller
             $project->tools()->detach();
         }
 
+        if ($request->hasFile('images')) {
+            $hasCover = $project->images()->where('is_cover', true)->exists();
+            $isFirstNewImage = true;
+            foreach ($request->file('images') as $imageFile) {
+                $path = $imageFile->store('project-images', 'public');
+                $project->images()->create([
+                    'path' => $path,
+                    'is_cover' => (!$hasCover && $isFirstNewImage),
+                ]);
+                $isFirstNewImage = false;
+            }
+        }
+
         return redirect(route('projects.index'))->with('status', 'Project updated successfully!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Project $project)
     {
         $this->authorize('delete', $project);
-
         $project->delete();
-
         return redirect(route('projects.index'))->with('status', 'Project deleted successfully!');
+    }
+
+    public function like(Project $project)
+    {
+        Auth::user()->likedProjects()->toggle($project->id);
+        return back()->with('status', 'Project like status updated!');
     }
 }

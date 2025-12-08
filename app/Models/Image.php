@@ -9,7 +9,11 @@ class Image extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['project_id', 'path'];
+    protected $fillable = ['project_id', 'path', 'is_cover'];
+
+    protected $casts = [
+        'is_cover' => 'boolean',
+    ];
 
     public function project()
     {

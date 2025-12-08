@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('project_id')->constrained()->onDelete('cascade');
             $table->string('path');
+            $table->boolean('is_cover')->default(false);
             $table->timestamps();
         });
     }
