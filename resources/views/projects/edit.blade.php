@@ -9,9 +9,61 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <form method="POST" action="{{ route('projects.update', $project) }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('projects.update', $project) }}" enctype="multipart/form-data"
+                        x-data="{
+                                newImages: [],
+                                existingImagesCount: {{ $project->images->where('is_cover',false)->count() }}, // Only count non-cover images for limit
+                                selectedCover: '{{ $project->images->where('is_cover', true)->first()?->id ? 'existing_' . $project->images->where('is_cover', true)->first()->id : '' }}',
+                                currentTotalImages: {{ $project->images->count() }},
+
+                                handleImageSelect(event) {
+                                    const files = Array.from(event.target.files);
+                                    if ((this.currentTotalImages + files.length) > 10) {
+                                        alert('You can only have a maximum of 10 images in total.');
+                                        $event.target.value = ''; // Clear file input
+                                        return;
+                                    }
+                                    this.newImages = [];
+                                    files.forEach(file => {
+                                        let reader = new FileReader();
+                                        reader.onload = (e) => {
+                                            this.newImages.push(e.target.result);
+                                        };
+                                        reader.readAsDataURL(file);
+                                    });
+                                },
+
+                                async deleteImage(imageId, element) {
+                                    if (!confirm('Are you sure you want to delete this image?')) {
+                                        return;
+                                    }
+                                    try {
+                                        const response = await fetch(`/images/${imageId}`, {
+                                            method: 'DELETE',
+                                            headers: {
+                                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                                'Accept': 'application/json',
+                                            },
+                                        });
+                                        if (!response.ok) throw new Error('Failed to delete image.');
+                                        element.remove();
+                                        this.currentTotalImages--;
+                                        // If the deleted image was the selected cover, clear selection
+                                        if (this.selectedCover == `existing_${imageId}`) {
+                                            this.selectedCover = '';
+                                        }
+                                        alert('Image deleted successfully.');
+                                    } catch (error) {
+                                        console.error('Delete error:', error);
+                                        alert('Could not delete the image. Please try again.');
+                                    }
+                                }
+                            }">
                         @csrf
                         @method('patch')
+
+                        <!-- Hidden input to ensure cover_image_selection is always sent -->
+                        <input type="hidden" name="cover_image_selection" :value="selectedCover">
 
                         <!-- Title -->
                         <div>
@@ -57,70 +109,7 @@
                         </div>
 
                         <!-- Images Section -->
-                        <div x-data="{
-                                newImages: [],
-                                existingImagesCount: {{ $project->images->count() }},
-                                imageCount: {{ $project->images->count() }},
-
-                                handleImageSelect(event) {
-                                    if ((this.existingImagesCount + event.target.files.length) > 10) {
-                                        alert('You can only have a maximum of 10 images in total.');
-                                        event.target.value = '';
-                                        return;
-                                    }
-                                    this.newImages = [];
-                                    for (let i = 0; i < event.target.files.length; i++) {
-                                        let reader = new FileReader();
-                                        reader.onload = (e) => {
-                                            this.newImages.push(e.target.result);
-                                        };
-                                        reader.readAsDataURL(event.target.files[i]);
-                                    }
-                                },
-
-                                async deleteImage(imageId, element) {
-                                    if (!confirm('Are you sure you want to delete this image?')) {
-                                        return;
-                                    }
-                                    try {
-                                        const response = await fetch(`/images/${imageId}`, {
-                                            method: 'DELETE',
-                                            headers: {
-                                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                                'Accept': 'application/json',
-                                            },
-                                        });
-                                        if (!response.ok) throw new Error('Failed to delete image.');
-                                        element.remove();
-                                        this.existingImagesCount--;
-                                        alert('Image deleted successfully.');
-                                        // You might need to refresh cover image status if the cover was deleted
-                                    } catch (error) {
-                                },
-
-                                async setAsCover(imageId) {
-                                    try {
-                                        const response = await fetch(`/images/${imageId}/set-as-as-cover`, {
-                                            method: 'POST',
-                                            headers: {
-                                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                                'Accept': 'application/json',
-                                            },
-                                        });
-                                        if (!response.ok) throw new Error('Failed to set as cover.');
-                                        alert('Cover image updated successfully!');
-                                        // Refresh the page or update UI dynamically
-                                        window.location.reload(); // Simple refresh for now
-                                    } catch (error) {
-                                        console.error('Set as cover error:', error);
-                                        alert('Could not set image as cover. Please try again.');
-                                    }
-                                }
-                                        console.error('Delete error:', error);
-                                        alert('Could not delete the image. Please try again.');
-                                    }
-                                }
-                            }">
+                        <div>
                             <!-- Image Upload -->
                             <div class="mt-4">
                                 <x-input-label for="images" :value="__('Upload New Images')" />
@@ -131,11 +120,17 @@
 
                             <!-- New Image Previews -->
                             <div class="mt-4" x-show="newImages.length > 0">
-                                <h4 class="font-semibold text-md text-gray-700">{{ __('New Previews') }}</h4>
+                                <h4 class="font-semibold text-md text-gray-700">{{ __('New Image Previews') }}</h4>
                                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-2">
-                                    <template x-for="image in newImages">
-                                        <div class="relative">
+                                    <template x-for="(image, index) in newImages">
+                                        <div class="relative group">
                                             <img :src="image" class="rounded-lg shadow-md w-full h-32 object-cover">
+                                            <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                                <label :for="'new_cover_image_' + index" class="cursor-pointer text-white px-2 py-1 rounded-md bg-indigo-600 hover:bg-indigo-700">
+                                                    <input type="radio" name="cover_image_selection" :id="'new_cover_image_' + index" :value="'new_' + index" class="mr-1" :checked="selectedCover == 'new_' + index" @change="selectedCover = 'new_' + index">
+                                                    {{ __('Set as Cover') }}
+                                                </label>
+                                            </div>
                                         </div>
                                     </template>
                                 </div>
@@ -148,17 +143,26 @@
                                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-2">
                                         @foreach ($project->images as $image)
                                             <div class="relative group" x-ref="image-{{ $image->id }}">
-                                                <img src="{{ asset('storage/' . $image->path) }}" alt="{{ $project->title }}" class="rounded-lg shadow-md w-full h-32 object-cover">
-                                                <button
-                                                    type="button"
-                                                    @click="deleteImage({{ $image->id }}, $refs['image-{{ $image->id }}'])"
-                                                    class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                                                    title="Delete Image"
-                                                >
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                                    </svg>
-                                                </button>
+                                                <img src="{{ asset('storage/' . $image->path) }}" alt="{{ $project->title }}" class="rounded-lg shadow-md w-full h-32 object-cover" :class="{'border-4 border-blue-500': selectedCover == `existing_${image.id}`}">
+                                                <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                                    <button
+                                                        type="button"
+                                                        @click="deleteImage({{ $image->id }}, $refs['image-{{ $image->id }}'])"
+                                                        class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1"
+                                                        title="Delete Image"
+                                                    >
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                        </svg>
+                                                    </button>
+                                                    <label :for="'existing_cover_image_' + {{ $image->id }}" class="cursor-pointer text-white px-2 py-1 rounded-md bg-indigo-600 hover:bg-indigo-700">
+                                                        <input type="radio" name="cover_image_selection" :id="'existing_cover_image_' + {{ $image->id }}" :value="'existing_' + {{ $image->id }}" class="mr-1" :checked="selectedCover == ('existing_' + {{ $image->id }})" @change="selectedCover = 'existing_' + {{ $image->id }}">
+                                                        {{ __('Set as Cover') }}
+                                                    </label>
+                                                </div>
+                                                @if ($image->is_cover)
+                                                    <span class="absolute bottom-1 left-1 bg-blue-500 text-white rounded-md px-2 py-1 text-xs" title="Current Cover">{{ __('Cover') }}</span>
+                                                @endif
                                             </div>
                                         @endforeach
                                     </div>

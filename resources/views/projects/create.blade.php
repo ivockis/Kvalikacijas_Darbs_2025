@@ -83,9 +83,15 @@
 
                             <!-- Previews -->
                             <div class="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4" x-show="images.length > 0">
-                                <template x-for="image in images">
-                                    <div class="relative">
+                                <template x-for="(image, index) in images">
+                                    <div class="relative group">
                                         <img :src="image" class="rounded-lg shadow-md w-full h-32 object-cover">
+                                        <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                            <label :for="'cover_image_' + index" class="cursor-pointer text-white px-2 py-1 rounded-md bg-indigo-600 hover:bg-indigo-700">
+                                                <input type="radio" name="cover_image_selection" :id="'cover_image_' + index" :value="index" class="mr-1" :checked="index === 0">
+                                                {{ __('Set as Cover') }}
+                                            </label>
+                                        </div>
                                     </div>
                                 </template>
                             </div>

@@ -36,13 +36,14 @@ class ProjectController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'materials' => 'nullable|string',
-            'is_public' => 'sometimes|boolean',
+            'is_public' => '',
             'categories' => 'nullable|array',
             'categories.*' => 'exists:categories,id',
             'tools' => 'nullable|array',
             'tools.*' => 'exists:tools,id',
-            'images' => 'required|array|min:1|max:10',
+            'images' => 'required|array|min:1|max:10', // At least 1 image is required for cover
             'images.*' => 'mimes:jpeg,png,jpg',
+            'cover_image_selection' => 'required_with:images|integer|min:0', // Index of the cover image in the 'images' array
         ]);
 
         $project = Auth::user()->projects()->create([
@@ -62,14 +63,15 @@ class ProjectController extends Controller
         }
 
         if ($request->hasFile('images')) {
-            $isFirstImage = true;
+            $imageIndex = 0;
             foreach ($request->file('images') as $imageFile) {
                 $path = $imageFile->store('project-images', 'public');
-                $image = $project->images()->create([
+                $isCover = ($imageIndex == $validated['cover_image_selection']);
+                $project->images()->create([
                     'path' => $path,
-                    'is_cover' => $isFirstImage,
+                    'is_cover' => $isCover,
                 ]);
-                $isFirstImage = false;
+                $imageIndex++;
             }
         }
 
@@ -104,13 +106,14 @@ class ProjectController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'materials' => 'nullable|string',
-            'is_public' => 'sometimes|boolean',
+            'is_public' => '',
             'categories' => 'nullable|array',
             'categories.*' => 'exists:categories,id',
             'tools' => 'nullable|array',
             'tools.*' => 'exists:tools,id',
             'images' => 'nullable|array|max:10',
             'images.*' => 'mimes:jpeg,png,jpg',
+            'cover_image_selection' => 'required|string', // Can be 'new_X' or 'existing_Y'
         ]);
 
         $project->update([
@@ -132,16 +135,45 @@ class ProjectController extends Controller
             $project->tools()->detach();
         }
 
+        $newImagePaths = [];
         if ($request->hasFile('images')) {
-            $hasCover = $project->images()->where('is_cover', true)->exists();
-            $isFirstNewImage = true;
             foreach ($request->file('images') as $imageFile) {
                 $path = $imageFile->store('project-images', 'public');
-                $project->images()->create([
+                $projectImage = $project->images()->create([
                     'path' => $path,
-                    'is_cover' => (!$hasCover && $isFirstNewImage),
+                    'is_cover' => false, // Set to false initially, will be updated based on selection
                 ]);
-                $isFirstNewImage = false;
+                $newImagePaths[] = $projectImage->id;
+            }
+        }
+
+        // Handle cover image selection
+        if ($request->filled('cover_image_selection')) {
+            $selection = $request->input('cover_image_selection');
+            if (str_starts_with($selection, 'new_')) {
+                // Selected a newly uploaded image as cover
+                $newImageIndex = (int) substr($selection, 4);
+                if (isset($newImagePaths[$newImageIndex])) {
+                    $newCoverImage = Image::find($newImagePaths[$newImageIndex]);
+                    if ($newCoverImage) {
+                        $project->setCoverImage($newCoverImage);
+                    }
+                }
+            } elseif (str_starts_with($selection, 'existing_')) {
+                // Selected an existing image as cover
+                $existingImageId = (int) substr($selection, 9);
+                $existingCoverImage = $project->images()->find($existingImageId);
+                if ($existingCoverImage) {
+                    $project->setCoverImage($existingCoverImage);
+                }
+            }
+        } else {
+            // If no cover is selected, and project has no cover, set the first existing image as cover
+            if (!$project->images()->where('is_cover', true)->exists()) {
+                $firstImage = $project->images()->first();
+                if ($firstImage) {
+                    $project->setCoverImage($firstImage);
+                }
             }
         }
 

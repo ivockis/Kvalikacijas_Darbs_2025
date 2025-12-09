@@ -19,6 +19,11 @@ class Project extends Model
         'is_blocked',
     ];
 
+    protected $casts = [
+        'is_public' => 'boolean',
+        'is_blocked' => 'boolean',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -61,5 +66,26 @@ class Project extends Model
         // Set the new image as the cover
         $newCoverImage->is_cover = true;
         $newCoverImage->save();
+    }
+
+    /**
+     * Get the project's cover image.
+     */
+    public function coverImage()
+    {
+        return $this->hasOne(Image::class)->where('is_cover', true);
+    }
+
+    /**
+     * Get the URL of the cover image, or a default placeholder.
+     */
+    public function getCoverImageUrlAttribute()
+    {
+        if ($this->coverImage) {
+            return asset('storage/' . $this->coverImage->path);
+        }
+
+        // Return a default placeholder image if no cover is set
+        return 'https://via.placeholder.com/400x300.png?text=No+Image';
     }
 }
