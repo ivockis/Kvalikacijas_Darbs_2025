@@ -23,6 +23,15 @@ class ProjectController extends Controller
         return view('projects.index', compact('projects'));
     }
 
+    /**
+     * Display a listing of all public projects.
+     */
+    public function publicIndex()
+    {
+        $projects = Project::where('is_public', true)->latest()->paginate(12);
+        return view('public-projects', compact('projects'));
+    }
+
     public function create()
     {
         $categories = Category::all();

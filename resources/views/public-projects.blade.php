@@ -1,0 +1,53 @@
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Public Projects Gallery') }}
+        </h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900">
+                    <!-- Placeholder for Search, Filter, Sort Navbar -->
+                    <div class="mb-6">
+                        <x-project-filters /> {{-- This will be created later --}}
+                    </div>
+
+                    @if ($projects->isEmpty())
+                        <p class="text-gray-600">{{ __('No public projects available yet.') }}</p>
+                    @else
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            @foreach ($projects as $project)
+                                <div class="bg-gray-100 rounded-lg shadow-md flex flex-col justify-between">
+                                    <a href="{{ route('projects.show', $project) }}">
+                                        <img src="{{ $project->cover_image_url }}" alt="{{ $project->title }} Cover Image" class="w-full h-48 object-cover rounded-t-lg">
+                                    </a>
+                                    <div class="p-6">
+                                        <div>
+                                            <h3 class="text-lg font-semibold text-gray-800 mb-2">
+                                                <a href="{{ route('projects.show', $project) }}" class="hover:underline">{{ $project->title }}</a>
+                                            </h3>
+                                            <p class="text-gray-600 text-sm mb-4">{{ Str::limit($project->description, 100) }}</p>
+                                            <p class="text-xs text-gray-500">{{ __('Author:') }} <span class="font-medium">{{ $project->user->name }}</span></p>
+                                            <p class="text-xs text-gray-500">{{ __('Created:') }} {{ $project->created_at->format('d.m.Y') }}</p>
+                                        </div>
+                                        <div class="mt-4 flex justify-end">
+                                            <a href="{{ route('projects.show', $project) }}" class="inline-flex items-center px-3 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-600 focus:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                                {{ __('View Project') }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <div class="mt-8">
+                            {{ $projects->links() }}
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+</x-app-layout>
