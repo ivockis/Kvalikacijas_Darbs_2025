@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('category_project', function (Blueprint $table) {
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
-            $table->foreignId('project_id')->constrained()->onDelete('cascade');
-            $table->primary(['category_id', 'project_id']);
+        Schema::create('images', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('project_id')->nullable(); // FK to projects table
+            $table->string('path');
+            $table->boolean('is_cover')->default(false);
+            $table->timestamps();
         });
     }
 
@@ -23,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('category_project');
+        Schema::dropIfExists('images');
     }
 };

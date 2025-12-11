@@ -11,6 +11,10 @@ class Complaint extends Model
 
     protected $fillable = ['user_id', 'project_id', 'message', 'status'];
 
+    protected $casts = [
+        'status' => 'boolean',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

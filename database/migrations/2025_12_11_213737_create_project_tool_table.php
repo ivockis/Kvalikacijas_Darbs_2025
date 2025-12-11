@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->foreignId('parent_id')->nullable()->constrained('categories')->onDelete('cascade');
-            $table->timestamps();
+        Schema::create('project_tool', function (Blueprint $table) {
+            $table->foreignId('project_id'); // FK to projects table
+            $table->foreignId('tool_id');    // FK to tools table
+            $table->primary(['project_id', 'tool_id']); // Composite primary key
         });
     }
 
@@ -24,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('project_tool');
     }
 };

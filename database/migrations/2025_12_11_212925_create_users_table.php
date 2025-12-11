@@ -15,14 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('surname')->nullable();
-            $table->string('username')->unique();
+            $table->string('username', 30)->unique();
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->boolean('is_admin')->default(false);
             $table->boolean('is_blocked')->default(false);
-            $table->string('profile_image_path')->nullable();
-            $table->rememberToken();
+            $table->foreignId('profile_image_id')->nullable(); // FK to images table, for profile picture
             $table->timestamps();
         });
     }

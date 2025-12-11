@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('complaints', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('project_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id');    // FK to users table
+            $table->foreignId('project_id'); // FK to projects table
             $table->text('message');
-            $table->string('status')->default('submitted');
+            $table->boolean('status')->default(false); // 0 = new, 1 = resolved
             $table->timestamps();
         });
     }

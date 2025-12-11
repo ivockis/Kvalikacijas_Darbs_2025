@@ -56,51 +56,17 @@
                         </div>
 
                         <!-- Images -->
-                        <div x-data="{ images: [], imageCount: 0 }">
+                        <div class="mt-4">
                             <x-input-label for="images" :value="__('Images')" />
-                            <input id="images" name="images[]" type="file" class="block mt-1 w-full" multiple
-                                @change="
-                                    imageCount = $event.target.files.length;
-                                    if (imageCount > 10) {
-                                        alert('You can only upload a maximum of 10 images.');
-                                        $event.target.value = '';
-                                        imageCount = 0;
-                                        images = [];
-                                    } else {
-                                        images = [];
-                                        for (let i = 0; i < imageCount; i++) {
-                                            let reader = new FileReader();
-                                            reader.onload = (e) => {
-                                                images.push(e.target.result);
-                                            };
-                                            reader.readAsDataURL($event.target.files[i]);
-                                        }
-                                    }
-                                "
-                            />
+                            <input id="images" name="images[]" type="file" class="block mt-1 w-full" multiple />
                             <x-input-error :messages="$errors->get('images')" class="mt-2" />
                             <x-input-error :messages="$errors->get('images.*')" class="mt-2" />
-
-                            <!-- Previews -->
-                            <div class="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4" x-show="images.length > 0">
-                                <template x-for="(image, index) in images">
-                                    <div class="relative group">
-                                        <img :src="image" class="rounded-lg shadow-md w-full h-32 object-cover">
-                                        <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                            <label :for="'cover_image_' + index" class="cursor-pointer text-white px-2 py-1 rounded-md bg-indigo-600 hover:bg-indigo-700">
-                                                <input type="radio" name="cover_image_selection" :id="'cover_image_' + index" :value="index" class="mr-1" :checked="index === 0">
-                                                {{ __('Set as Cover') }}
-                                            </label>
-                                        </div>
-                                    </div>
-                                </template>
-                            </div>
                         </div>
-
+                        
                         <!-- Is Public -->
                         <div class="mt-4">
                             <label for="is_public" class="inline-flex items-center">
-                                <input id="is_public" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="is_public" {{ old('is_public') ? 'checked' : '' }}>
+                                <input id="is_public" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="is_public" @checked(old('is_public'))>
                                 <span class="ms-2 text-sm text-gray-600">{{ __('Make Public') }}</span>
                             </label>
                             <x-input-error :messages="$errors->get('is_public')" class="mt-2" />

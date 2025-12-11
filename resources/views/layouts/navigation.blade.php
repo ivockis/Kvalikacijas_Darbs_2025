@@ -19,6 +19,11 @@
                         <x-nav-link :href="route('projects.index')" :active="request()->routeIs('projects.index')">
                             {{ __('My Projects') }}
                         </x-nav-link>
+                        @if(Auth::user()->is_admin)
+                            <x-nav-link :href="route('tools.index')" :active="request()->routeIs('tools.index')">
+                                {{ __('Manage Tools') }}
+                            </x-nav-link>
+                        @endif
                     @endauth
                 </div>
             </div>
@@ -45,6 +50,11 @@
                         <x-dropdown-link :href="route('projects.index')">
                             {{ __('My Projects') }}
                         </x-dropdown-link>
+                        @if(Auth::user()->is_admin)
+                            <x-dropdown-link :href="route('tools.index')">
+                                {{ __('Manage Tools') }}
+                            </x-dropdown-link>
+                        @endif
 
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
@@ -82,6 +92,11 @@
                 <x-responsive-nav-link :href="route('projects.index')" :active="request()->routeIs('projects.index')">
                     {{ __('My Projects') }}
                 </x-responsive-nav-link>
+                @if(Auth::user()->is_admin)
+                    <x-responsive-nav-link :href="route('tools.index')" :active="request()->routeIs('tools.index')">
+                        {{ __('Manage Tools') }}
+                    </x-responsive-nav-link>
+                @endif
             @endauth
         </div>
     </div>

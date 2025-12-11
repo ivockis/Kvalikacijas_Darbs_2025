@@ -24,7 +24,7 @@ class User extends Authenticatable
         'password',
         'is_admin',
         'is_blocked',
-        'profile_image_path',
+        'profile_image_id',
     ];
 
     /**
@@ -34,7 +34,6 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
     /**
@@ -45,7 +44,6 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_admin' => 'boolean',
             'is_blocked' => 'boolean',
@@ -65,5 +63,10 @@ class User extends Authenticatable
     public function likedProjects()
     {
         return $this->belongsToMany(Project::class, 'likes');
+    }
+
+    public function profileImage()
+    {
+        return $this->hasOne(Image::class, 'id', 'profile_image_id');
     }
 }

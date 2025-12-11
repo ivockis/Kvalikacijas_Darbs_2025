@@ -41,7 +41,7 @@ class Project extends Model
 
     public function images()
     {
-        return $this->hasMany(Image::class);
+        return $this->hasMany(Image::class)->whereNotNull('project_id'); // Only images explicitly tied to a project
     }
 
     public function complaints()
@@ -60,6 +60,11 @@ class Project extends Model
      */
     public function setCoverImage(Image $newCoverImage)
     {
+        // First, ensure the newCoverImage is actually associated with this project.
+        if ($newCoverImage->project_id !== $this->id) {
+            throw new \InvalidArgumentException("Image #{$newCoverImage->id} does not belong to Project #{$this->id}.");
+        }
+
         // Set all other images for this project to not be the cover
         $this->images()->where('id', '!=', $newCoverImage->id)->update(['is_cover' => false]);
 
@@ -73,7 +78,7 @@ class Project extends Model
      */
     public function coverImage()
     {
-        return $this->hasOne(Image::class)->where('is_cover', true);
+        return $this->hasOne(Image::class)->where('is_cover', true)->whereNotNull('project_id');
     }
 
     /**

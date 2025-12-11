@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('images', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('project_id')->constrained()->onDelete('cascade');
-            $table->string('path');
-            $table->boolean('is_cover')->default(false);
-            $table->timestamps();
+        Schema::create('category_project', function (Blueprint $table) {
+            $table->foreignId('category_id'); // FK to categories table
+            $table->foreignId('project_id');  // FK to projects table
+            $table->primary(['category_id', 'project_id']); // Composite primary key
         });
     }
 
@@ -25,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('images');
+        Schema::dropIfExists('category_project');
     }
 };

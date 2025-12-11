@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Models\Image;
 use App\Models\Project;
+use App\Models\Tool;
 use App\Policies\ImagePolicy;
 use App\Policies\ProjectPolicy;
+use App\Policies\ToolPolicy;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -18,6 +20,7 @@ class AppServiceProvider extends ServiceProvider
     protected $policies = [
         Project::class => ProjectPolicy::class,
         Image::class => ImagePolicy::class,
+        Tool::class => ToolPolicy::class,
     ];
 
     /**

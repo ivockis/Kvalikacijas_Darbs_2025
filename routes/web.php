@@ -3,6 +3,7 @@
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ToolController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,6 +21,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/projects/{project}/like', [ProjectController::class, 'like'])->name('projects.like');
     Route::delete('/images/{image}', [ImageController::class, 'destroy'])->name('images.destroy');
     Route::post('/images/{image}/set-as-cover', [ImageController::class, 'setAsCover'])->name('images.setAsCover');
+
+    Route::resource('tools', ToolController::class);
+    Route::get('/tools/search', [ToolController::class, 'search'])->name('tools.search');
 });
 
 require __DIR__.'/auth.php';

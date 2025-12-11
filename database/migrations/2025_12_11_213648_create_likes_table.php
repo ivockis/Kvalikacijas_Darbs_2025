@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('likes', function (Blueprint $table) {
-            $table->foreignId('project_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->primary(['project_id', 'user_id']);
+            $table->foreignId('project_id'); // FK to projects table
+            $table->foreignId('user_id');    // FK to users table
+            $table->primary(['project_id', 'user_id']); // Composite primary key
             $table->timestamp('created_at')->useCurrent();
         });
     }

@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('project_tool', function (Blueprint $table) {
-            $table->foreignId('project_id')->constrained()->onDelete('cascade');
-            $table->foreignId('tool_id')->constrained()->onDelete('cascade');
-            $table->primary(['project_id', 'tool_id']);
+        Schema::create('categories', function (Blueprint $table) {
+            $table->id();
+            $table->string('name', 50);
+            $table->foreignId('parent_id')->nullable(); // FK to self for nested categories
+            $table->timestamps();
         });
     }
 
@@ -23,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('project_tool');
+        Schema::dropIfExists('categories');
     }
 };

@@ -1,7 +1,5 @@
 <?php
 
-// Verified update: 2025-12-08 15:15:00
-
 namespace App\Http\Controllers;
 
 use App\Models\Category;
@@ -17,19 +15,16 @@ class ProjectController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index()
-    {
-        $projects = Auth::user()->projects()->latest()->get();
-        return view('projects.index', compact('projects'));
-    }
-
-    /**
-     * Display a listing of all public projects.
-     */
     public function publicIndex()
     {
         $projects = Project::where('is_public', true)->latest()->paginate(12);
         return view('public-projects', compact('projects'));
+    }
+
+    public function index()
+    {
+        $projects = Auth::user()->projects()->latest()->get();
+        return view('projects.index', compact('projects'));
     }
 
     public function create()
@@ -42,17 +37,16 @@ class ProjectController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|max:50',
             'description' => 'required|string',
-            'materials' => 'nullable|string',
+            'materials' => 'required|string',
             'is_public' => '',
             'categories' => 'nullable|array',
             'categories.*' => 'exists:categories,id',
             'tools' => 'nullable|array',
             'tools.*' => 'exists:tools,id',
-            'images' => 'required|array|min:1|max:10', // At least 1 image is required for cover
+            'images' => 'required|array|min:1|max:10',
             'images.*' => 'mimes:jpeg,png,jpg',
-            'cover_image_selection' => 'required_with:images|integer|min:0', // Index of the cover image in the 'images' array
         ]);
 
         $project = Auth::user()->projects()->create([
@@ -72,15 +66,14 @@ class ProjectController extends Controller
         }
 
         if ($request->hasFile('images')) {
-            $imageIndex = 0;
+            $isFirstImage = true;
             foreach ($request->file('images') as $imageFile) {
                 $path = $imageFile->store('project-images', 'public');
-                $isCover = ($imageIndex == $validated['cover_image_selection']);
                 $project->images()->create([
                     'path' => $path,
-                    'is_cover' => $isCover,
+                    'is_cover' => $isFirstImage,
                 ]);
-                $imageIndex++;
+                $isFirstImage = false;
             }
         }
 
@@ -112,9 +105,9 @@ class ProjectController extends Controller
         $this->authorize('update', $project);
 
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|max:50',
             'description' => 'required|string',
-            'materials' => 'nullable|string',
+            'materials' => 'required|string',
             'is_public' => '',
             'categories' => 'nullable|array',
             'categories.*' => 'exists:categories,id',
@@ -122,13 +115,13 @@ class ProjectController extends Controller
             'tools.*' => 'exists:tools,id',
             'images' => 'nullable|array|max:10',
             'images.*' => 'mimes:jpeg,png,jpg',
-            'cover_image_selection' => 'required|string', // Can be 'new_X' or 'existing_Y'
+            'cover_image_selection' => 'nullable|string', // Changed to nullable for debugging
         ]);
 
         $project->update([
             'title' => $validated['title'],
             'description' => $validated['description'],
-            'materials' => $validated['materials'] ?? null,
+            'materials' => $validated['materials'], // No longer nullable
             'is_public' => $request->has('is_public'),
         ]);
 
@@ -150,7 +143,7 @@ class ProjectController extends Controller
                 $path = $imageFile->store('project-images', 'public');
                 $projectImage = $project->images()->create([
                     'path' => $path,
-                    'is_cover' => false, // Set to false initially, will be updated based on selection
+                    'is_cover' => false,
                 ]);
                 $newImagePaths[] = $projectImage->id;
             }
@@ -159,6 +152,7 @@ class ProjectController extends Controller
         // Handle cover image selection
         if ($request->filled('cover_image_selection')) {
             $selection = $request->input('cover_image_selection');
+            
             if (str_starts_with($selection, 'new_')) {
                 // Selected a newly uploaded image as cover
                 $newImageIndex = (int) substr($selection, 4);
@@ -176,15 +170,8 @@ class ProjectController extends Controller
                     $project->setCoverImage($existingCoverImage);
                 }
             }
-        } else {
-            // If no cover is selected, and project has no cover, set the first existing image as cover
-            if (!$project->images()->where('is_cover', true)->exists()) {
-                $firstImage = $project->images()->first();
-                if ($firstImage) {
-                    $project->setCoverImage($firstImage);
-                }
-            }
         }
+
 
         return redirect(route('projects.index'))->with('status', 'Project updated successfully!');
     }
