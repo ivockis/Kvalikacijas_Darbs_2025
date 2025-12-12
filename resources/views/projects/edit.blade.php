@@ -64,6 +64,11 @@
                             <textarea id="materials" name="materials" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" required>{{ old('materials', $project->materials) }}</textarea>
                         </div>
                         <div class="mt-4">
+                            <x-input-label for="creation_time" :value="__('Time for Creation')" />
+                            <x-text-input id="creation_time" class="block mt-1 w-full" type="text" name="creation_time" :value="old('creation_time', $project->creation_time)" required />
+                            <x-input-error :messages="$errors->get('creation_time')" class="mt-2" />
+                        </div>
+                        <div class="mt-4">
                             <x-input-label for="categories" :value="__('Categories')" />
                             <select name="categories[]" id="categories" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" multiple>
                                 @foreach ($categories as $category)

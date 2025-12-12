@@ -40,6 +40,7 @@ class ProjectController extends Controller
             'title' => 'required|string|max:50',
             'description' => 'required|string',
             'materials' => 'required|string',
+            'creation_time' => 'required|string|max:255',
             'is_public' => '',
             'categories' => 'nullable|array',
             'categories.*' => 'exists:categories,id',
@@ -52,9 +53,9 @@ class ProjectController extends Controller
         $project = Auth::user()->projects()->create([
             'title' => $validated['title'],
             'description' => $validated['description'],
-            'materials' => $validated['materials'] ?? null,
+            'materials' => $validated['materials'],
             'is_public' => $request->has('is_public'),
-            'creation_time' => now(),
+            'creation_time' => $validated['creation_time'],
         ]);
 
         if (isset($validated['categories'])) {
@@ -108,6 +109,7 @@ class ProjectController extends Controller
             'title' => 'required|string|max:50',
             'description' => 'required|string',
             'materials' => 'required|string',
+            'creation_time' => 'required|string|max:255',
             'is_public' => '',
             'categories' => 'nullable|array',
             'categories.*' => 'exists:categories,id',
@@ -121,8 +123,9 @@ class ProjectController extends Controller
         $project->update([
             'title' => $validated['title'],
             'description' => $validated['description'],
-            'materials' => $validated['materials'], // No longer nullable
+            'materials' => $validated['materials'],
             'is_public' => $request->has('is_public'),
+            'creation_time' => $validated['creation_time'],
         ]);
 
         if (isset($validated['categories'])) {

@@ -29,8 +29,15 @@
                         <!-- Materials -->
                         <div class="mt-4">
                             <x-input-label for="materials" :value="__('Materials')" />
-                            <textarea id="materials" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" name="materials">{{ old('materials') }}</textarea>
+                            <textarea id="materials" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" name="materials" required>{{ old('materials') }}</textarea>
                             <x-input-error :messages="$errors->get('materials')" class="mt-2" />
+                        </div>
+
+                        <!-- Time for Creation -->
+                        <div class="mt-4">
+                            <x-input-label for="creation_time" :value="__('Time for Creation')" />
+                            <x-text-input id="creation_time" class="block mt-1 w-full" type="text" name="creation_time" :value="old('creation_time')" required />
+                            <x-input-error :messages="$errors->get('creation_time')" class="mt-2" />
                         </div>
 
                         <!-- Categories -->

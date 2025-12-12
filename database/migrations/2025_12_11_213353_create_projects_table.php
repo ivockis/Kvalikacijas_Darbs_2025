@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id'); // FK to users table
             $table->string('title', 50);
             $table->text('description');
-            $table->string('materials');
+            $table->text('materials');
             $table->string('creation_time');
             $table->boolean('is_public')->default(false);
             $table->boolean('is_blocked')->default(false);
