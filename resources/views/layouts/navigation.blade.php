@@ -23,6 +23,9 @@
                             <x-nav-link :href="route('tools.index')" :active="request()->routeIs('tools.index')">
                                 {{ __('Manage Tools') }}
                             </x-nav-link>
+                            <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.index')">
+                                {{ __('Manage Categories') }}
+                            </x-nav-link>
                         @endif
                     @endauth
                 </div>
@@ -53,6 +56,9 @@
                         @if(Auth::user()->is_admin)
                             <x-dropdown-link :href="route('tools.index')">
                                 {{ __('Manage Tools') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('categories.index')">
+                                {{ __('Manage Categories') }}
                             </x-dropdown-link>
                         @endif
 
@@ -95,6 +101,9 @@
                 @if(Auth::user()->is_admin)
                     <x-responsive-nav-link :href="route('tools.index')" :active="request()->routeIs('tools.index')">
                         {{ __('Manage Tools') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.index')">
+                        {{ __('Manage Categories') }}
                     </x-responsive-nav-link>
                 @endif
             @endauth

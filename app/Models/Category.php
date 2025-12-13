@@ -11,6 +11,10 @@ class Category extends Model
 
     protected $fillable = ['name', 'parent_id'];
 
+    protected $casts = [
+        'parent_id' => 'integer',
+    ];
+
     public function projects()
     {
         return $this->belongsToMany(Project::class);

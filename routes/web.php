@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
@@ -24,6 +25,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('tools', ToolController::class);
     Route::get('/tools/search', [ToolController::class, 'search'])->name('tools.search');
+
+    Route::resource('categories', CategoryController::class);
 });
 
 require __DIR__.'/auth.php';

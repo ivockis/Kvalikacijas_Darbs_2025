@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Category;
 use App\Models\Image;
 use App\Models\Project;
 use App\Models\Tool;
+use App\Policies\CategoryPolicy;
 use App\Policies\ImagePolicy;
 use App\Policies\ProjectPolicy;
 use App\Policies\ToolPolicy;
@@ -21,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
         Project::class => ProjectPolicy::class,
         Image::class => ImagePolicy::class,
         Tool::class => ToolPolicy::class,
+        Category::class => CategoryPolicy::class,
     ];
 
     /**
