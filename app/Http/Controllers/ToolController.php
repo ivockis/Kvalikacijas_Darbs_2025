@@ -27,8 +27,9 @@ class ToolController extends Controller
     {
         $this->authorize('create', Tool::class);
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:tools,name',
-            'comment' => 'nullable|string',
+            'name' => 'required|string|max:50',
+            'comment' => 'nullable|string|max:50',
+            'approved' => 'sometimes|boolean',
         ]);
         $tool = Tool::create($validated);
         // Load the projects_count for the new tool
@@ -38,22 +39,6 @@ class ToolController extends Controller
 
     /**
      * Update the specified resource in storage.
-     */
-    public function update(Request $request, Tool $tool)
-    {
-        $this->authorize('update', $tool);
-        $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:tools,name,' . $tool->id,
-            'comment' => 'nullable|string',
-        ]);
-        $tool->update($validated);
-        // Load the projects_count for the updated tool
-        $tool->loadCount('projects');
-        return response()->json($tool);
-    }
-
-    /**
-     * Remove the specified resource from storage.
      */
     public function destroy(Tool $tool)
     {
@@ -67,11 +52,6 @@ class ToolController extends Controller
         return response()->json(['message' => 'Tool deleted successfully.']);
     }
 
-    // Unused methods for single-page interface, kept for potential future use or API completeness
-    public function create() { $this->authorize('create', Tool::class); abort(404); }
-    public function show(Tool $tool) { $this->authorize('view', $tool); abort(404); }
-    public function edit(Tool $tool) { $this->authorize('update', $tool); abort(404); }
-
     /**
      * Search for tools by name.
      */
@@ -83,5 +63,16 @@ class ToolController extends Controller
                      ->limit(10) // Limit results for performance
                      ->get(['id', 'name', 'comment']); // Select only necessary fields
         return response()->json($tools);
+    }
+
+    /**
+     * Toggle the approval status of a tool.
+     */
+    public function toggleApproval(Tool $tool)
+    {
+        $this->authorize('update', $tool); // Reuse the update policy for approval
+        $tool->approved = !$tool->approved;
+        $tool->save();
+        return response()->json($tool);
     }
 }

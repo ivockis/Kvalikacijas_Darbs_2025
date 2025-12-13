@@ -23,8 +23,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/images/{image}', [ImageController::class, 'destroy'])->name('images.destroy');
     Route::post('/images/{image}/set-as-cover', [ImageController::class, 'setAsCover'])->name('images.setAsCover');
 
-    Route::resource('tools', ToolController::class);
+    Route::resource('tools', ToolController::class)->only(['index', 'store', 'destroy']);
     Route::get('/tools/search', [ToolController::class, 'search'])->name('tools.search');
+    Route::patch('/tools/{tool}/toggle-approval', [ToolController::class, 'toggleApproval'])->name('tools.toggleApproval');
 
     Route::resource('categories', CategoryController::class);
 });

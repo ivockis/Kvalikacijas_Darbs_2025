@@ -40,7 +40,7 @@
                                 newToolComment: '',
                                 get filteredOptions() {
                                     return this.options.filter(
-                                        option => !this.selected.some(s => s.id === option.id) && option.name.toLowerCase().includes(this.search.toLowerCase())
+                                        option => option.approved && !this.selected.some(s => s.id === option.id) && option.name.toLowerCase().includes(this.search.toLowerCase())
                                     )
                                 }
                             },
@@ -149,25 +149,25 @@
 
                         <!-- All form fields -->
                         <div>
-                            <x-input-label for="title" :value="__('Title')" />
+                            <x-input-label for="title">{{ __('Title') }}<span class="text-red-500">*</span></x-input-label>
                             <x-text-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('title')" required autofocus />
                         </div>
                         <div class="mt-4">
-                            <x-input-label for="description" :value="__('Description')" />
+                            <x-input-label for="description">{{ __('Description') }}<span class="text-red-500">*</span></x-input-label>
                             <textarea id="description" class="block mt-1 w-full rounded-md" name="description" required>{{ old('description') }}</textarea>
                         </div>
                         <div class="mt-4">
-                            <x-input-label for="materials" :value="__('Materials')" />
+                            <x-input-label for="materials">{{ __('Materials') }}<span class="text-red-500">*</span></x-input-label>
                             <textarea id="materials" class="block mt-1 w-full rounded-md" name="materials" required>{{ old('materials') }}</textarea>
                         </div>
                         <div class="mt-4">
-                            <x-input-label for="creation_time" :value="__('Time for Creation')" />
+                            <x-input-label for="creation_time">{{ __('Time for Creation') }}<span class="text-red-500">*</span></x-input-label>
                             <x-text-input id="creation_time" class="block mt-1 w-full" type="text" name="creation_time" :value="old('creation_time')" required />
                         </div>
 
                         <!-- Categories -->
                         <div class="mt-4">
-                            <x-input-label for="categories-search" :value="__('Categories')" />
+                            <x-input-label for="categories-search">{{ __('Categories') }}<span class="text-red-500">*</span></x-input-label>
                             <div class="flex flex-wrap gap-2 mt-2 mb-2">
                                 <template x-for="s in categories.selected" :key="s.id">
                                     <span class="inline-flex items-center px-2 py-1 bg-indigo-100 text-indigo-800 text-sm font-medium rounded-full">
@@ -218,7 +218,7 @@
 
                         <!-- Images -->
                         <div class="mt-4">
-                            <x-input-label for="images" :value="__('Images')" />
+                            <x-input-label for="images">{{ __('Images') }}<span class="text-red-500">*</span></x-input-label>
                             <input id="images" type="file" name="images[]" class="block mt-1 w-full" multiple @change="handleImageSelect($event)">
                             <x-input-error :messages="$errors->get('images')" class="mt-2" />
                             <x-input-error :messages="$errors->get('images.*')" class="mt-2" />

@@ -118,7 +118,7 @@
                                 newToolComment: '',
                                 get filteredOptions() {
                                     return this.options.filter(
-                                        option => !this.selected.some(s => s.id === option.id) && option.name.toLowerCase().includes(this.search.toLowerCase())
+                                        option => option.approved && !this.selected.some(s => s.id === option.id) && option.name.toLowerCase().includes(this.search.toLowerCase())
                                     )
                                 },
                                 async createNewTool() {

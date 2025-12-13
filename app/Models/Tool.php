@@ -9,7 +9,11 @@ class Tool extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'comment'];
+    protected $fillable = ['name', 'comment', 'approved'];
+
+    protected $casts = [
+        'approved' => 'boolean',
+    ];
 
     public function projects()
     {

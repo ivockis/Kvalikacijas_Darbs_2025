@@ -28,11 +28,7 @@ return new class extends Migration
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
         });
 
-        Schema::table('categories', function (Blueprint $table) {
-            $table->foreign('parent_id')->references('id')->on('categories')->onDelete('set null');
-        });
-
-        Schema::table('likes', function (Blueprint $table) {
+Schema::table('likes', function (Blueprint $table) {
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
