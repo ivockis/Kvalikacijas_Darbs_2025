@@ -9,40 +9,17 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <form method="POST" action="{{ route('projects.store') }}" enctype="multipart/form-data">
-                        @csrf
+                    <form 
+                        x-ref="createForm"
+                        @submit.prevent="submitForm"
+                        x-data="{
+                            // Image state
+                            newImages: [],
+                            imageFiles: [],
+                            selectedCoverIndex: null, // Initialized to null
 
-                        <!-- Title -->
-                        <div>
-                            <x-input-label for="title" :value="__('Title')" />
-                            <x-text-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('title')" required autofocus />
-                            <x-input-error :messages="$errors->get('title')" class="mt-2" />
-                        </div>
-
-                        <!-- Description -->
-                        <div class="mt-4">
-                            <x-input-label for="description" :value="__('Description')" />
-                            <textarea id="description" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" name="description" required>{{ old('description') }}</textarea>
-                            <x-input-error :messages="$errors->get('description')" class="mt-2" />
-                        </div>
-
-                        <!-- Materials -->
-                        <div class="mt-4">
-                            <x-input-label for="materials" :value="__('Materials')" />
-                            <textarea id="materials" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" name="materials" required>{{ old('materials') }}</textarea>
-                            <x-input-error :messages="$errors->get('materials')" class="mt-2" />
-                        </div>
-
-                        <!-- Time for Creation -->
-                        <div class="mt-4">
-                            <x-input-label for="creation_time" :value="__('Time for Creation')" />
-                            <x-text-input id="creation_time" class="block mt-1 w-full" type="text" name="creation_time" :value="old('creation_time')" required />
-                            <x-input-error :messages="$errors->get('creation_time')" class="mt-2" />
-                        </div>
-
-                        <!-- Categories -->
-                        <div class="mt-4"
-                            x-data="{
+                            // Categories state
+                            categories: {
                                 open: false,
                                 search: '',
                                 options: {{ $categories->toJson() }},
@@ -52,105 +29,225 @@
                                         option => !this.selected.some(s => s.id === option.id) && option.name.toLowerCase().includes(this.search.toLowerCase())
                                     )
                                 }
-                            }"
-                        >
-                            <x-input-label for="categories-search" :value="__('Categories')" />
-                            <!-- Hidden inputs for submission -->
-                            <template x-for="s in selected" :key="s.id">
-                                <input type="hidden" name="categories[]" :value="s.id">
-                            </template>
-                            <!-- Selected Tags -->
-                            <div class="flex flex-wrap gap-2 mt-2 mb-2">
-                                <template x-for="s in selected" :key="s.id">
-                                    <span class="inline-flex items-center px-2 py-1 bg-indigo-100 text-indigo-800 text-sm font-medium rounded-full">
-                                        <span x-text="s.name"></span>
-                                        <button @click="selected = selected.filter(i => i.id !== s.id)" type="button" class="ml-2 text-indigo-500 hover:text-indigo-700">
-                                            &times;
-                                        </button>
-                                    </span>
-                                </template>
-                            </div>
-                            <!-- Search Input -->
-                            <div @click.away="open = false" class="relative">
-                                <input id="categories-search" type="text" x-model="search" @focus="open = true" @input="open = true" placeholder="Search categories..." class="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                                <div x-show="open && filteredOptions.length > 0" class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
-                                    <template x-for="option in filteredOptions" :key="option.id">
-                                        <div @click="selected.push(option); search = ''; open = false" class="cursor-pointer px-4 py-2 hover:bg-gray-100" x-text="option.name"></div>
-                                    </template>
-                                </div>
-                            </div>
-                            <x-input-error :messages="$errors->get('categories')" class="mt-2" />
-                        </div>
+                            },
 
-                        <!-- Tools -->
-                        <div class="mt-4"
-                            x-data="{
+                            // Tools state
+                            tools: {
                                 open: false,
                                 search: '',
                                 options: {{ $tools->toJson() }},
                                 selected: [],
+                                newToolComment: '',
                                 get filteredOptions() {
                                     return this.options.filter(
                                         option => !this.selected.some(s => s.id === option.id) && option.name.toLowerCase().includes(this.search.toLowerCase())
                                     )
                                 }
-                            }"
-                        >
-                            <x-input-label for="tools-search" :value="__('Tools')" />
-                            <!-- Hidden inputs for submission -->
-                            <template x-for="s in selected" :key="s.id">
-                                <input type="hidden" name="tools[]" :value="s.id">
-                            </template>
-                            <!-- Selected Tags -->
+                            },
+
+                            // Image Functions
+                            handleImageSelect(event) {
+                                const files = Array.from(event.target.files);
+                                if ((this.imageFiles.length + files.length) > 10) {
+                                    alert('You can only upload a maximum of 10 images.');
+                                    return;
+                                }
+                                for (const file of files) {
+                                    this.imageFiles.push(file);
+                                    let reader = new FileReader();
+                                    reader.onload = (e) => this.newImages.push(e.target.result);
+                                    reader.readAsDataURL(file);
+                                }
+                                if (this.selectedCoverIndex === null && this.newImages.length > 0) {
+                                    this.selectedCoverIndex = 0; // Automatically set first image as cover
+                                }
+                            },
+                            removeNewImage(index) {
+                                this.newImages.splice(index, 1);
+                                this.imageFiles.splice(index, 1);
+                                if (this.newImages.length === 0) { // If no images left
+                                    this.selectedCoverIndex = null;
+                                } else if (this.selectedCoverIndex === index) { // If deleted cover
+                                    this.selectedCoverIndex = 0; // Set first remaining as new cover
+                                } else if (this.selectedCoverIndex > index) { // If deleted before cover
+                                    this.selectedCoverIndex--;
+                                }
+                            },
+
+                            // Tool Functions
+                            async createNewTool() {
+                                if (!this.tools.search.trim()) return;
+                                const response = await fetch('{{ route('tools.store') }}', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                                    body: JSON.stringify({ name: this.tools.search, comment: this.tools.newToolComment })
+                                });
+                                if (!response.ok) {
+                                    alert('Failed to create tool. It might already exist.');
+                                    return;
+                                }
+                                const newTool = await response.json();
+                                this.tools.options.push(newTool);
+                                this.tools.selected.push(newTool);
+                                this.tools.search = '';
+                                this.tools.newToolComment = '';
+                                this.tools.open = false;
+                            },
+
+                            // Main Form Submission
+                            submitForm() {
+                                // Create a new FormData object from the form
+                                const formData = new FormData(this.$refs.createForm);
+                                
+                                // Manually remove default image input if files were selected via Alpine
+                                if (this.imageFiles.length > 0) {
+                                    formData.delete('images[]');
+                                }
+
+                                // Append categories and tools
+                                this.categories.selected.forEach(cat => formData.append('categories[]', cat.id));
+                                this.tools.selected.forEach(tool => formData.append('tools[]', tool.id));
+
+                                // Append image files
+                                this.imageFiles.forEach((file, index) => {
+                                    formData.append(`images[${index}]`, file);
+                                });
+
+                                // Append cover selection
+                                if (this.selectedCoverIndex !== null) {
+                                    formData.append('cover_image_selection', `new_${this.selectedCoverIndex}`);
+                                }
+
+                                // Use fetch to submit the form
+                                fetch('{{ route('projects.store') }}', {
+                                    method: 'POST',
+                                    body: formData,
+                                    headers: {
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                        'Accept': 'application/json'
+                                    }
+                                })
+                                .then(response => {
+                                    if (response.ok) {
+                                        window.location.href = '{{ route('projects.index') }}';
+                                    } else {
+                                        return response.json().then(result => {
+                                            // Simple alert for errors, can be improved
+                                            const errorMessages = Object.values(result.errors).map(e => e.join('\n')).join('\n');
+                                            alert('Validation failed:\n' + errorMessages);
+                                        });
+                                    }
+                                })
+                                .catch(error => {
+                                    alert('An unexpected error occurred.');
+                                    console.error('Submit Error:', error);
+                                });
+                            }
+                        }"
+                    >
+                        @csrf
+
+                        <!-- All form fields -->
+                        <div>
+                            <x-input-label for="title" :value="__('Title')" />
+                            <x-text-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('title')" required autofocus />
+                        </div>
+                        <div class="mt-4">
+                            <x-input-label for="description" :value="__('Description')" />
+                            <textarea id="description" class="block mt-1 w-full rounded-md" name="description" required>{{ old('description') }}</textarea>
+                        </div>
+                        <div class="mt-4">
+                            <x-input-label for="materials" :value="__('Materials')" />
+                            <textarea id="materials" class="block mt-1 w-full rounded-md" name="materials" required>{{ old('materials') }}</textarea>
+                        </div>
+                        <div class="mt-4">
+                            <x-input-label for="creation_time" :value="__('Time for Creation')" />
+                            <x-text-input id="creation_time" class="block mt-1 w-full" type="text" name="creation_time" :value="old('creation_time')" required />
+                        </div>
+
+                        <!-- Categories -->
+                        <div class="mt-4">
+                            <x-input-label for="categories-search" :value="__('Categories')" />
                             <div class="flex flex-wrap gap-2 mt-2 mb-2">
-                                <template x-for="s in selected" :key="s.id">
-                                    <span class="inline-flex items-center px-2 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full">
+                                <template x-for="s in categories.selected" :key="s.id">
+                                    <span class="inline-flex items-center px-2 py-1 bg-indigo-100 text-indigo-800 text-sm font-medium rounded-full">
                                         <span x-text="s.name"></span>
-                                        <template x-if="s.comment">
-                                            <span class="ml-1 text-xs" x-text="'(' + s.comment + ')'"></span>
-                                        </template>
-                                        <button @click="selected = selected.filter(i => i.id !== s.id)" type="button" class="ml-2 text-green-500 hover:text-green-700">
-                                            &times;
-                                        </button>
+                                        <button @click="categories.selected = categories.selected.filter(i => i.id !== s.id)" type="button" class="ml-2 text-indigo-500 hover:text-indigo-700">&times;</button>
                                     </span>
                                 </template>
                             </div>
-                            <!-- Search Input -->
-                            <div @click.away="open = false" class="relative">
-                                <input id="tools-search" type="text" x-model="search" @focus="open = true" @input="open = true" placeholder="Search tools..." class="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                                <div x-show="open && filteredOptions.length > 0" class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
-                                    <template x-for="option in filteredOptions" :key="option.id">
-                                        <div @click="selected.push(option); search = ''; open = false" class="cursor-pointer px-4 py-2 hover:bg-gray-100">
-                                            <span x-text="option.name"></span>
-                                            <template x-if="option.comment">
-                                                <span class="ml-1 text-xs text-gray-500" x-text="'(' + option.comment + ')'"></span>
-                                            </template>
-                                        </div>
+                            <div @click.away="categories.open = false" class="relative">
+                                <input id="categories-search" type="text" x-model="categories.search" @focus="categories.open = true" @input="categories.open = true" placeholder="Search categories..." class="w-full rounded-md">
+                                <div x-show="categories.open && categories.filteredOptions.length > 0" class="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg max-h-60 overflow-y-auto">
+                                    <template x-for="option in categories.filteredOptions" :key="option.id">
+                                        <div @click="categories.selected.push(option); categories.search = ''; categories.open = false" class="cursor-pointer px-4 py-2 hover:bg-gray-100" x-text="option.name"></div>
                                     </template>
                                 </div>
                             </div>
-                            <x-input-error :messages="$errors->get('tools')" class="mt-2" />
+                        </div>
+
+                        <!-- Tools -->
+                        <div class="mt-4">
+                            <x-input-label for="tools-search" :value="__('Tools')" />
+                            <div class="flex flex-wrap gap-2 mt-2 mb-2">
+                                <template x-for="s in tools.selected" :key="s.id">
+                                     <span class="inline-flex items-center px-2 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full">
+                                        <span x-text="s.name"></span>
+                                        <template x-if="s.comment"><span class="ml-1 text-xs" x-text="'(' + s.comment + ')'"></span></template>
+                                        <button @click="tools.selected = tools.selected.filter(i => i.id !== s.id)" type="button" class="ml-2 text-green-500 hover:text-green-700">&times;</button>
+                                    </span>
+                                </template>
+                            </div>
+                            <div @click.away="tools.open = false" class="relative">
+                                <input id="tools-search" type="text" x-model="tools.search" @focus="tools.open = true" @input="tools.open = true" placeholder="Search or add a new tool..." class="w-full rounded-md">
+                                <div x-show="tools.open" class="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg max-h-60 overflow-y-auto">
+                                    <template x-for="option in tools.filteredOptions" :key="option.id">
+                                        <div @click="tools.selected.push(option); tools.search = ''; tools.open = false" class="cursor-pointer px-4 py-2 hover:bg-gray-100">
+                                            <span x-text="option.name"></span>
+                                            <template x-if="option.comment"><span class="ml-1 text-xs text-gray-500" x-text="'(' + option.comment + ')'"></span></template>
+                                        </div>
+                                    </template>
+                                    <div x-show="tools.search && tools.filteredOptions.length === 0" class="p-4 border-t">
+                                        <p class="mb-2">Create new tool: <strong x-text="tools.search"></strong></p>
+                                        <input type="text" x-model="tools.newToolComment" placeholder="Optional comment..." class="w-full text-sm rounded-md mb-2">
+                                        <button @click="createNewTool" type="button" class="w-full text-sm px-4 py-2 bg-indigo-600 text-white rounded-md">Create & Add</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Images -->
                         <div class="mt-4">
                             <x-input-label for="images" :value="__('Images')" />
-                            <input id="images" name="images[]" type="file" class="block mt-1 w-full" multiple />
+                            <input id="images" type="file" name="images[]" class="block mt-1 w-full" multiple @change="handleImageSelect($event)">
                             <x-input-error :messages="$errors->get('images')" class="mt-2" />
                             <x-input-error :messages="$errors->get('images.*')" class="mt-2" />
+
+                            <div class="mt-4" x-show="newImages.length > 0">
+                                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-2">
+                                    <template x-for="(image, index) in newImages" :key="index">
+                                        <div class="relative group">
+                                            <img :src="image" class="rounded-lg shadow-md w-full h-32 object-cover">
+                                            <button type="button" @click="removeNewImage(index)" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
+                                            <label class="absolute bottom-1 left-1 cursor-pointer text-white px-2 py-1 rounded-md text-xs" :class="selectedCoverIndex === index ? 'bg-indigo-600' : 'bg-gray-700 opacity-0 group-hover:opacity-100'">
+                                                <input type="radio" name="cover_image_selection" :value="index" x-model.number="selectedCoverIndex" class="hidden">
+                                                <span x-text="selectedCoverIndex === index ? 'Cover' : 'Set Cover'"></span>
+                                            </label>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
                         </div>
                         
-                        <!-- Is Public -->
                         <div class="mt-4">
                             <label for="is_public" class="inline-flex items-center">
-                                <input id="is_public" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="is_public" @checked(old('is_public'))>
+                                <input id="is_public" type="checkbox" class="rounded border-gray-300" name="is_public" value="1">
                                 <span class="ms-2 text-sm text-gray-600">{{ __('Make Public') }}</span>
                             </label>
-                            <x-input-error :messages="$errors->get('is_public')" class="mt-2" />
                         </div>
 
                         <div class="flex items-center justify-end mt-4">
-                            <x-primary-button class="ms-4">
+                            <x-primary-button class="ms-4" type="submit">
                                 {{ __('Create Project') }}
                             </x-primary-button>
                         </div>

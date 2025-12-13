@@ -67,14 +67,18 @@ class ProjectController extends Controller
         }
 
         if ($request->hasFile('images')) {
-            $isFirstImage = true;
-            foreach ($request->file('images') as $imageFile) {
+            $coverIndex = 0; // Default to the first image
+            if ($request->filled('cover_image_selection')) {
+                // 'new_2' -> '2'
+                $coverIndex = (int) str_replace('new_', '', $request->input('cover_image_selection'));
+            }
+            
+            foreach ($request->file('images') as $index => $imageFile) {
                 $path = $imageFile->store('project-images', 'public');
                 $project->images()->create([
                     'path' => $path,
-                    'is_cover' => $isFirstImage,
+                    'is_cover' => ($index === $coverIndex)
                 ]);
-                $isFirstImage = false;
             }
         }
 
