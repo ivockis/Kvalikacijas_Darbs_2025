@@ -19,7 +19,7 @@ class ProjectController extends Controller
     {
         $categories = Category::all(); // Get all categories for the filter dropdown
 
-        $query = Project::where('is_public', true);
+        $query = Project::where('is_public', true)->where('is_blocked', false);
 
         // Apply search filter
         if ($search = $request->input('search')) {

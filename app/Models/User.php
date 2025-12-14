@@ -69,4 +69,16 @@ class User extends Authenticatable
     {
         return $this->hasOne(Image::class, 'id', 'profile_image_id');
     }
+
+    /**
+     * Get the URL of the user's profile image, or a default placeholder.
+     */
+    public function getProfileImageUrlAttribute()
+    {
+        if ($this->profileImage) {
+            return asset('storage/' . $this->profileImage->path);
+        }
+        // Return a default placeholder image if no profile image is set
+        return 'https://ui-avatars.com/api/?name=' . urlencode($this->name . ' ' . $this->surname) . '&color=7F9CF5&background=EBF4FF';
+    }
 }
