@@ -15,16 +15,87 @@ class ProjectController extends Controller
 {
     use AuthorizesRequests;
 
-    public function publicIndex()
+    public function publicIndex(Request $request)
     {
-        $projects = Project::where('is_public', true)->latest()->paginate(12);
-        return view('public-projects', compact('projects'));
+        $categories = Category::all(); // Get all categories for the filter dropdown
+
+        $query = Project::where('is_public', true);
+
+        // Apply search filter
+        if ($search = $request->input('search')) {
+            $query->where('title', 'like', '%' . $search . '%');
+        }
+
+        // Apply category filter
+        if ($categoryId = $request->input('category_id')) {
+            $query->whereHas('categories', function ($q) use ($categoryId) {
+                $q->where('categories.id', $categoryId);
+            });
+        }
+
+        // Apply sorting
+        switch ($request->input('sort_by')) {
+            case 'oldest':
+                $query->oldest();
+                break;
+            case 'most_liked':
+                // This would require a 'likes_count' or similar field/relation to sort by
+                // For now, we'll default to latest if not implemented
+                $query->latest();
+                break;
+            case 'title_asc':
+                $query->orderBy('title', 'asc');
+                break;
+            case 'title_desc':
+                $query->orderBy('title', 'desc');
+                break;
+            default: // latest
+                $query->latest();
+                break;
+        }
+
+        $projects = $query->paginate(12)->withQueryString();
+
+        return view('public-projects', compact('projects', 'categories'));
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $projects = Auth::user()->projects()->latest()->get();
-        return view('projects.index', compact('projects'));
+        $categories = Category::all(); // Get all categories for the filter dropdown
+
+        $query = Auth::user()->projects(); // Start with authenticated user's projects
+
+        // Apply search filter
+        if ($search = $request->input('search')) {
+            $query->where('title', 'like', '%' . $search . '%');
+        }
+
+        // Apply category filter
+        if ($categoryId = $request->input('category_id')) {
+            $query->whereHas('categories', function ($q) use ($categoryId) {
+                $q->where('categories.id', $categoryId);
+            });
+        }
+
+        // Apply sorting
+        switch ($request->input('sort_by')) {
+            case 'oldest':
+                $query->oldest();
+                break;
+            case 'title_asc':
+                $query->orderBy('title', 'asc');
+                break;
+            case 'title_desc':
+                $query->orderBy('title', 'desc');
+                break;
+            default: // latest
+                $query->latest();
+                break;
+        }
+
+        $projects = $query->paginate(12)->withQueryString();
+
+        return view('projects.index', compact('projects', 'categories'));
     }
 
     public function create()
