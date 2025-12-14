@@ -24,8 +24,8 @@ class ProfileUpdateRequest extends FormRequest
                 'required',
                 'string',
                 'email',
-                'max:255',
-                Rule::unique(User::class, 'email')->ignore($this->user()->id)->withoutTrashed(), // Ensure uniqueness even with soft-deleted users
+                'max:256',
+                Rule::unique(User::class, 'email')->ignore($this->user()->id),
             ],
             'profile_image' => ['nullable', 'image', 'mimes:jpg,png', 'max:2048'], // 2MB max, E-016
             'remove_profile_image' => ['boolean'], // For removing the image
