@@ -24,6 +24,13 @@ class Project extends Model
         'is_blocked' => 'boolean',
     ];
 
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['cover_image_url'];
+
     public function user()
     {
         return $this->belongsTo(User::class);

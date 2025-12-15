@@ -78,6 +78,112 @@ class AdminController extends Controller
         $user->is_admin = !$user->is_admin;
         $user->save();
 
-        return response()->json(['message' => 'User admin status updated.', 'is_admin' => $user->is_admin]);
-    }
-}
+        
+
+                return response()->json(['message' => 'User admin status updated.', 'is_admin' => $user->is_admin]);
+
+            }
+
+        
+
+            /**
+
+             * Display the project management view.
+
+             */
+
+            public function projectsIndex(Request $request)
+
+            {
+
+                $query = Project::with('user'); // Eager load the author relationship
+
+        
+
+                // Search functionality
+
+                if ($search = $request->input('search')) {
+
+                    $query->where(function ($q) use ($search) {
+
+                        $q->where('title', 'like', '%' . $search . '%')
+
+                          ->orWhere('description', 'like', '%' . $search . '%');
+
+                    });
+
+                }
+
+        
+
+                // Filtering by status
+
+                if ($status = $request->input('status')) {
+
+                    if ($status === 'blocked') {
+
+                        $query->where('is_blocked', true);
+
+                    } elseif ($status === 'active') {
+
+                        $query->where('is_blocked', false);
+
+                    }
+
+                }
+
+        
+
+                // Sorting
+
+                $sortBy = $request->input('sort_by', 'created_at');
+
+                $sortOrder = $request->input('sort_order', 'desc');
+
+                $query->orderBy($sortBy, $sortOrder);
+
+        
+
+                $perPage = $request->input('per_page', 10);
+
+                $projects = $query->paginate($perPage)->withQueryString();
+
+        
+
+                if ($request->wantsJson()) {
+
+                    return $projects;
+
+                }
+
+        
+
+                return view('admin.projects.index', compact('projects'));
+
+            }
+
+        
+
+            /**
+
+             * Toggle the is_blocked status of a project.
+
+             */
+
+            public function toggleProjectBlock(Project $project)
+
+            {
+
+                $project->is_blocked = !$project->is_blocked;
+
+                $project->save();
+
+        
+
+                return response()->json(['message' => 'Project status updated.', 'is_blocked' => $project->is_blocked]);
+
+            }
+
+        }
+
+        

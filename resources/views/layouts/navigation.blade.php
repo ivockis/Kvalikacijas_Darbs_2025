@@ -29,6 +29,9 @@
                             <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.index')">
                                 {{ __('User Management') }}
                             </x-nav-link>
+                            <x-nav-link :href="route('admin.projects.index')" :active="request()->routeIs('admin.projects.index')">
+                                {{ __('Project Management') }}
+                            </x-nav-link>
                         @endif
                     @endauth
                 </div>
@@ -65,6 +68,9 @@
                             </x-dropdown-link>
                             <x-dropdown-link :href="route('admin.users.index')">
                                 {{ __('User Management') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('admin.projects.index')">
+                                {{ __('Project Management') }}
                             </x-dropdown-link>
                         @endif
 
@@ -113,6 +119,9 @@
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.index')">
                         {{ __('User Management') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('admin.projects.index')" :active="request()->routeIs('admin.projects.index')">
+                        {{ __('Project Management') }}
                     </x-responsive-nav-link>
                 @endif
             @endauth
