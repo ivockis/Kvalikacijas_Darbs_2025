@@ -28,6 +28,13 @@ class User extends Authenticatable
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['profile_image_url'];
+
+    /**
      * The attributes that should be hidden for serialization.
      *
      * @var array<int, string>

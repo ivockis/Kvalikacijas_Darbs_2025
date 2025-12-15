@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ProfileController;
@@ -28,6 +29,16 @@ Route::middleware('auth')->group(function () {
     Route::patch('/tools/{tool}/toggle-approval', [ToolController::class, 'toggleApproval'])->name('tools.toggleApproval');
 
     Route::resource('categories', CategoryController::class);
+
+    // Admin Panel Routes
+    Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/users', [AdminController::class, 'usersIndex'])->name('users.index');
+        Route::patch('/users/{user}/toggle-block', [AdminController::class, 'toggleBlock'])->name('users.toggleBlock');
+        Route::patch('/users/{user}/toggle-admin', [AdminController::class, 'toggleAdmin'])->name('users.toggleAdmin');
+        
+        Route::get('/projects', [AdminController::class, 'projectsIndex'])->name('projects.index');
+        Route::patch('/projects/{project}/toggle-block', [AdminController::class, 'toggleProjectBlock'])->name('projects.toggleBlock');
+    });
 });
 
 require __DIR__.'/auth.php';
