@@ -15,9 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id');    // FK to users table
             $table->foreignId('project_id'); // FK to projects table
-            $table->text('message');
-            $table->boolean('status')->default(false); // 0 = new, 1 = resolved
+            $table->text('reason');
+            $table->string('status')->default('pending'); // e.g., pending, reviewed, dismissed
             $table->timestamps();
+
+            // Add unique constraint for user_id and project_id combination
+            $table->unique(['user_id', 'project_id']);
         });
     }
 

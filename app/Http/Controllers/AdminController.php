@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Project;
+use App\Models\Complaint;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -96,10 +97,8 @@ class AdminController extends Controller
 
             {
 
-                $query = Project::with('user'); // Eager load the author relationship
-
+                $query = Project::with('user')->withCount('complaints'); // Eager load relationships
         
-
                 // Search functionality
 
                 if ($search = $request->input('search')) {
@@ -107,15 +106,13 @@ class AdminController extends Controller
                     $query->where(function ($q) use ($search) {
 
                         $q->where('title', 'like', '%' . $search . '%')
-
-                          ->orWhere('description', 'like', '%' . $search . '%');
-
+                          ->orWhereHas('user', function ($userQuery) use ($search) {
+                              $userQuery->where('username', 'like', '%' . $search . '%');
+                          });
                     });
 
                 }
-
         
-
                 // Filtering by status
 
                 if ($status = $request->input('status')) {
@@ -128,36 +125,36 @@ class AdminController extends Controller
 
                         $query->where('is_blocked', false);
 
+                    } elseif ($status === 'has_complaints') {
+                        $query->whereHas('complaints');
                     }
 
                 }
-
         
-
                 // Sorting
 
                 $sortBy = $request->input('sort_by', 'created_at');
 
                 $sortOrder = $request->input('sort_order', 'desc');
 
-                $query->orderBy($sortBy, $sortOrder);
+                if ($sortBy === 'complaints_count') {
+                    $query->orderBy('complaints_count', $sortOrder);
+                } else {
+                    $query->orderBy($sortBy, $sortOrder);
+                }
 
         
-
                 $perPage = $request->input('per_page', 10);
 
                 $projects = $query->paginate($perPage)->withQueryString();
 
         
-
                 if ($request->wantsJson()) {
 
                     return $projects;
 
                 }
-
         
-
                 return view('admin.projects.index', compact('projects'));
 
             }
@@ -184,6 +181,45 @@ class AdminController extends Controller
 
             }
 
+        
+
+            /**
+
+             * Display the complaints for a specific project.
+
+             */
+
+            public function showProjectComplaints(Project $project)
+
+            {
+
+                $project->load(['complaints.user']); // Eager load complaints and the user who made them
+                
+                [$pendingComplaints, $resolvedComplaints] = $project->complaints->partition(function ($complaint) {
+                    return $complaint->status === 'pending';
+                });
+
+                return view('admin.projects.complaints', compact('project', 'pendingComplaints', 'resolvedComplaints'));
+
+            }
+
+            /**
+             * Approve a complaint.
+             */
+            public function approveComplaint(Complaint $complaint)
+            {
+                $complaint->update(['status' => 'approved']);
+                return back()->with('status', 'Complaint approved.');
+            }
+        
+            /**
+             * Decline a complaint.
+             */
+            public function declineComplaint(Complaint $complaint)
+            {
+                $complaint->update(['status' => 'declined']);
+                return back()->with('status', 'Complaint declined.');
+            }
         }
 
         

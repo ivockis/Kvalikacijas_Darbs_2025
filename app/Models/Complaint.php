@@ -9,11 +9,7 @@ class Complaint extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'project_id', 'message', 'status'];
-
-    protected $casts = [
-        'status' => 'boolean',
-    ];
+    protected $fillable = ['user_id', 'project_id', 'reason', 'status'];
 
     public function user()
     {

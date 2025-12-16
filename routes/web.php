@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
@@ -21,6 +22,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('projects', ProjectController::class);
     Route::post('/projects/{project}/like', [ProjectController::class, 'like'])->name('projects.like');
+    Route::post('/projects/{project}/complain', [ComplaintController::class, 'store'])->name('projects.complain');
     Route::delete('/images/{image}', [ImageController::class, 'destroy'])->name('images.destroy');
     Route::post('/images/{image}/set-as-cover', [ImageController::class, 'setAsCover'])->name('images.setAsCover');
 
@@ -38,6 +40,9 @@ Route::middleware('auth')->group(function () {
         
         Route::get('/projects', [AdminController::class, 'projectsIndex'])->name('projects.index');
         Route::patch('/projects/{project}/toggle-block', [AdminController::class, 'toggleProjectBlock'])->name('projects.toggleBlock');
+        Route::get('/projects/{project}/complaints', [AdminController::class, 'showProjectComplaints'])->name('projects.complaints');
+        Route::patch('/complaints/{complaint}/approve', [AdminController::class, 'approveComplaint'])->name('complaints.approve');
+        Route::patch('/complaints/{complaint}/decline', [AdminController::class, 'declineComplaint'])->name('complaints.decline');
     });
 });
 

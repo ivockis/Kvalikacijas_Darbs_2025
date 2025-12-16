@@ -164,8 +164,13 @@ class ProjectController extends Controller
 
         $project->load(['user', 'categories', 'tools', 'images', 'likers']);
         $liked = Auth::check() ? $project->likers->contains(Auth::user()->id) : false;
+        
+        $hasComplained = false;
+        if (Auth::check()) {
+            $hasComplained = $project->complaints()->where('user_id', Auth::id())->exists();
+        }
 
-        return view('projects.show', compact('project', 'liked'));
+        return view('projects.show', compact('project', 'liked', 'hasComplained'));
     }
 
     public function edit(Project $project)

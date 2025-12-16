@@ -89,6 +89,7 @@
                                     <option value="">All</option>
                                     <option value="blocked">Blocked</option>
                                     <option value="active">Active</option>
+                                    <option value="has_complaints">Has Complaints</option>
                                 </select>
                             </div>
                             <div>
@@ -110,6 +111,7 @@
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Project</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Author</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                    <th @click="sort_by = 'complaints_count'; sort_order = sort_order === 'asc' ? 'desc' : 'asc'" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer">Complaints</th>
                                     <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Is Blocked</th>
                                 </tr>
                             </thead>
@@ -131,6 +133,14 @@
                                         <td class="px-6 py-4">
                                             <span x-show="project.is_blocked" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Blocked</span>
                                             <span x-show="!project.is_blocked" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <template x-if="project.complaints_count > 0">
+                                                <a :href="`/admin/projects/${project.id}/complaints`" class="text-blue-600 hover:underline" x-text="project.complaints_count"></a>
+                                            </template>
+                                            <template x-if="project.complaints_count === 0">
+                                                <span x-text="project.complaints_count"></span>
+                                            </template>
                                         </td>
                                         <td class="px-6 py-4 text-center relative">
                                             <button @click="askForConfirmation(project)" :class="{ 'bg-red-500': project.is_blocked, 'bg-gray-300': !project.is_blocked }" class="relative inline-flex items-center h-6 rounded-full w-11 transition-colors">
