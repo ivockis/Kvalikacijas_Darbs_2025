@@ -131,7 +131,7 @@
                                             <div class="flex items-center">
                                                 <img :src="user.profile_image_url" alt="" class="h-10 w-10 rounded-full object-cover">
                                                 <div class="ml-4">
-                                                    <div class="text-sm font-medium text-gray-900" x-text="`${user.name} ${user.surname}`"></div>
+                                                    <a :href="'/users/' + user.id" class="text-sm font-medium text-blue-600 hover:underline" x-text="`${user.name} ${user.surname}`"></a>
                                                     <div class="text-sm text-gray-500" x-text="user.username"></div>
                                                     <div class="text-sm text-gray-500" x-text="user.email"></div>
                                                 </div>

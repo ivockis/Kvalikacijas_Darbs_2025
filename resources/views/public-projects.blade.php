@@ -65,7 +65,7 @@
                                                 <a href="{{ route('projects.show', $project) }}" class="hover:underline">{{ $project->title }}</a>
                                             </h3>
                                             <p class="text-gray-600 text-sm mb-4 overflow-hidden text-ellipsis line-clamp-2">{{ Str::limit($project->description, 100) }}</p>
-                                            <p class="text-xs text-gray-500">{{ __('Author:') }} <span class="font-medium">{{ $project->user->name }}</span></p>
+                                        <p class="text-xs text-gray-500">{{ __('Author:') }} <a href="{{ route('users.show', $project->user) }}" class="font-medium text-blue-600 hover:underline">{{ $project->user->name }}</a></p>
                                             <p class="text-xs text-gray-500">{{ __('Created:') }} {{ $project->created_at->format('d.m.Y') }}</p>
                                         </div>
                                         <div class="mt-4 flex justify-end">

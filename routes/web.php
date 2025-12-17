@@ -7,6 +7,7 @@ use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ToolController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -14,6 +15,7 @@ Route::get('/', function () {
 });
 
 Route::get('/public-projects', [ProjectController::class, 'publicIndex'])->name('public.index');
+Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

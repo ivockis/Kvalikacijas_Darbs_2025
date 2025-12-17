@@ -48,18 +48,33 @@
                                             <div class="flex items-end justify-center min-h-screen px-4 text-center md:items-center sm:block sm:p-0">
                                                 <div x-show="open" @click="open = false" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
 
-                                                <div x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                                <div x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" 
+                                                     class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+                                                     x-data="{ 
+                                                        reason: '',
+                                                        complaintOptions: [
+                                                            'Inappropriate or offensive content.',
+                                                            'Spam or misleading information.',
+                                                            'Copyright or intellectual property violation.',
+                                                            'Dangerous or harmful instructions.'
+                                                        ]
+                                                     }">
                                                     <form method="POST" action="{{ route('projects.complain', $project) }}">
                                                         @csrf
                                                         <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                                             <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
                                                                 {{ __('Report Project') }}: {{ $project->title }}
                                                             </h3>
-                                                            <div class="mt-2">
-                                                                <p class="text-sm text-gray-500 mb-4">
-                                                                    {{ __('Please provide a reason for reporting this project.') }}
+                                                            <div class="mt-4">
+                                                                <p class="text-sm text-gray-500 mb-2">
+                                                                    {{ __('Select a reason or write your own:') }}
                                                                 </p>
-                                                                <textarea name="reason" rows="4" class="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required minlength="10"></textarea>
+                                                                <div class="flex flex-wrap gap-2 mb-4">
+                                                                    <template x-for="option in complaintOptions" :key="option">
+                                                                        <button @click.prevent="reason = option" type="button" class="px-3 py-1 text-xs text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-full" x-text="option"></button>
+                                                                    </template>
+                                                                </div>
+                                                                <textarea name="reason" x-model="reason" rows="4" class="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required minlength="10" placeholder="{{ __('Or provide your own reason here...') }}"></textarea>
                                                             </div>
                                                         </div>
                                                         <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
@@ -84,7 +99,7 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                         <div>
-                            <p class="font-semibold">{{ __('Author:') }} <a href="#" class="text-blue-600">{{ $project->user->name }}</a></p>
+                            <p class="font-semibold">{{ __('Author:') }} <a href="{{ route('users.show', $project->user) }}" class="text-blue-600 hover:underline">{{ $project->user->username }}</a></p>
                             <p class="font-semibold">{{ __('Created:') }} {{ $project->created_at->format('d.m.Y H:i') }}</p>
                             <p class="font-semibold">{{ __('Public:') }} {{ $project->is_public ? __('Yes') : __('No') }}</p>
                         </div>

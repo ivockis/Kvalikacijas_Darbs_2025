@@ -128,7 +128,7 @@
                                              </a>
                                         </td>
                                         <td class="px-6 py-4">
-                                            <div class="text-sm text-gray-900" x-text="project.user.username"></div>
+                                            <a :href="'/users/' + project.user.id" class="text-sm text-blue-600 hover:underline" x-text="project.user.username"></a>
                                         </td>
                                         <td class="px-6 py-4">
                                             <span x-show="project.is_blocked" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Blocked</span>
