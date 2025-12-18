@@ -53,19 +53,19 @@
                         <!-- Title, Description, etc. -->
                         <div>
                             <x-input-label for="title" :value="__('Title')" />
-                            <x-text-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('title', $project->title)" required autofocus />
+                            <x-text-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('title', $project->title)" required autofocus maxlength="100" />
                         </div>
                         <div class="mt-4">
                             <x-input-label for="description" :value="__('Description')" />
-                            <textarea id="description" name="description" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" required>{{ old('description', $project->description) }}</textarea>
+                            <textarea id="description" name="description" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" required maxlength="10000">{{ old('description', $project->description) }}</textarea>
                         </div>
                         <div class="mt-4">
                             <x-input-label for="materials" :value="__('Materials')" />
-                            <textarea id="materials" name="materials" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" required>{{ old('materials', $project->materials) }}</textarea>
+                            <textarea id="materials" name="materials" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" required maxlength="5000">{{ old('materials', $project->materials) }}</textarea>
                         </div>
                         <div class="mt-4">
-                            <x-input-label for="creation_time" :value="__('Time for Creation')" />
-                            <x-text-input id="creation_time" class="block mt-1 w-full" type="text" name="creation_time" :value="old('creation_time', $project->creation_time)" required />
+                            <x-input-label for="estimated_hours" :value="__('Estimated Hours for Creation')" />
+                            <x-text-input id="estimated_hours" class="block mt-1 w-full" type="number" name="estimated_hours" :value="old('estimated_hours', $project->estimated_hours)" required min="1" max="1000" />
                         </div>
                         <!-- Categories -->
                         <div class="mt-4"
@@ -99,7 +99,7 @@
                             </div>
                             <!-- Search Input -->
                             <div @click.away="open = false" class="relative">
-                                <input id="categories-search" type="text" x-model="search" @focus="open = true" @input="open = true" placeholder="Search categories..." class="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                <input id="categories-search" type="text" x-model="search" @focus="open = true" @input="open = true" placeholder="Search categories..." class="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" maxlength="50">
                                 <div x-show="open && filteredOptions.length > 0" class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
                                     <template x-for="option in filteredOptions" :key="option.id">
                                         <div @click="selected.push(option); search = ''; open = false" class="cursor-pointer px-4 py-2 hover:bg-gray-100" x-text="option.name"></div>
@@ -162,7 +162,7 @@
                             </div>
                             <!-- Search Input -->
                             <div @click.away="open = false" class="relative">
-                                <input id="tools-search" type="text" x-model="search" @focus="open = true" @input="open = true" placeholder="Search or add a new tool..." class="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                <input id="tools-search" type="text" x-model="search" @focus="open = true" @input="open = true" placeholder="Search or add a new tool..." class="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" maxlength="50">
                                 <div x-show="open" class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
                                     <template x-for="option in filteredOptions" :key="option.id">
                                         <div @click="selected.push(option); search = ''; open = false" class="cursor-pointer px-4 py-2 hover:bg-gray-100">
@@ -175,7 +175,7 @@
                                     <!-- Create new tool UI -->
                                     <div x-show="search && filteredOptions.length === 0" class="p-4 border-t">
                                         <p class="mb-2">Create new tool: <strong x-text="search"></strong></p>
-                                        <input type="text" x-model="newToolComment" placeholder="Optional comment..." class="w-full text-sm rounded-md shadow-sm border-gray-300 mb-2">
+                                        <input type="text" x-model="newToolComment" placeholder="Optional comment..." class="w-full text-sm rounded-md shadow-sm border-gray-300 mb-2" maxlength="50">
                                         <button @click="createNewTool" type="button" class="w-full text-sm px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-500">Create & Add</button>
                                     </div>
                                 </div>

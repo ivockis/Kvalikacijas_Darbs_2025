@@ -5,28 +5,28 @@
         <!-- Name -->
         <div>
             <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" autocomplete="name" />
+            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" maxlength="255" />
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 
         <!-- Surname -->
         <div class="mt-4">
             <x-input-label for="surname" :value="__('Surname')" />
-            <x-text-input id="surname" class="block mt-1 w-full" type="text" name="surname" :value="old('surname')" autocomplete="surname" />
+            <x-text-input id="surname" class="block mt-1 w-full" type="text" name="surname" :value="old('surname')" autocomplete="family-name" maxlength="255" />
             <x-input-error :messages="$errors->get('surname')" class="mt-2" />
         </div>
 
-        <!-- Lietotājvārds -->
+        <!-- Username -->
         <div class="mt-4">
             <x-input-label for="username" :value="__('Username')" />
-            <x-text-input id="username" class="block mt-1 w-full" type="text" name="username" :value="old('username')" required autofocus autocomplete="username" />
+            <x-text-input id="username" class="block mt-1 w-full" type="text" name="username" :value="old('username')" required autocomplete="username" maxlength="30" />
             <x-input-error :messages="$errors->get('username')" class="mt-2" />
         </div>
 
         <!-- Email Address -->
         <div class="mt-4">
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
+            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="email" maxlength="255" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
@@ -37,7 +37,7 @@
             <x-text-input id="password" class="block mt-1 w-full"
                             type="password"
                             name="password"
-                            required autocomplete="new-password" />
+                            required autocomplete="new-password" maxlength="255" />
 
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
@@ -48,7 +48,7 @@
 
             <x-text-input id="password_confirmation" class="block mt-1 w-full"
                             type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
+                            name="password_confirmation" required autocomplete="new-password" maxlength="255" />
 
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>

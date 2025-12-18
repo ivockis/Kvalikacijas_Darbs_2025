@@ -111,7 +111,7 @@ class ProjectController extends Controller
             'title' => 'required|string|max:50',
             'description' => 'required|string',
             'materials' => 'required|string',
-            'creation_time' => 'required|string|max:255',
+            'estimated_hours' => 'required|integer|min:1|max:1000',
             'is_public' => '',
             'categories' => 'required|array|min:1',
             'categories.*' => 'exists:categories,id',
@@ -126,7 +126,7 @@ class ProjectController extends Controller
             'description' => $validated['description'],
             'materials' => $validated['materials'],
             'is_public' => $request->has('is_public'),
-            'creation_time' => $validated['creation_time'],
+            'estimated_hours' => $validated['estimated_hours'],
         ]);
 
         if (isset($validated['categories'])) {
@@ -189,7 +189,7 @@ class ProjectController extends Controller
             'title' => 'required|string|max:50',
             'description' => 'required|string',
             'materials' => 'required|string',
-            'creation_time' => 'required|string|max:255',
+            'estimated_hours' => 'required|integer|min:1|max:1000',
             'is_public' => '',
             'categories' => 'required|array|min:1',
             'categories.*' => 'exists:categories,id',
@@ -205,7 +205,7 @@ class ProjectController extends Controller
             'description' => $validated['description'],
             'materials' => $validated['materials'],
             'is_public' => $request->has('is_public'),
-            'creation_time' => $validated['creation_time'],
+            'estimated_hours' => $validated['estimated_hours'],
         ]);
 
         if (isset($validated['categories'])) {

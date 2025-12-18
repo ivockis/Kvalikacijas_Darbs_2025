@@ -25,7 +25,7 @@ class ProjectFactory extends Factory
             'title' => $this->faker->sentence(3),
             'description' => $this->faker->paragraph(),
             'materials' => $this->faker->text(200),
-            'creation_time' => $this->faker->words(2, true), // e.g., "3 hours"
+            'estimated_hours' => $this->faker->numberBetween(1, 100),
             'is_public' => $this->faker->boolean(80), // 80% public
             'is_blocked' => false,
             'user_id' => \App\Models\User::factory(), // Automatically create a user if not provided

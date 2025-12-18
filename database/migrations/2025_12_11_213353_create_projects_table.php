@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('title', 50);
             $table->text('description');
             $table->text('materials');
-            $table->string('creation_time');
+            $table->unsignedInteger('estimated_hours')->default(1);
             $table->boolean('is_public')->default(false);
             $table->boolean('is_blocked')->default(false);
             $table->timestamps();

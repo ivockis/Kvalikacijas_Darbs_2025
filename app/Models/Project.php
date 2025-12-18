@@ -14,7 +14,7 @@ class Project extends Model
         'title',
         'description',
         'materials',
-        'creation_time',
+        'estimated_hours',
         'is_public',
         'is_blocked',
     ];
@@ -22,6 +22,7 @@ class Project extends Model
     protected $casts = [
         'is_public' => 'boolean',
         'is_blocked' => 'boolean',
+        'estimated_hours' => 'integer',
     ];
 
     /**

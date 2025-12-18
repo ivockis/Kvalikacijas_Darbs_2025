@@ -150,19 +150,19 @@
                         <!-- All form fields -->
                         <div>
                             <x-input-label for="title">{{ __('Title') }}<span class="text-red-500">*</span></x-input-label>
-                            <x-text-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('title')" required autofocus />
+                            <x-text-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('title')" required autofocus maxlength="100" />
                         </div>
                         <div class="mt-4">
                             <x-input-label for="description">{{ __('Description') }}<span class="text-red-500">*</span></x-input-label>
-                            <textarea id="description" class="block mt-1 w-full rounded-md" name="description" required>{{ old('description') }}</textarea>
+                            <textarea id="description" class="block mt-1 w-full rounded-md" name="description" required maxlength="10000">{{ old('description') }}</textarea>
                         </div>
                         <div class="mt-4">
                             <x-input-label for="materials">{{ __('Materials') }}<span class="text-red-500">*</span></x-input-label>
-                            <textarea id="materials" class="block mt-1 w-full rounded-md" name="materials" required>{{ old('materials') }}</textarea>
+                            <textarea id="materials" class="block mt-1 w-full rounded-md" name="materials" required maxlength="5000">{{ old('materials') }}</textarea>
                         </div>
                         <div class="mt-4">
-                            <x-input-label for="creation_time">{{ __('Time for Creation') }}<span class="text-red-500">*</span></x-input-label>
-                            <x-text-input id="creation_time" class="block mt-1 w-full" type="text" name="creation_time" :value="old('creation_time')" required />
+                            <x-input-label for="estimated_hours">{{ __('Estimated Hours for Creation') }}<span class="text-red-500">*</span></x-input-label>
+                            <x-text-input id="estimated_hours" class="block mt-1 w-full" type="number" name="estimated_hours" :value="old('estimated_hours')" required min="1" max="1000" />
                         </div>
 
                         <!-- Categories -->
@@ -177,7 +177,7 @@
                                 </template>
                             </div>
                             <div @click.away="categories.open = false" class="relative">
-                                <input id="categories-search" type="text" x-model="categories.search" @focus="categories.open = true" @input="categories.open = true" placeholder="Search categories..." class="w-full rounded-md">
+                                <input id="categories-search" type="text" x-model="categories.search" @focus="categories.open = true" @input="categories.open = true" placeholder="Search categories..." class="w-full rounded-md" maxlength="50">
                                 <div x-show="categories.open && categories.filteredOptions.length > 0" class="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg max-h-60 overflow-y-auto">
                                     <template x-for="option in categories.filteredOptions" :key="option.id">
                                         <div @click="categories.selected.push(option); categories.search = ''; categories.open = false" class="cursor-pointer px-4 py-2 hover:bg-gray-100" x-text="option.name"></div>
@@ -199,7 +199,7 @@
                                 </template>
                             </div>
                             <div @click.away="tools.open = false" class="relative">
-                                <input id="tools-search" type="text" x-model="tools.search" @focus="tools.open = true" @input="tools.open = true" placeholder="Search or add a new tool..." class="w-full rounded-md">
+                                <input id="tools-search" type="text" x-model="tools.search" @focus="tools.open = true" @input="tools.open = true" placeholder="Search or add a new tool..." class="w-full rounded-md" maxlength="50">
                                 <div x-show="tools.open" class="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg max-h-60 overflow-y-auto">
                                     <template x-for="option in tools.filteredOptions" :key="option.id">
                                         <div @click="tools.selected.push(option); tools.search = ''; tools.open = false" class="cursor-pointer px-4 py-2 hover:bg-gray-100">
@@ -209,7 +209,7 @@
                                     </template>
                                     <div x-show="tools.search && tools.filteredOptions.length === 0" class="p-4 border-t">
                                         <p class="mb-2">Create new tool: <strong x-text="tools.search"></strong></p>
-                                        <input type="text" x-model="tools.newToolComment" placeholder="Optional comment..." class="w-full text-sm rounded-md mb-2">
+                                        <input type="text" x-model="tools.newToolComment" placeholder="Optional comment..." class="w-full text-sm rounded-md mb-2" maxlength="50">
                                         <button @click="createNewTool" type="button" class="w-full text-sm px-4 py-2 bg-indigo-600 text-white rounded-md">Create & Add</button>
                                     </div>
                                 </div>

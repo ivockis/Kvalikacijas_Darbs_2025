@@ -102,8 +102,8 @@
                     <div class="mb-6 p-4 border rounded-lg">
                         <h3 class="font-bold text-lg mb-2">Add New Tool</h3>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <input type="text" x-model="newTool.name" placeholder="Tool Name" class="w-full rounded-md shadow-sm border-gray-300">
-                            <input type="text" x-model="newTool.comment" placeholder="Optional Comment" class="w-full md:col-span-2 rounded-md shadow-sm border-gray-300">
+                            <input type="text" x-model="newTool.name" placeholder="Tool Name" class="w-full rounded-md shadow-sm border-gray-300" maxlength="50">
+                            <input type="text" x-model="newTool.comment" placeholder="Optional Comment" class="w-full md:col-span-2 rounded-md shadow-sm border-gray-300" maxlength="50">
                         </div>
                         <div class="mt-4 flex justify-end">
                             <button @click="addTool" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700">Add</button>
