@@ -52,19 +52,19 @@
 
                         <!-- Title, Description, etc. -->
                         <div>
-                            <x-input-label for="title" :value="__('Title')" />
+                            <x-input-label for="title">{{ __('Title') }}<span class="text-red-500">*</span></x-input-label>
                             <x-text-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('title', $project->title)" required autofocus maxlength="100" />
                         </div>
                         <div class="mt-4">
-                            <x-input-label for="description" :value="__('Description')" />
+                            <x-input-label for="description">{{ __('Description') }}<span class="text-red-500">*</span></x-input-label>
                             <textarea id="description" name="description" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" required maxlength="10000">{{ old('description', $project->description) }}</textarea>
                         </div>
                         <div class="mt-4">
-                            <x-input-label for="materials" :value="__('Materials')" />
+                            <x-input-label for="materials">{{ __('Materials') }}<span class="text-red-500">*</span></x-input-label>
                             <textarea id="materials" name="materials" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" required maxlength="5000">{{ old('materials', $project->materials) }}</textarea>
                         </div>
                         <div class="mt-4">
-                            <x-input-label for="estimated_hours" :value="__('Estimated Hours for Creation')" />
+                            <x-input-label for="estimated_hours">{{ __('Estimated Hours for Creation') }}<span class="text-red-500">*</span></x-input-label>
                             <x-text-input id="estimated_hours" class="block mt-1 w-full" type="number" name="estimated_hours" :value="old('estimated_hours', $project->estimated_hours)" required min="1" max="1000" />
                         </div>
                         <!-- Categories -->
@@ -81,7 +81,7 @@
                                 }
                             }"
                         >
-                            <x-input-label for="categories-search" :value="__('Categories')" />
+                            <x-input-label for="categories-search">{{ __('Categories') }}<span class="text-red-500">*</span></x-input-label>
                             <!-- Hidden inputs for submission -->
                             <template x-for="s in selected" :key="s.id">
                                 <input type="hidden" name="categories[]" :value="s.id">
@@ -187,7 +187,7 @@
                         <div>
                             <!-- Image Upload -->
                             <div class="mt-4">
-                                <x-input-label for="images" :value="__('Upload New Images')" />
+                                <x-input-label for="images">{{ __('Upload New Images') }}<span class="text-red-500">*</span></x-input-label>
                                 <input id="images" name="images[]" type="file" class="block mt-1 w-full" multiple @change="handleImageSelect($event)">
                             </div>
 

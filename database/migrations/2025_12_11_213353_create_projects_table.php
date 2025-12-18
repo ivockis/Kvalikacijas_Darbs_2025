@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id'); // FK to users table
-            $table->string('title', 50);
+            $table->string('title', 100);
             $table->text('description');
             $table->text('materials');
             $table->unsignedInteger('estimated_hours')->default(1);

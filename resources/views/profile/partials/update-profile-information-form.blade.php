@@ -43,14 +43,14 @@
         </div>
 
         <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" autofocus autocomplete="name" maxlength="255" />
+            <x-input-label for="name">{{ __('Name') }}<span class="text-red-500">*</span></x-input-label>
+            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" maxlength="255" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
 
         <div>
-            <x-input-label for="surname" :value="__('Surname')" />
-            <x-text-input id="surname" name="surname" type="text" class="mt-1 block w-full" :value="old('surname', $user->surname)" autocomplete="surname" maxlength="255" />
+            <x-input-label for="surname">{{ __('Surname') }}<span class="text-red-500">*</span></x-input-label>
+            <x-text-input id="surname" name="surname" type="text" class="mt-1 block w-full" :value="old('surname', $user->surname)" required autocomplete="surname" maxlength="255" />
             <x-input-error class="mt-2" :messages="$errors->get('surname')" />
         </div>
 
