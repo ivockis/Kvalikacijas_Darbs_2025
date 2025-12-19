@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
-use App\Models\Image; // Import Image model
+use App\Models\Image;
+use App\Models\User; // Import User model
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Storage; // Import Storage facade
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -68,6 +69,14 @@ class ProfileController extends Controller
         ]);
 
         $user = $request->user();
+
+        // Prevent deletion if this is the last admin
+        if ($user->is_admin) {
+            $adminCount = User::where('is_admin', true)->count();
+            if ($adminCount <= 1) {
+                return Redirect::route('profile.edit')->with('error', 'last-admin');
+            }
+        }
 
         Auth::logout();
 

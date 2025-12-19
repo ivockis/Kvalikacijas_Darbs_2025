@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Validation\Rule;
 
 class ProjectController extends Controller
 {
@@ -54,7 +55,16 @@ class ProjectController extends Controller
                 break;
         }
 
-        $projects = $query->paginate(12)->withQueryString();
+        $perPage = $request->input('per_page', 25);
+        if ($perPage === 'all') {
+            $perPage = 999; // A large number to simulate "all"
+        }
+
+        $projects = $query->paginate($perPage)->withQueryString();
+
+        if ($request->ajax()) {
+            return view('projects._public-project-list-dynamic', compact('projects', 'categories'))->render();
+        }
 
         return view('public-projects', compact('projects', 'categories'));
     }
@@ -93,7 +103,16 @@ class ProjectController extends Controller
                 break;
         }
 
-        $projects = $query->paginate(12)->withQueryString();
+        $perPage = $request->input('per_page', 25);
+        if ($perPage === 'all') {
+            $perPage = 999; // A large number to simulate "all"
+        }
+
+        $projects = $query->paginate($perPage)->withQueryString();
+
+        if ($request->ajax()) {
+            return view('projects._my-project-list-dynamic', compact('projects', 'categories'))->render();
+        }
 
         return view('projects.index', compact('projects', 'categories'));
     }

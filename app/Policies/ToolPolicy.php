@@ -29,7 +29,7 @@ class ToolPolicy
      */
     public function create(User $user): bool
     {
-        return $user->is_admin;
+        return true; // Any authenticated user can create a tool
     }
 
     /**
