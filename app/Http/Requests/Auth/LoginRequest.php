@@ -49,6 +49,16 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        // Check if the authenticated user is blocked
+        $user = Auth::user();
+        if ($user && $user->is_blocked) {
+            Auth::guard('web')->logout(); // Log out the blocked user
+            RateLimiter::hit($this->throttleKey()); // Optionally hit rate limiter for blocked attempts
+            throw ValidationException::withMessages([
+                'email' => 'Your account has been blocked.', // Custom message for blocked users
+            ]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
 

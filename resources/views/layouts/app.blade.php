@@ -27,6 +27,16 @@
                 </header>
             @endisset
 
+            <!-- Session Status Message -->
+            @if (session('status'))
+                <div class="max-w-7xl mx-auto mt-4 px-4 sm:px-6 lg:px-8">
+                    <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
+                        <strong class="font-bold">Info:</strong>
+                        <span class="block sm:inline">{{ session('status') }}</span>
+                    </div>
+                </div>
+            @endif
+
             <!-- Page Content -->
             <main>
                 {{ $slot }}
