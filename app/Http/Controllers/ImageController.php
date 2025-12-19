@@ -15,6 +15,11 @@ class ImageController extends Controller
     {
         $this->authorize('delete', $image);
 
+        // Check if the image belongs to a project and if it's the last one
+        if ($image->project_id && $image->project->images()->count() === 1) {
+            return response()->json(['message' => 'Cannot delete the last image of a project. A project must have at least one image.'], 403);
+        }
+
         // Delete the image file from storage
         Storage::disk('public')->delete($image->path);
 

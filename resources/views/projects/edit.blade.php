@@ -14,11 +14,22 @@
                             newImages: [],
                             currentTotalImages: {{ $project->images->count() }},
                             selectedCover: '{{ optional($project->images->firstWhere('is_cover'))->id ? 'existing_' . optional($project->images->firstWhere('is_cover'))->id : '' }}',
+                            message: '', // New property for message text
+                            messageType: '', // New property for message type (success/error)
+
+                            showMessage(text, type = 'success') {
+                                this.message = text;
+                                this.messageType = type;
+                                setTimeout(() => {
+                                    this.message = '';
+                                    this.messageType = '';
+                                }, 5000); // Message disappears after 5 seconds
+                            },
 
                             handleImageSelect(event) {
                                 const files = Array.from(event.target.files);
                                 if ((this.currentTotalImages + files.length) > 10) {
-                                    alert('You can only have a maximum of 10 images in total.');
+                                    this.showMessage('You can only have a maximum of 10 images in total.', 'error');
                                     event.target.value = '';
                                     return;
                                 }
@@ -30,7 +41,7 @@
                                 });
                             },
                             async deleteImage(imageId, element) {
-                                if (!confirm('Are you sure you want to delete this image?')) return;
+
                                 const response = await fetch(`/images/${imageId}`, {
                                     method: 'DELETE',
                                     headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' },
@@ -41,8 +52,10 @@
                                     if (this.selectedCover === `existing_${imageId}`) {
                                         this.selectedCover = '';
                                     }
+                                    this.showMessage('Image deleted successfully.', 'success'); // Show success message
                                 } else {
-                                    alert('Failed to delete image.');
+                                    const errorData = await response.json();
+                                    this.showMessage(errorData.message || 'Failed to delete image.', 'error'); // Show error message from backend
                                 }
                             }
                         }"
@@ -50,22 +63,35 @@
                         @csrf
                         @method('patch')
 
+                        <!-- Message Display Area -->
+                        <div x-show="message" :class="{ 'bg-green-100 border-green-400 text-green-700': messageType === 'success', 'bg-red-100 border-red-400 text-red-700': messageType === 'error' }"
+                            class="border px-4 py-3 rounded relative mb-4" role="alert">
+                            <span class="block sm:inline" x-text="message"></span>
+                            <span @click="message = ''" class="absolute top-0 bottom-0 right-0 px-4 py-3 cursor-pointer">
+                                <svg class="fill-current h-6 w-6" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 2.65a1.2 1.2 0 1 1-1.697-1.697l2.758-2.758-2.758-2.758a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-2.651a1.2 1.2 0 1 1 1.697 1.697l-2.758 2.758 2.758 2.758a1.2 1.2 0 0 1 0 1.698z"/></svg>
+                            </span>
+                        </div>
+
                         <!-- Title, Description, etc. -->
                         <div>
                             <x-input-label for="title">{{ __('Title') }}<span class="text-red-500">*</span></x-input-label>
-                            <x-text-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('title', $project->title)" required autofocus maxlength="100" />
+                            <x-text-input id="title" class="block mt-1 w-full @error('title') border-red-500 @enderror" type="text" name="title" :value="old('title', $project->title)" required autofocus maxlength="100" />
+                            <x-input-error :messages="$errors->get('title')" class="mt-2" />
                         </div>
                         <div class="mt-4">
                             <x-input-label for="description">{{ __('Description') }}<span class="text-red-500">*</span></x-input-label>
-                            <textarea id="description" name="description" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" required maxlength="10000">{{ old('description', $project->description) }}</textarea>
+                            <textarea id="description" name="description" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 @error('description') border-red-500 @enderror" required maxlength="10000">{{ old('description', $project->description) }}</textarea>
+                            <x-input-error :messages="$errors->get('description')" class="mt-2" />
                         </div>
                         <div class="mt-4">
                             <x-input-label for="materials">{{ __('Materials') }}<span class="text-red-500">*</span></x-input-label>
-                            <textarea id="materials" name="materials" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" required maxlength="5000">{{ old('materials', $project->materials) }}</textarea>
+                            <textarea id="materials" name="materials" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 @error('materials') border-red-500 @enderror" required maxlength="5000">{{ old('materials', $project->materials) }}</textarea>
+                            <x-input-error :messages="$errors->get('materials')" class="mt-2" />
                         </div>
                         <div class="mt-4">
                             <x-input-label for="estimated_hours">{{ __('Estimated Hours for Creation') }}<span class="text-red-500">*</span></x-input-label>
-                            <x-text-input id="estimated_hours" class="block mt-1 w-full" type="number" name="estimated_hours" :value="old('estimated_hours', $project->estimated_hours)" required min="1" max="1000" />
+                            <x-text-input id="estimated_hours" class="block mt-1 w-full @error('estimated_hours') border-red-500 @enderror" type="number" name="estimated_hours" :value="old('estimated_hours', $project->estimated_hours)" required min="1" max="1000" />
+                            <x-input-error :messages="$errors->get('estimated_hours')" class="mt-2" />
                         </div>
                         <!-- Categories -->
                         <div class="mt-4"
@@ -99,7 +125,7 @@
                             </div>
                             <!-- Search Input -->
                             <div @click.away="open = false" class="relative">
-                                <input id="categories-search" type="text" x-model="search" @focus="open = true" @input="open = true" placeholder="Search categories..." class="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" maxlength="50">
+                                <input id="categories-search" type="text" x-model="search" @focus="open = true" @input="open = true" placeholder="Search categories..." class="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 @error('categories') border-red-500 @enderror" maxlength="50">
                                 <div x-show="open && filteredOptions.length > 0" class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
                                     <template x-for="option in filteredOptions" :key="option.id">
                                         <div @click="selected.push(option); search = ''; open = false" class="cursor-pointer px-4 py-2 hover:bg-gray-100" x-text="option.name"></div>
@@ -162,7 +188,7 @@
                             </div>
                             <!-- Search Input -->
                             <div @click.away="open = false" class="relative">
-                                <input id="tools-search" type="text" x-model="search" @focus="open = true" @input="open = true" placeholder="Search or add a new tool..." class="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" maxlength="50">
+                                <input id="tools-search" type="text" x-model="search" @focus="open = true" @input="open = true" placeholder="Search or add a new tool..." class="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 @error('tools') border-red-500 @enderror" maxlength="50">
                                 <div x-show="open" class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
                                     <template x-for="option in filteredOptions" :key="option.id">
                                         <div @click="selected.push(option); search = ''; open = false" class="cursor-pointer px-4 py-2 hover:bg-gray-100">
@@ -188,7 +214,7 @@
                             <!-- Image Upload -->
                             <div class="mt-4">
                                 <x-input-label for="images">{{ __('Upload New Images') }}<span class="text-red-500">*</span></x-input-label>
-                                <input id="images" name="images[]" type="file" class="block mt-1 w-full" multiple @change="handleImageSelect($event)">
+                                <input id="images" name="images[]" type="file" class="block mt-1 w-full @error('images') border-red-500 @enderror" multiple @change="handleImageSelect($event)">
                             </div>
 
                             <!-- New Image Previews -->
@@ -216,17 +242,16 @@
                                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-2">
                                         @foreach ($project->images as $image)
                                             <div class="relative group" x-ref="image-{{ $image->id }}">
-                                                <img src="{{ asset('storage/' . $image->path) }}" alt="{{ $project->title }}" class="rounded-lg shadow-md w-full h-32 object-cover">
+                                                <img src="{{ asset('storage/' . $image->path) }}" alt="{{ $project->title }}" class="rounded-lg shadow-md w-full h-32 object-cover" :class="selectedCover === 'existing_{{ $image->id }}' ? 'border-4 border-indigo-500' : ''">
                                                 <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100">
-                                                    <button type="button" @click="deleteImage({{ $image->id }}, $refs['image-{{ $image->id }}'])" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
+                                                    <template x-if="currentTotalImages > 1">
+                                                        <button type="button" @click="deleteImage({{ $image->id }}, $refs['image-{{ $image->id }}'])" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
+                                                    </template>
                                                     <label class="absolute bottom-1 left-1 cursor-pointer text-white px-2 py-1 rounded-md text-xs" :class="selectedCover === 'existing_{{ $image->id }}' ? 'bg-indigo-600' : 'bg-gray-700 opacity-0 group-hover:opacity-100'">
-                                                        <input type="radio" name="cover_image_selection" :value="'existing_' + {{ $image->id }}" x-model="selectedCover" class="hidden">
-                                                        <span x-text="selectedCover === 'existing_{{ $image->id }}' ? 'Cover' : 'Set Cover'"></span>
+                                                        <input type="radio" name="cover_image_selection" :value="'existing_' + {{ $image->id }}" x-model="selectedCover" class="hidden" :disabled="selectedCover === 'existing_{{ $image->id }}'">
+                                                        <span x-text="selectedCover === 'existing_{{ $image->id }}' ? 'Current Cover' : 'Set Cover'"></span>
                                                     </label>
                                                 </div>
-                                                @if ($image->is_cover)
-                                                    <span class="absolute bottom-1 right-1 bg-blue-500 text-white rounded-md px-2 py-1 text-xs">Cover</span>
-                                                @endif
                                             </div>
                                         @endforeach
                                     </div>

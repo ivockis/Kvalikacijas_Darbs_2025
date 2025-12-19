@@ -127,7 +127,12 @@ class ProjectController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:100',
+            'title' => [
+                'required',
+                'string',
+                'max:100',
+                Rule::unique('projects')->where('user_id', Auth::id()),
+            ],
             'description' => 'required|string',
             'materials' => 'required|string',
             'estimated_hours' => 'required|integer|min:1|max:1000',
@@ -205,7 +210,12 @@ class ProjectController extends Controller
         $this->authorize('update', $project);
 
         $validated = $request->validate([
-            'title' => 'required|string|max:100',
+            'title' => [
+                'required',
+                'string',
+                'max:100',
+                Rule::unique('projects')->where('user_id', Auth::id())->ignore($project->id),
+            ],
             'description' => 'required|string',
             'materials' => 'required|string',
             'estimated_hours' => 'required|integer|min:1|max:1000',

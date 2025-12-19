@@ -13,6 +13,9 @@
                         x-ref="createForm"
                         @submit.prevent="submitForm"
                         x-data="{
+                            // Global errors object
+                            formErrors: {},
+
                             // Image state
                             newImages: [],
                             imageFiles: [],
@@ -96,6 +99,7 @@
 
                             // Main Form Submission
                             submitForm() {
+                                this.formErrors = {}; // Clear previous errors
                                 // Create a new FormData object from the form
                                 const formData = new FormData(this.$refs.createForm);
                                 
@@ -132,14 +136,13 @@
                                         window.location.href = '{{ route('projects.index') }}';
                                     } else {
                                         return response.json().then(result => {
-                                            // Simple alert for errors, can be improved
-                                            const errorMessages = Object.values(result.errors).map(e => e.join('\n')).join('\n');
-                                            alert('Validation failed:\n' + errorMessages);
+                                            this.formErrors = {}; // Clear previous errors
+                                            this.formErrors = result.errors;
                                         });
                                     }
                                 })
                                 .catch(error => {
-                                    alert('An unexpected error occurred.');
+                                    this.formErrors = {'general': ['An unexpected error occurred.']}; // Display a general error
                                     console.error('Submit Error:', error);
                                 });
                             }
@@ -150,19 +153,23 @@
                         <!-- All form fields -->
                         <div>
                             <x-input-label for="title">{{ __('Title') }}<span class="text-red-500">*</span></x-input-label>
-                            <x-text-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('title')" required autofocus maxlength="100" />
+                            <x-text-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('title')" required autofocus maxlength="100" x-bind:class="{ 'border-red-500': formErrors.title }" />
+                            <span x-text="formErrors.title[0]" x-show="formErrors.title" class="text-red-500 text-sm mt-1"></span>
                         </div>
                         <div class="mt-4">
                             <x-input-label for="description">{{ __('Description') }}<span class="text-red-500">*</span></x-input-label>
-                            <textarea id="description" class="block mt-1 w-full rounded-md" name="description" required maxlength="10000">{{ old('description') }}</textarea>
+                            <textarea id="description" class="block mt-1 w-full rounded-md" name="description" required maxlength="10000" x-bind:class="{ 'border-red-500': formErrors.description }">{{ old('description') }}</textarea>
+                            <span x-text="formErrors.description[0]" x-show="formErrors.description" class="text-red-500 text-sm mt-1"></span>
                         </div>
                         <div class="mt-4">
                             <x-input-label for="materials">{{ __('Materials') }}<span class="text-red-500">*</span></x-input-label>
-                            <textarea id="materials" class="block mt-1 w-full rounded-md" name="materials" required maxlength="5000">{{ old('materials') }}</textarea>
+                            <textarea id="materials" class="block mt-1 w-full rounded-md" name="materials" required maxlength="5000" x-bind:class="{ 'border-red-500': formErrors.materials }">{{ old('materials') }}</textarea>
+                            <span x-text="formErrors.materials[0]" x-show="formErrors.materials" class="text-red-500 text-sm mt-1"></span>
                         </div>
                         <div class="mt-4">
                             <x-input-label for="estimated_hours">{{ __('Estimated Hours for Creation') }}<span class="text-red-500">*</span></x-input-label>
-                            <x-text-input id="estimated_hours" class="block mt-1 w-full" type="number" name="estimated_hours" :value="old('estimated_hours')" required min="1" max="1000" />
+                            <x-text-input id="estimated_hours" class="block mt-1 w-full" type="number" name="estimated_hours" :value="old('estimated_hours')" required min="1" max="1000" x-bind:class="{ 'border-red-500': formErrors.estimated_hours }" />
+                            <span x-text="formErrors.estimated_hours[0]" x-show="formErrors.estimated_hours" class="text-red-500 text-sm mt-1"></span>
                         </div>
 
                         <!-- Categories -->
@@ -177,7 +184,8 @@
                                 </template>
                             </div>
                             <div @click.away="categories.open = false" class="relative">
-                                <input id="categories-search" type="text" x-model="categories.search" @focus="categories.open = true" @input="categories.open = true" placeholder="Search categories..." class="w-full rounded-md" maxlength="50">
+                                <input id="categories-search" type="text" x-model="categories.search" @focus="categories.open = true" @input="categories.open = true" placeholder="Search categories..." class="w-full rounded-md" maxlength="50" x-bind:class="{ 'border-red-500': formErrors.categories }" >
+                                <span x-text="formErrors.categories[0]" x-show="formErrors.categories" class="text-red-500 text-sm mt-1"></span>
                                 <div x-show="categories.open && categories.filteredOptions.length > 0" class="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg max-h-60 overflow-y-auto">
                                     <template x-for="option in categories.filteredOptions" :key="option.id">
                                         <div @click="categories.selected.push(option); categories.search = ''; categories.open = false" class="cursor-pointer px-4 py-2 hover:bg-gray-100" x-text="option.name"></div>
@@ -199,7 +207,8 @@
                                 </template>
                             </div>
                             <div @click.away="tools.open = false" class="relative">
-                                <input id="tools-search" type="text" x-model="tools.search" @focus="tools.open = true" @input="tools.open = true" placeholder="Search or add a new tool..." class="w-full rounded-md" maxlength="50">
+                                <input id="tools-search" type="text" x-model="tools.search" @focus="tools.open = true" @input="tools.open = true" placeholder="Search or add a new tool..." class="w-full rounded-md" maxlength="50" x-bind:class="{ 'border-red-500': formErrors.tools }">
+                                <span x-text="formErrors.tools[0]" x-show="formErrors.tools" class="text-red-500 text-sm mt-1"></span>
                                 <div x-show="tools.open" class="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg max-h-60 overflow-y-auto">
                                     <template x-for="option in tools.filteredOptions" :key="option.id">
                                         <div @click="tools.selected.push(option); tools.search = ''; tools.open = false" class="cursor-pointer px-4 py-2 hover:bg-gray-100">
@@ -219,9 +228,9 @@
                         <!-- Images -->
                         <div class="mt-4">
                             <x-input-label for="images">{{ __('Images') }}<span class="text-red-500">*</span></x-input-label>
-                            <input id="images" type="file" name="images[]" class="block mt-1 w-full" multiple @change="handleImageSelect($event)">
-                            <x-input-error :messages="$errors->get('images')" class="mt-2" />
-                            <x-input-error :messages="$errors->get('images.*')" class="mt-2" />
+                            <input id="images" type="file" name="images[]" class="block mt-1 w-full" multiple @change="handleImageSelect($event)" x-bind:class="{ 'border-red-500': formErrors.images }">
+                            <span x-text="formErrors.images[0]" x-show="formErrors.images" class="text-red-500 text-sm mt-1"></span>
+                            <span x-text="formErrors['images.0']" x-show="formErrors['images.0']" class="text-red-500 text-sm mt-1"></span>
 
                             <div class="mt-4" x-show="newImages.length > 0">
                                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-2">
