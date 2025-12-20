@@ -39,7 +39,7 @@
                     x-transition:leave="transition ease-in duration-300" 
                     x-transition:leave-start="opacity-100 transform translate-y-0" 
                     x-transition:leave-end="opacity-0 transform translate-y-2"
-                    class="max-w-7xl mx-auto mt-4 px-4 sm:px-6 lg:px-8 absolute top-0 left-1/2 -translate-x-1/2 z-50 w-full"
+                    class="max-w-7xl mx-auto mt-4 px-4 sm:px-6 lg:px-8"
                     style="display: none;"
                 >
                     <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">

@@ -102,6 +102,7 @@
                             <p class="font-semibold">{{ __('Author:') }} <a href="{{ route('users.show', $project->user) }}" class="text-blue-600 hover:underline">{{ $project->user->username }}</a></p>
                             <p class="font-semibold">{{ __('Created:') }} {{ $project->created_at->format('d.m.Y H:i') }}</p>
                             <p class="font-semibold">{{ __('Public:') }} {{ $project->is_public ? __('Yes') : __('No') }}</p>
+                            <p class="font-semibold">{{ __('Estimated Hours:') }} {{ $project->estimated_hours }}</p>
                         </div>
                         <div>
                             @if($project->materials)
@@ -176,6 +177,8 @@
                             </div>
                         </div>
                     </div>
+
+
                 </div>
             </div>
         </div>
