@@ -23,8 +23,8 @@
         @endif
 
         <div class="max-w-7xl mx-auto p-6 lg:p-8">
-            <h1 class="text-5xl font-bold text-gray-800 dark:text-white">Welcome to Craftify!</h1>
-            <p class="mt-4 text-lg text-gray-600 dark:text-gray-400">Where creativity takes shape...</p>
+            <h1 class="text-5xl font-bold text-gray-800 dark:text-white">{{ __('messages.Welcome to Craftify!') }}</h1>
+            <p class="mt-4 text-lg text-gray-600 dark:text-gray-400">{{ __('messages.Your ultimate destination for sharing and discovering inspiring craft projects.') }}</p>
         </div>
     </div>
 </body>

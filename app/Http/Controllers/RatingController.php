@@ -32,7 +32,7 @@ class RatingController extends Controller
             ['rating' => $validated['rating']]
         );
 
-        return back()->with('status', 'Your rating has been saved successfully!');
+        return back()->with('status', 'rating-saved');
     }
 
     /**
@@ -49,6 +49,6 @@ class RatingController extends Controller
             $rating->delete();
         }
 
-        return back()->with('status', 'Your rating has been removed.');
+        return back()->with('status', 'rating-removed');
     }
 }

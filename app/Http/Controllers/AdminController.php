@@ -209,7 +209,7 @@ class AdminController extends Controller
             public function approveComplaint(Complaint $complaint)
             {
                 $complaint->update(['status' => 'approved']);
-                return back()->with('status', 'Complaint approved.');
+                return back()->with('status', 'complaint-approved');
             }
         
             /**
@@ -218,7 +218,7 @@ class AdminController extends Controller
             public function declineComplaint(Complaint $complaint)
             {
                 $complaint->update(['status' => 'declined']);
-                return back()->with('status', 'Complaint declined.');
+                return back()->with('status', 'complaint-declined');
             }
         }
 

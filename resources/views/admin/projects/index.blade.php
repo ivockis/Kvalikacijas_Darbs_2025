@@ -74,26 +74,27 @@
                             project.is_blocked = data.is_blocked;
                             this.cancelConfirmation();
                         });
-                    }
+                    },
+                    confirmBlockUnblockProjectMessage: '{{ __("Confirm block/unblock project") }}'
                 }">
                     <!-- Filters -->
                     <div class="p-6">
                         <div class="mb-4 flex flex-wrap items-end gap-4">
                             <div class="flex-grow">
                                 <label for="search" class="sr-only">Search</label>
-                                <input type="text" x-model.debounce.500ms="search" placeholder="Search by title or description..." class="w-full rounded-md shadow-sm border-gray-300">
+                                <input type="text" x-model.debounce.500ms="search" placeholder="{{ __('Search by title or description...') }}" class="w-full rounded-md shadow-sm border-gray-300">
                             </div>
                             <div>
-                                <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+                                <label for="status" class="block text-sm font-medium text-gray-700">{{ __('Status') }}</label>
                                 <select x-model="status" id="status" class="rounded-md shadow-sm border-gray-300">
-                                    <option value="">All</option>
-                                    <option value="blocked">Blocked</option>
-                                    <option value="active">Active</option>
-                                    <option value="has_complaints">Has Complaints</option>
+                                    <option value="">{{ __('All') }}</option>
+                                    <option value="blocked">{{ __('Blocked') }}</option>
+                                    <option value="active">{{ __('Active') }}</option>
+                                    <option value="has_complaints">{{ __('Has Complaints') }}</option>
                                 </select>
                             </div>
                             <div>
-                                <label for="per_page" class="block text-sm font-medium text-gray-700">Per Page</label>
+                                <label for="per_page" class="block text-sm font-medium text-gray-700">{{ __('Per Page') }}</label>
                                 <select x-model="per_page" id="per_page" class="rounded-md shadow-sm border-gray-300">
                                     <option value="10">10</option>
                                     <option value="25">25</option>
@@ -108,11 +109,11 @@
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Project</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Author</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                                    <th @click="sort_by = 'complaints_count'; sort_order = sort_order === 'asc' ? 'desc' : 'asc'" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer">Complaints</th>
-                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Is Blocked</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Project') }}</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Author') }}</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Status') }}</th>
+                                    <th @click="sort_by = 'complaints_count'; sort_order = sort_order === 'asc' ? 'desc' : 'asc'" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer">{{ __('Complaints') }}</th>
+                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">{{ __('Is Blocked') }}</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
@@ -131,8 +132,8 @@
                                             <a :href="'/users/' + project.user.id" class="text-sm text-blue-600 hover:underline" x-text="project.user.username"></a>
                                         </td>
                                         <td class="px-6 py-4">
-                                            <span x-show="project.is_blocked" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Blocked</span>
-                                            <span x-show="!project.is_blocked" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
+                                            <span x-show="project.is_blocked" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">{{ __('Blocked') }}</span>
+                                            <span x-show="!project.is_blocked" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">{{ __('Active') }}</span>
                                         </td>
                                         <td class="px-6 py-4">
                                             <template x-if="project.complaints_count > 0">
@@ -150,10 +151,10 @@
                                             <div x-show="confirmingProject && confirmingProject.id === project.id" 
                                                  class="absolute z-10 right-0 mt-2 w-64 bg-white border border-gray-300 rounded-lg shadow-lg p-4"
                                                  @click.outside="cancelConfirmation()">
-                                                <p class="text-sm text-gray-700" x-text="`Are you sure to block/unblock project ${project.title}?`"></p>
+                                                <p class="text-sm text-gray-700" x-text="confirmBlockUnblockProjectMessage.replace(':title', confirmingProject.title)"></p>
                                                 <div class="mt-4 flex justify-end space-x-2">
-                                                    <button @click="cancelConfirmation()" class="px-3 py-1 text-sm text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-md">Cancel</button>
-                                                    <button @click="toggleProjectBlock(project)" class="px-3 py-1 text-sm text-white bg-red-600 hover:bg-red-700 rounded-md">Yes</button>
+                                                    <button @click="cancelConfirmation()" class="px-3 py-1 text-sm text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-md">{{ __('Cancel') }}</button>
+                                                    <button @click="toggleProjectBlock(project)" class="px-3 py-1 text-sm text-white bg-red-600 hover:bg-red-700 rounded-md">{{ __('Yes') }}</button>
                                                 </div>
                                             </div>
                                         </td>
@@ -171,13 +172,13 @@
                             <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                                 <div>
                                     <p class="text-sm text-gray-700">
-                                        Showing
+                                        {{ __('Showing') }}
                                         <span x-text="projects.length > 0 ? links.find(l => l.active).label - per_page * (Math.ceil(links.find(l => l.active).label/per_page)-1) + 1 : 0"></span>
-                                        to
+                                        {{ __('to') }}
                                         <span x-text="links.find(l => l.active).label"></span>
-                                        of
+                                        {{ __('of') }}
                                         <span x-text="links.reduce((acc, link) => Math.max(acc, link.label), 0)"></span>
-                                        results
+                                        {{ __('results') }}
                                     </p>
                                 </div>
                                 <div>

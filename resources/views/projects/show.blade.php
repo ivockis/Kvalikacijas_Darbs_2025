@@ -94,10 +94,10 @@
                                                          x-data="{ 
                                                             reason: '',
                                                             complaintOptions: [
-                                                                'Inappropriate or offensive content.',
-                                                                'Spam or misleading information.',
-                                                                'Copyright or intellectual property violation.',
-                                                                'Dangerous or harmful instructions.'
+                                                                '{{ __("Inappropriate or offensive content.") }}',
+                                                                '{{ __("Spam or misleading information.") }}',
+                                                                '{{ __("Copyright or intellectual property violation.") }}',
+                                                                '{{ __("Dangerous or harmful instructions.") }}'
                                                             ]
                                                          }">
                                                         <form method="POST" action="{{ route('projects.complain', $project) }}">
@@ -148,7 +148,7 @@
                                 @if(($ratingsCount ?? 0) > 0)
                                     {{ number_format($averageRating ?? 0, 1) }} ({{ $ratingsCount ?? 0 }}) 
                                 @else
-                                    {{ __('No ratings yet.') }}
+                                    {{ __('(0)') }}
                                 @endif
                             </span>
                         </div>

@@ -2,15 +2,18 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\ToolController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/language/{locale}', [LanguageController::class, 'switch'])->name('language.switch');
 
 Route::get('/', function () {
     return view('welcome');

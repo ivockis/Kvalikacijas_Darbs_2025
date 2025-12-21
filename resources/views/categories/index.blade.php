@@ -34,14 +34,14 @@
                                 if (!response.ok) {
                                     const data = await response.json();
                                     this.errors = data.errors || {};
-                                    throw new Error(data.message || 'Failed to add category.');
+                                    throw new Error(data.message || '{{ __("Failed to add category.") }}');
                                 }
                                 const created = await response.json();
                                 created.editing = false;
                                 created.originalName = created.name;
                                 this.categories.unshift(created);
                                 this.newCategoryName = '';
-                                this.showNotification('Category added successfully.');
+                                this.showNotification('{{ __("Category added successfully.") }}');
                             } catch (error) {
                                 this.showNotification(error.message, 'error');
                             }
@@ -58,12 +58,12 @@
                                     const data = await response.json();
                                     this.errors = data.errors || {};
                                     category.name = category.originalName; // Revert on failure
-                                    throw new Error(data.message || 'Failed to update category.');
+                                    throw new Error(data.message || '{{ __("Failed to update category.") }}');
                                 }
                                 const updated = await response.json();
                                 category.originalName = updated.name;
                                 category.editing = false;
-                                this.showNotification('Category updated successfully.');
+                                this.showNotification('{{ __("Category updated successfully.") }}');
                             } catch (error) {
                                 this.showNotification(error.message, 'error');
                             }
@@ -76,10 +76,10 @@
                                 });
                                 if (!response.ok) {
                                     const data = await response.json();
-                                    throw new Error(data.message || 'Failed to delete category.');
+                                    throw new Error(data.message || '{{ __("Failed to delete category.") }}');
                                 }
                                 this.categories = this.categories.filter(c => c.id !== this.confirmingDelete);
-                                this.showNotification('Category deleted successfully.');
+                                this.showNotification('{{ __("Category deleted successfully.") }}');
                             } catch (error) {
                                 this.showNotification(error.message, 'error');
                             } finally {
@@ -96,7 +96,7 @@
                     <!-- Confirmation Modal -->
                     <div x-show="confirmingDelete !== null" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-75">
                         <div @click.away="confirmingDelete = null" class="bg-white rounded-lg p-6 shadow-xl">
-                            <p class="mb-4">Are you sure? This action is irreversible.</p>
+                            <p class="mb-4">{{ __('Confirm delete category.') }}</p>
                             <div class="flex justify-end space-x-4">
                                 <button @click="confirmingDelete = null" class="px-4 py-2 bg-gray-300 rounded-md">Cancel</button>
                                 <button @click="confirmDelete()" class="px-4 py-2 bg-red-600 text-white rounded-md">Delete</button>
@@ -108,10 +108,10 @@
                     <div class="mb-6 p-4 border rounded-lg bg-gray-50">
                         <h3 class="font-bold text-lg mb-2">{{ __('Add New Category') }}</h3>
                         <div>
-                            <input type="text" x-model="newCategoryName" placeholder="Category Name" class="w-full rounded-md shadow-sm border-gray-300" maxlength="50">
+                            <input type="text" x-model="newCategoryName" placeholder="{{ __('Category Name') }}" class="w-full rounded-md shadow-sm border-gray-300" maxlength="50">
                         </div>
                         <div class="mt-4 flex justify-end">
-                            <button @click="addCategory" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700">Add Category</button>
+                            <button @click="addCategory" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700">{{ __('Add Category') }}</button>
                         </div>
                     </div>
 
@@ -120,9 +120,9 @@
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Projects</th>
-                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Name') }}</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Projects') }}</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
@@ -134,15 +134,15 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" x-text="category.projects_count"></td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                                            <button x-show="!category.editing" @click="category.editing = true" class="text-indigo-600 hover:text-indigo-900">Edit</button>
-                                            <button x-show="category.editing" @click="updateCategory(category)" class="text-green-600 hover:text-green-900">Save</button>
-                                            <button x-show="category.editing" @click="category.editing = false; category.name = category.originalName" class="text-gray-500 hover:text-gray-900">Cancel</button>
-                                            <button @click="confirmingDelete = category.id" :disabled="category.projects_count > 0" :class="{ 'text-gray-400 cursor-not-allowed': category.projects_count > 0, 'text-red-600 hover:text-red-900': category.projects_count === 0 }">Delete</button>
+                                            <button x-show="!category.editing" @click="category.editing = true" class="text-indigo-600 hover:text-indigo-900">{{ __('Edit') }}</button>
+                                            <button x-show="category.editing" @click="updateCategory(category)" class="text-green-600 hover:text-green-900">{{ __('Save') }}</button>
+                                            <button x-show="category.editing" @click="category.editing = false; category.name = category.originalName" class="text-gray-500 hover:text-gray-900">{{ __('Cancel') }}</button>
+                                            <button @click="confirmingDelete = category.id" :disabled="category.projects_count > 0" :class="{ 'text-gray-400 cursor-not-allowed': category.projects_count > 0, 'text-red-600 hover:text-red-900': category.projects_count === 0 }">{{ __('Delete') }}</button>
                                         </td>
                                     </tr>
                                 </template>
                                 <template x-if="categories.length === 0">
-                                    <tr><td colspan="3" class="text-center py-4 text-gray-500">No categories found.</td></tr>
+                                    <tr><td colspan="3" class="text-center py-4 text-gray-500">{{ __('No categories found.') }}</td></tr>
                                 </template>
                             </tbody>
                         </table>

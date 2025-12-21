@@ -19,7 +19,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <h3 class="text-xl font-semibold mb-4">Public Projects by {{ $user->username }}</h3>
+                    <h3 class="text-xl font-semibold mb-4">{{ __('Public Projects by User') }} {{ $user->username }}</h3>
                     
                     @if ($projects->isEmpty())
                         <p class="text-gray-600">{{ __(':username has not posted any public projects yet.', ['username' => $user->username]) }}</p>
@@ -28,7 +28,7 @@
                             @foreach ($projects as $project)
                                 <div class="bg-gray-100 rounded-lg shadow-md flex flex-col justify-between">
                                     <a href="{{ route('projects.show', $project) }}">
-                                        <img src="{{ $project->cover_image_url }}" alt="{{ $project->title }} Cover Image" class="w-full h-48 object-cover rounded-t-lg">
+                                        <img src="{{ $project->cover_image_url }}" alt="{{ $project->title }} {{ __("Cover Image") }}" class="w-full h-48 object-cover rounded-t-lg">
                                     </a>
                                     <div class="p-6">
                                         <div>

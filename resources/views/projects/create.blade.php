@@ -52,7 +52,7 @@
                             handleImageSelect(event) {
                                 const files = Array.from(event.target.files);
                                 if ((this.imageFiles.length + files.length) > 10) {
-                                    alert('You can only upload a maximum of 10 images.');
+                                    alert('{{ __("You can only upload a maximum of 10 images.") }}');
                                     return;
                                 }
                                 for (const file of files) {
@@ -86,7 +86,7 @@
                                     body: JSON.stringify({ name: this.tools.search, comment: this.tools.newToolComment })
                                 });
                                 if (!response.ok) {
-                                    alert('Failed to create tool. It might already exist.');
+                                    alert('{{ __("Failed to create tool. It might already exist.") }}');
                                     return;
                                 }
                                 const newTool = await response.json();
@@ -142,7 +142,7 @@
                                     }
                                 })
                                 .catch(error => {
-                                    this.formErrors = {'general': ['An unexpected error occurred.']}; // Display a general error
+                                    this.formErrors = {'general': ['{{ __("An unexpected error occurred.") }}']}; // Display a general error
                                     console.error('Submit Error:', error);
                                 });
                             }
@@ -184,7 +184,7 @@
                                 </template>
                             </div>
                             <div @click.away="categories.open = false" class="relative">
-                                <input id="categories-search" type="text" x-model="categories.search" @focus="categories.open = true" @input="categories.open = true" placeholder="Search categories..." class="w-full rounded-md" maxlength="50" x-bind:class="{ 'border-red-500': formErrors.categories }" >
+                                <input id="categories-search" type="text" x-model="categories.search" @focus="categories.open = true" @input="categories.open = true" placeholder="{{ __("Search categories...") }}" class="w-full rounded-md" maxlength="50" x-bind:class="{ 'border-red-500': formErrors.categories }" >
                                 <span x-text="formErrors.categories[0]" x-show="formErrors.categories" class="text-red-500 text-sm mt-1"></span>
                                 <div x-show="categories.open && categories.filteredOptions.length > 0" class="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg max-h-60 overflow-y-auto">
                                     <template x-for="option in categories.filteredOptions" :key="option.id">
@@ -207,7 +207,7 @@
                                 </template>
                             </div>
                             <div @click.away="tools.open = false" class="relative">
-                                <input id="tools-search" type="text" x-model="tools.search" @focus="tools.open = true" @input="tools.open = true" placeholder="Search or add a new tool..." class="w-full rounded-md" maxlength="50" x-bind:class="{ 'border-red-500': formErrors.tools }">
+                                <input id="tools-search" type="text" x-model="tools.search" @focus="tools.open = true" @input="tools.open = true" placeholder="{{ __("Search or add a new tool...") }}" class="w-full rounded-md" maxlength="50" x-bind:class="{ 'border-red-500': formErrors.tools }">
                                 <span x-text="formErrors.tools[0]" x-show="formErrors.tools" class="text-red-500 text-sm mt-1"></span>
                                 <div x-show="tools.open" class="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg max-h-60 overflow-y-auto">
                                     <template x-for="option in tools.filteredOptions" :key="option.id">
@@ -217,9 +217,9 @@
                                         </div>
                                     </template>
                                     <div x-show="tools.search && tools.filteredOptions.length === 0" class="p-4 border-t">
-                                        <p class="mb-2">Create new tool: <strong x-text="tools.search"></strong></p>
-                                        <input type="text" x-model="tools.newToolComment" placeholder="Optional comment..." class="w-full text-sm rounded-md mb-2" maxlength="50">
-                                        <button @click="createNewTool" type="button" class="w-full text-sm px-4 py-2 bg-indigo-600 text-white rounded-md">Create & Add</button>
+                                        <p class="mb-2">{{ __("Create new tool:") }} <strong x-text="tools.search"></strong></p>
+                                        <input type="text" x-model="tools.newToolComment" placeholder="{{ __("Optional comment...") }}" class="w-full text-sm rounded-md mb-2" maxlength="50">
+                                        <button @click="createNewTool" type="button" class="w-full text-sm px-4 py-2 bg-indigo-600 text-white rounded-md">{{ __("Create & Add") }}</button>
                                     </div>
                                 </div>
                             </div>
@@ -240,7 +240,7 @@
                                             <button type="button" @click="removeNewImage(index)" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
                                             <label class="absolute bottom-1 left-1 cursor-pointer text-white px-2 py-1 rounded-md text-xs" :class="selectedCoverIndex === index ? 'bg-indigo-600' : 'bg-gray-700 opacity-0 group-hover:opacity-100'">
                                                 <input type="radio" name="cover_image_selection" :value="index" x-model.number="selectedCoverIndex" class="hidden">
-                                                <span x-text="selectedCoverIndex === index ? 'Cover' : 'Set Cover'"></span>
+                                                <span x-text="selectedCoverIndex === index ? '{{ __("Cover") }}' : '{{ __("Set Cover") }}'"></span>
                                             </label>
                                         </div>
                                     </template>

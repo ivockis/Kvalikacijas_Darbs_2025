@@ -208,7 +208,7 @@ class ProjectController extends Controller
             }
         }
 
-        return redirect(route('projects.index'))->with('status', 'Project created successfully!');
+        return redirect(route('projects.index'))->with('status', 'project-created');
     }
 
     public function show(Project $project)
@@ -349,14 +349,14 @@ class ProjectController extends Controller
         }
 
 
-        return redirect(route('projects.index'))->with('status', 'Project updated successfully!');
+        return redirect(route('projects.index'))->with('status', 'project-updated');
     }
 
     public function destroy(Project $project)
     {
         $this->authorize('delete', $project);
         $project->delete();
-        return redirect(route('projects.index'))->with('status', 'Project deleted successfully!');
+        return redirect(route('projects.index'))->with('status', 'project-deleted');
     }
 
     public function like(Project $project)

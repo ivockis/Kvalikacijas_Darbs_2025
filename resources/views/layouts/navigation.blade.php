@@ -37,6 +37,13 @@
                 </div>
             </div>
 
+            <!-- Language Switcher -->
+            <div class="hidden sm:flex sm:items-center sm:ms-6">
+                <a href="{{ route('language.switch', 'en') }}" class="text-sm font-semibold {{ app()->getLocale() == 'en' ? 'text-indigo-600 underline' : 'text-gray-500 hover:text-gray-700' }}">EN</a>
+                <span class="mx-1 text-gray-300">|</span>
+                <a href="{{ route('language.switch', 'lv') }}" class="text-sm font-semibold {{ app()->getLocale() == 'lv' ? 'text-indigo-600 underline' : 'text-gray-500 hover:text-gray-700' }}">LV</a>
+            </div>
+
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <x-dropdown align="right" width="48">
@@ -108,7 +115,7 @@
             </x-responsive-nav-link>
             @auth
                 <x-responsive-nav-link :href="route('projects.index')" :active="request()->routeIs('projects.index')">
-                    {{ __('My Projects') }}
+                    {{ __('messages.My Projects') }}
                 </x-responsive-nav-link>
                 @if(Auth::user()->is_admin)
                     <x-responsive-nav-link :href="route('tools.index')" :active="request()->routeIs('tools.index')">

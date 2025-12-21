@@ -28,7 +28,7 @@ class CommentController extends Controller
             'comment' => $validated['comment'],
         ]);
 
-        return back()->with('status', 'Comment posted successfully!');
+        return back()->with('status', 'comment-posted');
     }
 
 
@@ -51,7 +51,7 @@ class CommentController extends Controller
             return response()->json(['message' => 'Comment updated successfully!', 'comment' => $comment]);
         }
 
-        return redirect()->route('projects.show', $comment->project)->with('status', 'Comment updated successfully!');
+        return redirect()->route('projects.show', $comment->project)->with('status', 'comment-updated');
     }
 
     /**
@@ -63,6 +63,6 @@ class CommentController extends Controller
         
         $comment->delete();
 
-        return back()->with('status', 'Comment deleted successfully!');
+        return back()->with('status', 'comment-deleted');
     }
 }

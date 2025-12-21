@@ -29,7 +29,7 @@
                             handleImageSelect(event) {
                                 const files = Array.from(event.target.files);
                                 if ((this.currentTotalImages + files.length) > 10) {
-                                    this.showMessage('You can only have a maximum of 10 images in total.', 'error');
+                                    this.showMessage('{{ __("You can only have a maximum of 10 images in total.") }}', 'error');
                                     event.target.value = '';
                                     return;
                                 }
@@ -52,10 +52,10 @@
                                     if (this.selectedCover === `existing_${imageId}`) {
                                         this.selectedCover = '';
                                     }
-                                    this.showMessage('Image deleted successfully.', 'success'); // Show success message
+                                    this.showMessage('{{ __("Image deleted successfully.") }}', 'success'); // Show success message
                                 } else {
                                     const errorData = await response.json();
-                                    this.showMessage(errorData.message || 'Failed to delete image.', 'error'); // Show error message from backend
+                                    this.showMessage(errorData.message || '{{ __("Failed to delete image.") }}', 'error'); // Show error message from backend
                                 }
                             }
                         }"
@@ -155,7 +155,7 @@
                                         body: JSON.stringify({ name: this.search, comment: this.newToolComment })
                                     });
                                     if (!response.ok) {
-                                        alert('Failed to create tool. It might already exist.');
+                                        alert('{{ __("Failed to create tool. It might already exist.") }}');
                                         return;
                                     }
                                     const newTool = await response.json();
@@ -200,9 +200,9 @@
                                     </template>
                                     <!-- Create new tool UI -->
                                     <div x-show="search && filteredOptions.length === 0" class="p-4 border-t">
-                                        <p class="mb-2">Create new tool: <strong x-text="search"></strong></p>
-                                        <input type="text" x-model="newToolComment" placeholder="Optional comment..." class="w-full text-sm rounded-md shadow-sm border-gray-300 mb-2" maxlength="50">
-                                        <button @click="createNewTool" type="button" class="w-full text-sm px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-500">Create & Add</button>
+                                        <p class="mb-2">{{ __("Create new tool:") }} <strong x-text="search"></strong></p>
+                                        <input type="text" x-model="newToolComment" placeholder="{{ __("Optional comment...") }}" class="w-full text-sm rounded-md shadow-sm border-gray-300 mb-2" maxlength="50">
+                                        <button @click="createNewTool" type="button" class="w-full text-sm px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-500">{{ __("Create & Add") }}</button>
                                     </div>
                                 </div>
                             </div>
@@ -219,7 +219,7 @@
 
                             <!-- New Image Previews -->
                             <div class="mt-4" x-show="newImages.length > 0">
-                                <h4 class="font-semibold text-md text-gray-700">New Previews</h4>
+                                <h4 class="font-semibold text-md text-gray-700">{{ __("New Previews") }}</h4>
                                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-2">
                                     <template x-for="(image, index) in newImages" :key="index">
                                         <div class="relative group">
@@ -227,7 +227,7 @@
                                             <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100">
                                                 <label class="absolute bottom-1 left-1 cursor-pointer text-white px-2 py-1 rounded-md text-xs" :class="selectedCover === 'new_' + index ? 'bg-indigo-600' : 'bg-gray-700 opacity-0 group-hover:opacity-100'">
                                                     <input type="radio" name="cover_image_selection" :value="'new_' + index" x-model="selectedCover" class="hidden">
-                                                    <span x-text="selectedCover === 'new_' + index ? 'Cover' : 'Set Cover'"></span>
+                                                    <span x-text="selectedCover === 'new_' + index ? '{{ __("Cover") }}' : '{{ __("Set Cover") }}'"></span>
                                                 </label>
                                             </div>
                                         </div>
@@ -238,7 +238,7 @@
                             <!-- Current Images -->
                             @if ($project->images->isNotEmpty())
                                 <div class="mt-6">
-                                    <h4 class="font-semibold text-md text-gray-700">Current Images</h4>
+                                    <h4 class="font-semibold text-md text-gray-700">{{ __("Current Images") }}</h4>
                                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-2">
                                         @foreach ($project->images as $image)
                                             <div class="relative group" x-ref="image-{{ $image->id }}">
@@ -249,7 +249,7 @@
                                                     </template>
                                                     <label class="absolute bottom-1 left-1 cursor-pointer text-white px-2 py-1 rounded-md text-xs" :class="selectedCover === 'existing_{{ $image->id }}' ? 'bg-indigo-600' : 'bg-gray-700 opacity-0 group-hover:opacity-100'">
                                                         <input type="radio" name="cover_image_selection" :value="'existing_' + {{ $image->id }}" x-model="selectedCover" class="hidden" :disabled="selectedCover === 'existing_{{ $image->id }}'">
-                                                        <span x-text="selectedCover === 'existing_{{ $image->id }}' ? 'Current Cover' : 'Set Cover'"></span>
+                                                        <span x-text="selectedCover === 'existing_{{ $image->id }}' ? '{{ __("Current Cover") }}' : '{{ __("Set Cover") }}'"></span>
                                                     </label>
                                                 </div>
                                             </div>
