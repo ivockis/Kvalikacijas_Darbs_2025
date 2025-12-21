@@ -13,6 +13,44 @@
                         <div class="flex items-center justify-between">
                             <h3 class="text-2xl font-bold">{{ $project->title }}</h3>
                             <div class="flex items-center space-x-2">
+
+                                <!-- Like Button -->
+                                @auth
+                                    <div x-data="{ 
+                                        liked: {{ $liked ? 'true' : 'false' }}, 
+                                        likesCount: {{ $project->likers->count() }},
+                                        async toggleLike() {
+                                            const response = await fetch('{{ route('projects.like', $project) }}', {
+                                                method: 'POST',
+                                                headers: {
+                                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                                    'Accept': 'application/json'
+                                                }
+                                            });
+                                            const data = await response.json();
+                                            this.liked = data.liked;
+                                            this.likesCount = data.likes_count;
+                                        }
+                                    }" class="flex items-center space-x-2">
+                                        <button @click="toggleLike" class="flex items-center space-x-1 text-gray-500 hover:text-red-500 focus:outline-none">
+                                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" 
+                                                 :class="{ 'text-red-500': liked, 'text-gray-400': !liked }">
+                                                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                                            </svg>
+                                        </button>
+                                        <span x-text="likesCount" class="text-gray-600 font-medium"></span>
+                                    </div>
+                                @else
+                                    <div class="flex items-center space-x-2">
+                                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        <span class="text-gray-600 font-medium">{{ $project->likers->count() }}</span>
+                                    </div>
+                                @endauth
+
+                                <div class="w-px h-6 bg-gray-200 mx-2"></div> <!-- Divider -->
+
                                 @can('update', $project)
                                     <a href="{{ route('projects.edit', $project) }}" class="inline-flex items-center px-4 py-2 bg-indigo-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-600 focus:bg-indigo-600 active:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
                                         {{ __('Edit') }}
@@ -27,6 +65,8 @@
                                         </button>
                                     </form>
                                 @endcan
+                                
+                               
                                 
                                 <!-- Report Project Button -->
                                 @auth
@@ -228,23 +268,6 @@
                             </div>
                         </div>
                     @endif
-
-                    <div class="mt-8">
-                        @auth
-                            <form method="POST" action="{{ route('projects.like', $project) }}">
-                                @csrf
-                                <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-600 focus:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                    @if ($liked)
-                                        {{ __('Unlike') }} ({{ $project->likers->count() }})
-                                    @else
-                                        {{ __('Like') }} ({{ $project->likers->count() }})
-                                    @endif
-                                </button>
-                            </form>
-                        @else
-                            <span class="text-gray-600">{{ $project->likers->count() }} {{ __('Likes') }}</span>
-                        @endauth
-                    </div>
 
                     <!-- Ratings and Comments Section -->
                     <div class="mt-8 border-t pt-8">

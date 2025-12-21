@@ -361,7 +361,12 @@ class ProjectController extends Controller
 
     public function like(Project $project)
     {
-        Auth::user()->likedProjects()->toggle($project->id);
-        return back()->with('status', 'Project like status updated!');
+        $user = Auth::user();
+        $user->likedProjects()->toggle($project->id);
+
+        return response()->json([
+            'liked' => $user->likedProjects()->where('project_id', $project->id)->exists(),
+            'likes_count' => $project->likers()->count()
+        ]);
     }
 }
