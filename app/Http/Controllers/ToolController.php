@@ -31,8 +31,12 @@ class ToolController extends Controller
             'comment' => 'nullable|string|max:50',
             'approved' => 'sometimes|boolean',
         ]);
+        // Load the projects_count for the new tool 
+        $validated['name'] = ucfirst($validated['name']);
+        if (!empty($validated['comment'])) {
+            $validated['comment'] = ucfirst($validated['comment']);
+        }
         $tool = Tool::create($validated);
-        // Load the projects_count for the new tool
         $tool->loadCount('projects');
         return response()->json($tool);
     }

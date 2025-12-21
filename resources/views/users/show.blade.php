@@ -6,7 +6,11 @@
                 <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
                     {{ $user->username }}
                 </h2>
-                <p class="text-sm text-gray-600">{{ $user->name }} {{ $user->surname }}</p>
+                {{-- Conditional display for name, surname, and email --}}
+                @if (Auth::check() && Auth::user()->is_admin)
+                    <p class="text-sm text-gray-600">{{ $user->name }} {{ $user->surname }}</p>
+                    <p class="text-sm text-gray-600">{{ $user->email }}</p>
+                @endif
             </div>
         </div>
     </x-slot>

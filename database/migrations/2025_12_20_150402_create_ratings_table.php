@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('project_id')->constrained()->cascadeOnDelete();
             $table->unsignedInteger('rating'); // 1-5
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
 
             $table->unique(['user_id', 'project_id']);
         });

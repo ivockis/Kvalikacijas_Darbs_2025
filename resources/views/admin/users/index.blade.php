@@ -119,6 +119,8 @@
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">User</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase w-32">Created At</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase w-32">Updated At</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                                     <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Is Admin</th>
                                     <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Is Blocked</th>
@@ -137,6 +139,8 @@
                                                 </div>
                                             </div>
                                         </td>
+                                        <td class="px-6 py-4 text-sm text-gray-900 w-32" x-text="new Date(user.created_at).toLocaleString()"></td>
+                                        <td class="px-6 py-4 text-sm text-gray-900 w-32" x-text="new Date(user.updated_at).toLocaleString()"></td>
                                         <td class="px-6 py-4">
                                             <span x-show="user.is_blocked" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Blocked</span>
                                             <span x-show="!user.is_blocked" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>

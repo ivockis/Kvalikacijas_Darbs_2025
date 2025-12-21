@@ -114,7 +114,7 @@
                         </div>
                     </div>
 
-                    <p class="text-gray-600 mb-4">{{ $project->description }}</p>
+                    <p class="text-gray-600 mb-4 whitespace-pre-wrap">{{ $project->description }}</p>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                         <div>
@@ -126,7 +126,7 @@
                         <div>
                             @if($project->materials)
                                 <p class="font-semibold">{{ __('Materials:') }}</p>
-                                <p>{{ $project->materials }}</p>
+                                <p class="whitespace-pre-wrap">{{ $project->materials }}</p>
                             @endif
                         </div>
                     </div>
@@ -158,12 +158,73 @@
                     @endif
 
                     @if ($project->images->isNotEmpty())
-                        <div class="mt-6">
+                        <div class="mt-6" x-data="{
+                            lightboxOpen: false,
+                            currentImageIndex: 0,
+                            allImages: {{ json_encode($project->images->map(fn($image) => asset('storage/' . $image->path))->toArray()) }},
+                            get currentImage() { return this.allImages[this.currentImageIndex] },
+                            get currentImageAlt() { return '{{ $project->title }} image' }, // Alt text could be dynamic if images had titles
+
+                            openLightbox(index) {
+                                this.currentImageIndex = index;
+                                this.lightboxOpen = true;
+                            },
+                            nextImage() {
+                                if (this.currentImageIndex < this.allImages.length - 1) {
+                                    this.currentImageIndex++;
+                                }
+                            },
+                            prevImage() {
+                                if (this.currentImageIndex > 0) {
+                                    this.currentImageIndex--;
+                                }
+                            }
+                        }">
                             <p class="font-semibold">{{ __('Images:') }}</p>
                             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-2">
-                                @foreach ($project->images as $image)
-                                    <img src="{{ asset('storage/' . $image->path) }}" alt="{{ $project->title }} image" class="rounded-lg shadow-md w-full h-32 object-cover">
+                                @foreach ($project->images as $index => $image)
+                                    <img src="{{ asset('storage/' . $image->path) }}"
+                                         alt="{{ $project->title }} image"
+                                         class="rounded-lg shadow-md w-full h-32 object-cover cursor-pointer"
+                                         @click="openLightbox({{ $index }})">
                                 @endforeach
+                            </div>
+
+                            <!-- Image Lightbox Modal -->
+                            <div x-show="lightboxOpen"
+                                 x-transition:enter="transition ease-out duration-300"
+                                 x-transition:enter-start="opacity-0"
+                                 x-transition:enter-end="opacity-100"
+                                 x-transition:leave="transition ease-in duration-200"
+                                 x-transition:leave-start="opacity-100"
+                                 x-transition:leave-end="opacity-0"
+                                 class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75"
+                                 style="display: none;"
+                                 @click.away="lightboxOpen = false"
+                                 @keydown.escape.window="lightboxOpen = false">
+                                <div class="relative w-11/12 h-11/12 md:w-3/4 md:h-3/4 flex items-center justify-center">
+                                    <img :src="currentImage" :alt="currentImageAlt" class="w-full h-full object-contain">
+
+                                    <!-- Navigation Buttons -->
+                                    <template x-if="allImages.length > 1">
+                                        <div>
+                                            <button @click.stop="prevImage()"
+                                                    :disabled="currentImageIndex === 0"
+                                                    class="absolute left-4 top-1/2 -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 disabled:opacity-50 disabled:cursor-not-allowed">
+                                                &#10094; <!-- Left arrow -->
+                                            </button>
+                                            <button @click.stop="nextImage()"
+                                                    :disabled="currentImageIndex === allImages.length - 1"
+                                                    class="absolute right-4 top-1/2 -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 disabled:opacity-50 disabled:cursor-not-allowed">
+                                                &#10095; <!-- Right arrow -->
+                                            </button>
+                                        </div>
+                                    </template>
+
+                                    <button @click="lightboxOpen = false" class="absolute top-4 right-4 text-white text-3xl focus:outline-none">
+                                        &times;
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     @endif
