@@ -20,7 +20,13 @@ class ProjectController extends Controller
     {
         $categories = Category::all(); // Get all categories for the filter dropdown
 
-        $query = Project::where('is_public', true)->where('is_blocked', false)->with('user');
+        $query = Project::select('projects.*') // Explicitly select all project columns to avoid SQLSTATE[42000] error
+                        ->where('is_public', true)
+                        ->where('is_blocked', false)
+                        ->with('user')
+                        ->withCount('ratings') // Count the number of ratings
+                        ->withAvg('ratings', 'rating') // Calculate the average rating
+                        ->groupBy('projects.id'); // Group by project to use having for average rating
 
         // Apply search filter
         if ($search = $request->input('search')) {
@@ -34,15 +40,25 @@ class ProjectController extends Controller
             });
         }
 
+        // Apply minimum rating filter
+        if ($minRating = $request->input('min_rating')) {
+            $query->having('ratings_avg_rating', '>=', $minRating)
+                  ->having('ratings_count', '>', 0); // Only show projects with at least one rating
+        }
+
         // Apply sorting
         switch ($request->input('sort_by')) {
             case 'oldest':
-                $query->oldest();
+                $query->oldest('projects.created_at'); // Specify table for clarity
                 break;
             case 'most_liked':
-                // This would require a 'likes_count' or similar field/relation to sort by
-                // For now, we'll default to latest if not implemented
-                $query->latest();
+                $query->withCount('likers')->orderByDesc('likers_count');
+                break;
+            case 'highest_rated':
+                $query->orderByDesc('ratings_avg_rating')->having('ratings_count', '>', 0); // Order by average rating
+                break;
+            case 'most_rated':
+                $query->orderByDesc('ratings_count'); // Order by number of ratings
                 break;
             case 'title_asc':
                 $query->orderBy('title', 'asc');
@@ -51,7 +67,7 @@ class ProjectController extends Controller
                 $query->orderBy('title', 'desc');
                 break;
             default: // latest
-                $query->latest();
+                $query->latest('projects.created_at'); // Specify table for clarity
                 break;
         }
 
@@ -73,7 +89,10 @@ class ProjectController extends Controller
     {
         $categories = Category::all(); // Get all categories for the filter dropdown
 
-        $query = Auth::user()->projects(); // Start with authenticated user's projects
+        $query = Auth::user()->projects()->select('projects.*') // Explicitly select all project columns to avoid SQLSTATE[42000] error
+                        ->withCount('ratings') // Count the number of ratings
+                        ->withAvg('ratings', 'rating') // Calculate the average rating
+                        ->groupBy('projects.id'); // Group by project to use having for average rating
 
         // Apply search filter
         if ($search = $request->input('search')) {
@@ -87,10 +106,22 @@ class ProjectController extends Controller
             });
         }
 
+        // Apply minimum rating filter
+        if ($minRating = $request->input('min_rating')) {
+            $query->having('ratings_avg_rating', '>=', $minRating)
+                  ->having('ratings_count', '>', 0); // Only show projects with at least one rating
+        }
+
         // Apply sorting
         switch ($request->input('sort_by')) {
             case 'oldest':
-                $query->oldest();
+                $query->oldest('projects.created_at');
+                break;
+            case 'highest_rated':
+                $query->orderByDesc('ratings_avg_rating')->having('ratings_count', '>', 0); // Order by average rating
+                break;
+            case 'most_rated':
+                $query->orderByDesc('ratings_count'); // Order by number of ratings
                 break;
             case 'title_asc':
                 $query->orderBy('title', 'asc');
@@ -99,7 +130,7 @@ class ProjectController extends Controller
                 $query->orderBy('title', 'desc');
                 break;
             default: // latest
-                $query->latest();
+                $query->latest('projects.created_at');
                 break;
         }
 
@@ -194,7 +225,40 @@ class ProjectController extends Controller
             $hasComplained = $project->complaints()->where('user_id', Auth::id())->exists();
         }
 
-        return view('projects.show', compact('project', 'liked', 'hasComplained'));
+        // --- RATINGS AND COMMENTS ---
+        $project->load([
+            'comments' => function ($query) {
+                $query->with('user.profileImage')->latest();
+            },
+            'ratings'
+        ]);
+
+        $comments = $project->comments;
+        $ratings = $project->ratings;
+
+        $averageRating = $ratings->avg('rating');
+        $ratingsCount = $ratings->count();
+
+        $userRating = null;
+        if (Auth::check()) {
+            $userRating = $ratings->firstWhere('user_id', Auth::id());
+        }
+
+        // The 'userComment' variable is intentionally omitted here.
+        // The create form in the blade view should not be pre-filled with an existing comment,
+        // as a user can have multiple comments. The blade will be adjusted separately to handle this.
+        $userComment = null; 
+
+        return view('projects.show', compact(
+            'project',
+            'liked',
+            'hasComplained',
+            'comments',
+            'averageRating',
+            'ratingsCount',
+            'userRating',
+            'userComment'
+        ));
     }
 
     public function edit(Project $project)

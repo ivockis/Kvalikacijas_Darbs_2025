@@ -62,6 +62,16 @@ class Project extends Model
         return $this->belongsToMany(User::class, 'likes');
     }
 
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     /**
      * Set a specific image as the cover image for this project.
      * Ensures only one image is marked as cover.
@@ -100,5 +110,13 @@ class Project extends Model
 
         // Return a default placeholder image if no cover is set
         return 'https://via.placeholder.com/400x300.png?text=No+Image';
+    }
+
+    /**
+     * Get the project's average rating.
+     */
+    public function getAverageRatingAttribute()
+    {
+        return round($this->ratings()->avg('rating'));
     }
 }

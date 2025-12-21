@@ -88,4 +88,14 @@ class User extends Authenticatable
         // Return a default placeholder image if no profile image is set
         return 'https://ui-avatars.com/api/?name=' . urlencode($this->name . ' ' . $this->surname) . '&color=7F9CF5&background=EBF4FF';
     }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

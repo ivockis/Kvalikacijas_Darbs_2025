@@ -3,12 +3,16 @@
 namespace App\Providers;
 
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\Image;
 use App\Models\Project;
+use App\Models\Rating;
 use App\Models\Tool;
 use App\Policies\CategoryPolicy;
+use App\Policies\CommentPolicy;
 use App\Policies\ImagePolicy;
 use App\Policies\ProjectPolicy;
+use App\Policies\RatingPolicy;
 use App\Policies\ToolPolicy;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,6 +28,8 @@ class AppServiceProvider extends ServiceProvider
         Image::class => ImagePolicy::class,
         Tool::class => ToolPolicy::class,
         Category::class => CategoryPolicy::class,
+        Rating::class => RatingPolicy::class,
+        Comment::class => CommentPolicy::class,
     ];
 
     /**

@@ -6,8 +6,10 @@ use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\RatingController;
 use App\Http\Controllers\ToolController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -25,6 +27,19 @@ Route::middleware('auth')->group(function () {
     Route::resource('projects', ProjectController::class);
     Route::post('/projects/{project}/like', [ProjectController::class, 'like'])->name('projects.like');
     Route::post('/projects/{project}/complain', [ComplaintController::class, 'store'])->name('projects.complain');
+    
+    // Ratings & Comments
+    // Route for storing/updating a rating for a project
+    Route::post('/projects/{project}/ratings', [RatingController::class, 'store'])->name('ratings.store');
+    // Route for deleting a user's rating for a project
+    Route::delete('/projects/{project}/ratings', [RatingController::class, 'destroy'])->name('ratings.destroy');
+
+    // Routes for comments (create, delete, and inline update individual comments)
+    // The 'comments.edit' route is removed as editing now happens inline on the project show page.
+    Route::post('/projects/{project}/comments', [CommentController::class, 'store'])->name('comments.store'); // For new, separate comments
+    Route::patch('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
     Route::delete('/images/{image}', [ImageController::class, 'destroy'])->name('images.destroy');
     Route::post('/images/{image}/set-as-cover', [ImageController::class, 'setAsCover'])->name('images.setAsCover');
 
