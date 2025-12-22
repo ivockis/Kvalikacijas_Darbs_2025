@@ -1,8 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Create New Project') }}
-        </h2>
+        <div class="flex items-center justify-between">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('Create New Project') }}
+            </h2>
+            <a href="#" onclick="history.back()" class="inline-flex items-center px-2 py-1 bg-gray-200 border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-300">
+                &laquo; {{ __('Back') }}
+            </a>
+        </div>
     </x-slot>
 
     <div class="py-12">
@@ -52,9 +57,11 @@
                             handleImageSelect(event) {
                                 const files = Array.from(event.target.files);
                                 if ((this.imageFiles.length + files.length) > 10) {
-                                    alert('{{ __("You can only upload a maximum of 10 images.") }}');
+                                    this.formErrors.images = ['{{ __("You can only upload a maximum of 10 images.") }}']; // Set the error message
+                                    event.target.value = ''; // Clear the input field
                                     return;
                                 }
+                                this.formErrors.images = null; // Clear any previous error message
                                 for (const file of files) {
                                     this.imageFiles.push(file);
                                     let reader = new FileReader();
@@ -168,7 +175,7 @@
                         </div>
                         <div class="mt-4">
                             <x-input-label for="estimated_hours">{{ __('Estimated Hours for Creation') }}<span class="text-red-500">*</span></x-input-label>
-                            <x-text-input id="estimated_hours" class="block mt-1 w-full" type="number" name="estimated_hours" :value="old('estimated_hours')" required min="1" max="1000" x-bind:class="{ 'border-red-500': formErrors.estimated_hours }" />
+                            <x-text-input id="estimated_hours" class="block mt-1 w-full" type="number" name="estimated_hours" :value="old('estimated_hours')" required min="1" max="1000" maxlength="4" x-bind:class="{ 'border-red-500': formErrors.estimated_hours }" />
                             <span x-text="formErrors.estimated_hours[0]" x-show="formErrors.estimated_hours" class="text-red-500 text-sm mt-1"></span>
                         </div>
 

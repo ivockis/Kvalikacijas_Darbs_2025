@@ -109,7 +109,7 @@
                      }"
                 >
                     <!-- Notification -->
-                    <div x-show="notification.show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 transform translate-y-0" x-transition:leave-end="opacity-0 transform translate-y-2" class="fixed bottom-4 right-4 p-4 rounded-lg shadow-lg text-white" :class="notification.type === 'success' ? 'bg-green-500' : 'bg-red-500'" style="display: none;">
+                    <div x-show="notification.show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 transform translate-y-0" x-transition:leave-end="opacity-0 transform translate-y-2" class="fixed bottom-4 right-4 z-50 p-4 rounded-lg shadow-lg text-white" :class="notification.type === 'success' ? 'bg-green-500' : 'bg-red-500'" style="display: none;">
                         <p x-text="notification.message"></p>
                     </div>
 

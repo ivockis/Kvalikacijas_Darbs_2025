@@ -1,17 +1,22 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center space-x-4">
-            <img src="{{ $user->profile_image_url }}" alt="{{ $user->username }}" class="h-16 w-16 rounded-full object-cover">
-            <div>
-                <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
-                    {{ $user->username }}
-                </h2>
-                {{-- Conditional display for name, surname, and email --}}
-                @if (Auth::check() && Auth::user()->is_admin)
-                    <p class="text-sm text-gray-600">{{ $user->name }} {{ $user->surname }}</p>
-                    <p class="text-sm text-gray-600">{{ $user->email }}</p>
-                @endif
+        <div class="flex items-center justify-between w-full"> {{-- Added w-full for full width --}}
+            <div class="flex items-center space-x-4">
+                <img src="{{ $user->profile_image_url }}" alt="{{ $user->username }}" class="h-16 w-16 rounded-full object-cover">
+                <div>
+                    <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
+                        {{ $user->username }}
+                    </h2>
+                    {{-- Conditional display for name, surname, and email --}}
+                    @if (Auth::check() && Auth::user()->is_admin)
+                        <p class="text-sm text-gray-600">{{ $user->name }} {{ $user->surname }}</p>
+                        <p class="text-sm text-gray-600">{{ $user->email }}</p>
+                    @endif
+                </div>
             </div>
+            <a href="#" onclick="history.back()" class="inline-flex items-center px-2 py-1 bg-gray-200 border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-300">
+                &laquo; {{ __('Back') }}
+            </a>
         </div>
     </x-slot>
 

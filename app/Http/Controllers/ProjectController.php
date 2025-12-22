@@ -35,9 +35,22 @@ class ProjectController extends Controller
 
         // Apply category filter
         if ($categoryId = $request->input('category_id')) {
-            $query->whereHas('categories', function ($q) use ($categoryId) {
-                $q->where('categories.id', $categoryId);
-            });
+            if ($categoryId === 'liked') {
+                if (Auth::check()) {
+                    $query->whereHas('likers', function ($q) {
+                        $q->where('user_id', Auth::id());
+                    });
+                } else {
+                    // If not authenticated, 'liked' filter means nothing,
+                    // so return no projects or handle as appropriate.
+                    // For now, let's just make it return no projects.
+                    $query->whereRaw('1 = 0'); // Always false condition
+                }
+            } else {
+                $query->whereHas('categories', function ($q) use ($categoryId) {
+                    $q->where('categories.id', $categoryId);
+                });
+            }
         }
 
         // Apply minimum rating filter
@@ -50,6 +63,12 @@ class ProjectController extends Controller
         switch ($request->input('sort_by')) {
             case 'oldest':
                 $query->oldest('projects.created_at'); // Specify table for clarity
+                break;
+            case 'estimated_hours_asc':
+                $query->orderBy('estimated_hours', 'asc');
+                break;
+            case 'estimated_hours_desc':
+                $query->orderBy('estimated_hours', 'desc');
                 break;
             case 'most_liked':
                 $query->withCount('likers')->orderByDesc('likers_count');

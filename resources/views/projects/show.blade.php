@@ -1,8 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ $project->title }}
-        </h2>
+        <div class="flex items-center justify-between">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ $project->title }}
+            </h2>
+            <a href="#" onclick="history.back()" class="inline-flex items-center px-2 py-1 bg-gray-200 border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-300">
+                &laquo; {{ __('Back') }}
+            </a>
+        </div>
     </x-slot>
 
     <div class="py-12">
@@ -11,7 +16,7 @@
                 <div class="p-6 text-gray-900" x-data="{ confirmingDelete: null }">
                     <div class="mb-6">
                         <div class="flex items-center justify-between">
-                            <h3 class="text-2xl font-bold">{{ $project->title }}</h3>
+                            <h3 class="text-2xl font-bold max-w-lg break-words">{{ $project->title }}</h3>
                             <div class="flex items-center space-x-2">
 
                                 <!-- Like Button -->

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome</title>
+    <title>{{ __('Welcome') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased">
@@ -11,20 +11,20 @@
         @if (Route::has('login'))
             <div class="sm:fixed sm:top-0 sm:right-0 p-6 text-right z-10">
                 @auth
-                    <a href="{{ route('public.index') }}" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Public Projects</a>
+                    <a href="{{ route('public.index') }}" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">{{ __('Public Projects') }}</a>
                 @else
-                    <a href="{{ route('login') }}" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Log in</a>
+                    <a href="{{ route('login') }}" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">{{ __('Log in') }}</a>
 
                     @if (Route::has('register'))
-                        <a href="{{ route('register') }}" class="ml-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Register</a>
+                        <a href="{{ route('register') }}" class="ml-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">{{ __('Register') }}</a>
                     @endif
                 @endauth
             </div>
         @endif
 
         <div class="max-w-7xl mx-auto p-6 lg:p-8">
-            <h1 class="text-5xl font-bold text-gray-800 dark:text-white">{{ __('messages.Welcome to Craftify!') }}</h1>
-            <p class="mt-4 text-lg text-gray-600 dark:text-gray-400">{{ __('messages.Your ultimate destination for sharing and discovering inspiring craft projects.') }}</p>
+            <h1 class="text-5xl font-bold text-gray-800 dark:text-white">{{ __('Welcome to Craftify!') }}</h1>
+            <p class="mt-4 text-lg text-gray-600 dark:text-gray-400">{{ __('Your ultimate destination for sharing and discovering inspiring craft projects.') }}</p>
         </div>
     </div>
 </body>

@@ -157,8 +157,8 @@
                                                  @click.outside="cancelConfirmation()">
                                                 <p class="text-sm text-gray-700" x-text="confirmChangeAdminStatusMessage.replace(':username', confirmingUser.username)"></p>
                                                 <div class="mt-4 flex justify-end space-x-2">
-                                                    <button @click="cancelConfirmation()" class="px-3 py-1 text-sm text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-md">Cancel</button>
-                                                    <button @click="toggleAdmin(user)" class="px-3 py-1 text-sm text-white bg-green-600 hover:bg-green-700 rounded-md">Yes</button>
+                                                    <button @click="cancelConfirmation()" class="px-3 py-1 text-sm text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-md">{{ __('Cancel') }}</button>
+                                                    <button @click="toggleAdmin(user)" class="px-3 py-1 text-sm text-white bg-green-600 hover:bg-green-700 rounded-md">{{ __('Yes') }}</button>
                                                 </div>
                                             </div>
                                         </td>
@@ -172,8 +172,8 @@
                                                  @click.outside="cancelConfirmation()">
                                                 <p class="text-sm text-gray-700" x-text="confirmBlockUnblockUserMessage.replace(':username', confirmingUser.username)"></p>
                                                 <div class="mt-4 flex justify-end space-x-2">
-                                                    <button @click="cancelConfirmation()" class="px-3 py-1 text-sm text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-md">Cancel</button>
-                                                    <button @click="toggleBlock(user)" class="px-3 py-1 text-sm text-white bg-red-600 hover:bg-red-700 rounded-md">Yes</button>
+                                                    <button @click="cancelConfirmation()" class="px-3 py-1 text-sm text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-md">{{ __('Cancel') }}</button>
+                                                    <button @click="toggleBlock(user)" class="px-3 py-1 text-sm text-white bg-red-600 hover:bg-red-700 rounded-md">{{ __('Yes') }}</button>
                                                 </div>
                                             </div>
                                         </td>

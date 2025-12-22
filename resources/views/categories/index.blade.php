@@ -98,8 +98,8 @@
                         <div @click.away="confirmingDelete = null" class="bg-white rounded-lg p-6 shadow-xl">
                             <p class="mb-4">{{ __('Confirm delete category.') }}</p>
                             <div class="flex justify-end space-x-4">
-                                <button @click="confirmingDelete = null" class="px-4 py-2 bg-gray-300 rounded-md">Cancel</button>
-                                <button @click="confirmDelete()" class="px-4 py-2 bg-red-600 text-white rounded-md">Delete</button>
+                                <button @click="confirmingDelete = null" class="px-4 py-2 bg-gray-300 rounded-md">{{ __('Cancel') }}</button>
+                                <button @click="confirmDelete()" class="px-4 py-2 bg-red-600 text-white rounded-md">{{ __('Delete') }}</button>
                             </div>
                         </div>
                     </div>

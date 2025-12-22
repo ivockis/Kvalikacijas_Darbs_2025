@@ -1,8 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Edit Project') }}
-        </h2>
+        <div class="flex items-center justify-between">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('Edit Project') }}
+            </h2>
+            <a href="#" onclick="history.back()" class="inline-flex items-center px-2 py-1 bg-gray-200 border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-300">
+                &laquo; {{ __('Back') }}
+            </a>
+        </div>
     </x-slot>
 
     <div class="py-12">
@@ -16,6 +21,7 @@
                             selectedCover: '{{ optional($project->images->firstWhere('is_cover'))->id ? 'existing_' . optional($project->images->firstWhere('is_cover'))->id : '' }}',
                             message: '', // New property for message text
                             messageType: '', // New property for message type (success/error)
+                            imageErrors: {},
 
                             showMessage(text, type = 'success') {
                                 this.message = text;
@@ -29,10 +35,11 @@
                             handleImageSelect(event) {
                                 const files = Array.from(event.target.files);
                                 if ((this.currentTotalImages + files.length) > 10) {
-                                    this.showMessage('{{ __("You can only have a maximum of 10 images in total.") }}', 'error');
-                                    event.target.value = '';
+                                    this.imageErrors = { images: ['{{ __("You can only have a maximum of 10 images in total.") }}'] }; // Set the error message
+                                    event.target.value = ''; // Clear the input field
                                     return;
                                 }
+                                this.imageErrors = {}; // Clear any previous error message
                                 this.newImages = [];
                                 files.forEach(file => {
                                     let reader = new FileReader();
@@ -75,7 +82,7 @@
                         <!-- Title, Description, etc. -->
                         <div>
                             <x-input-label for="title">{{ __('Title') }}<span class="text-red-500">*</span></x-input-label>
-                            <x-text-input id="title" class="block mt-1 w-full @error('title') border-red-500 @enderror" type="text" name="title" :value="old('title', $project->title)" required autofocus maxlength="100" />
+                            <x-text-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('title', $project->title)" required autofocus maxlength="100" />
                             <x-input-error :messages="$errors->get('title')" class="mt-2" />
                         </div>
                         <div class="mt-4">
@@ -90,7 +97,7 @@
                         </div>
                         <div class="mt-4">
                             <x-input-label for="estimated_hours">{{ __('Estimated Hours for Creation') }}<span class="text-red-500">*</span></x-input-label>
-                            <x-text-input id="estimated_hours" class="block mt-1 w-full @error('estimated_hours') border-red-500 @enderror" type="number" name="estimated_hours" :value="old('estimated_hours', $project->estimated_hours)" required min="1" max="1000" />
+                            <x-text-input id="estimated_hours" class="block mt-1 w-full" type="number" name="estimated_hours" :value="old('estimated_hours', $project->estimated_hours)" required min="1" max="1000" maxlength="4" />
                             <x-input-error :messages="$errors->get('estimated_hours')" class="mt-2" />
                         </div>
                         <!-- Categories -->
@@ -215,6 +222,7 @@
                             <div class="mt-4">
                                 <x-input-label for="images">{{ __('Upload New Images') }}<span class="text-red-500">*</span></x-input-label>
                                 <input id="images" name="images[]" type="file" class="block mt-1 w-full @error('images') border-red-500 @enderror" multiple @change="handleImageSelect($event)">
+                                <span x-text="imageErrors.images[0]" x-show="imageErrors.images" class="text-red-500 text-sm mt-1"></span>
                             </div>
 
                             <!-- New Image Previews -->

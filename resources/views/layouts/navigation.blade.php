@@ -115,7 +115,7 @@
             </x-responsive-nav-link>
             @auth
                 <x-responsive-nav-link :href="route('projects.index')" :active="request()->routeIs('projects.index')">
-                    {{ __('messages.My Projects') }}
+                    {{ __('My Projects') }}
                 </x-responsive-nav-link>
                 @if(Auth::user()->is_admin)
                     <x-responsive-nav-link :href="route('tools.index')" :active="request()->routeIs('tools.index')">

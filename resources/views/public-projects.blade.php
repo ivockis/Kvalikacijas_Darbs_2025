@@ -19,6 +19,7 @@
                             <x-input-label for="category_id" :value="__('Filter by Category')" class="sr-only" />
                             <select id="category_id" name="category_id" class="block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                                 <option value="">{{ __('All Categories') }}</option>
+                                <option value="liked" @selected(request('category_id') == 'liked')>{{ __('Liked') }}</option>
                                 @foreach($categories as $category)
                                     <option value="{{ $category->id }}" @selected(request('category_id') == $category->id)>{{ $category->name }}</option>
                                 @endforeach
@@ -33,6 +34,8 @@
                                 <option value="oldest" @selected(request('sort_by') == 'oldest')>{{ __('Oldest') }}</option>
                                 <option value="title_asc" @selected(request('sort_by') == 'title_asc')>{{ __('Title (A-Z)') }}</option>
                                 <option value="title_desc" @selected(request('sort_by') == 'title_desc')>{{ __('Title (Z-A)') }}</option>
+                                <option value="estimated_hours_asc" @selected(request('sort_by') == 'estimated_hours_asc')>{{ __('Estimated Hours (Asc)') }}</option>
+                                <option value="estimated_hours_desc" @selected(request('sort_by') == 'estimated_hours_desc')>{{ __('Estimated Hours (Desc)') }}</option>
                                 <option value="most_liked" @selected(request('sort_by') == 'most_liked')>{{ __('Most Liked') }}</option>
                                 <option value="highest_rated" @selected(request('sort_by') == 'highest_rated')>{{ __('Highest Rated') }}</option>
 
