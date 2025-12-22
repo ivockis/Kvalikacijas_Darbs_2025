@@ -1,10 +1,10 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ $project->title }}
             </h2>
-            <a href="#" onclick="history.back()" class="inline-flex items-center px-2 py-1 bg-gray-200 border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-300">
+            <a href="#" onclick="history.back()" class="inline-flex items-center px-2 py-1 bg-gray-600 border border-gray-500 rounded-md font-semibold text-xs text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-500">
                 &laquo; {{ __('Back') }}
             </a>
         </div>
@@ -12,8 +12,8 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900" x-data="{ confirmingDelete: null }">
+            <div class="bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-200" x-data="{ confirmingDelete: null }">
                     <div class="mb-6">
                         <div class="flex items-center justify-between">
                             <h3 class="text-2xl font-bold max-w-lg break-words">{{ $project->title }}</h3>
@@ -43,18 +43,18 @@
                                                 <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
                                             </svg>
                                         </button>
-                                        <span x-text="likesCount" class="text-gray-600 font-medium"></span>
+                                        <span x-text="likesCount" class="text-gray-400 font-medium"></span>
                                     </div>
                                 @else
                                     <div class="flex items-center space-x-2">
                                         <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
                                         </svg>
-                                        <span class="text-gray-600 font-medium">{{ $project->likers->count() }}</span>
+                                        <span class="text-gray-400 font-medium">{{ $project->likers->count() }}</span>
                                     </div>
                                 @endauth
 
-                                <div class="w-px h-6 bg-gray-200 mx-2"></div> <!-- Divider -->
+                                <div class="w-px h-6 bg-gray-600 mx-2"></div> <!-- Divider -->
 
                                 @can('update', $project)
                                     <a href="{{ route('projects.edit', $project) }}" class="inline-flex items-center px-4 py-2 bg-indigo-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-600 focus:bg-indigo-600 active:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
@@ -95,7 +95,7 @@
                                                     <div x-show="open" @click="open = false" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
 
                                                     <div x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" 
-                                                         class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+                                                         class="inline-block align-bottom bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
                                                          x-data="{ 
                                                             reason: '',
                                                             complaintOptions: [
@@ -107,27 +107,27 @@
                                                          }">
                                                         <form method="POST" action="{{ route('projects.complain', $project) }}">
                                                             @csrf
-                                                            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                                                                <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                                                            <div class="bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                                                <h3 class="text-lg leading-6 font-medium text-gray-200" id="modal-title">
                                                                     {{ __('Report Project') }}: {{ $project->title }}
                                                                 </h3>
                                                                 <div class="mt-4">
-                                                                    <p class="text-sm text-gray-500 mb-2">
+                                                                    <p class="text-sm text-gray-400 mb-2">
                                                                         {{ __('Select a reason or write your own:') }}
                                                                     </p>
                                                                     <div class="flex flex-wrap gap-2 mb-4">
                                                                         <template x-for="option in complaintOptions" :key="option">
-                                                                            <button @click.prevent="reason = option" type="button" class="px-3 py-1 text-xs text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-full" x-text="option"></button>
+                                                                            <button @click.prevent="reason = option" type="button" class="px-3 py-1 text-xs text-gray-300 bg-gray-600 hover:bg-gray-500 rounded-full" x-text="option"></button>
                                                                         </template>
                                                                     </div>
-                                                                    <textarea name="reason" x-model="reason" rows="4" class="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required minlength="10" placeholder="{{ __('Or provide your own reason here...') }}"></textarea>
+                                                                    <textarea name="reason" x-model="reason" rows="4" class="w-full rounded-md shadow-sm border-gray-600 bg-gray-700 text-gray-300 focus:border-indigo-500 focus:ring-indigo-500" required minlength="10" placeholder="{{ __('Or provide your own reason here...') }}"></textarea>
                                                                 </div>
                                                             </div>
-                                                            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                                                            <div class="bg-gray-700 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                                                                 <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
                                                                     {{ __('Submit Report') }}
                                                                 </button>
-                                                                <button @click="open = false" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">
+                                                                <button @click="open = false" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-500 shadow-sm px-4 py-2 bg-gray-600 text-base font-medium text-gray-300 hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">
                                                                     {{ __('Cancel') }}
                                                                 </button>
                                                             </div>
@@ -149,7 +149,7 @@
                                     </svg>
                                 @endfor
                             </div>
-                            <span class="text-sm text-gray-600">
+                            <span class="text-sm text-gray-400">
                                 @if(($ratingsCount ?? 0) > 0)
                                     {{ number_format($averageRating ?? 0, 1) }} ({{ $ratingsCount ?? 0 }}) 
                                 @else
@@ -159,7 +159,7 @@
                         </div>
                     </div>
 
-                    <p class="text-gray-600 mb-4 whitespace-pre-wrap">{{ $project->description }}</p>
+                    <p class="text-gray-400 mb-4 whitespace-pre-wrap">{{ $project->description }}</p>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                         <div>
@@ -275,7 +275,7 @@
                     @endif
 
                     <!-- Ratings and Comments Section -->
-                    <div class="mt-8 border-t pt-8">
+                    <div class="mt-8 border-t border-gray-700 pt-8">
                         <h3 class="text-2xl font-bold mb-4">{{ __('Ratings & Comments') }}</h3>
 
 
@@ -283,7 +283,7 @@
                         @auth
                             @if(Auth::id() !== $project->user_id)
                                                             <!-- Your Rating Section -->
-                                                            <div class="bg-gray-50 p-6 rounded-lg mb-6" x-data="{
+                                                            <div class="bg-gray-700 p-6 rounded-lg mb-6" x-data="{
                                                                 hoverRating: 0,
                                                                 selectedRating: {{ optional($userRating)->rating ?? 0 }},
                                                                 hasUserRating: {{ optional($userRating)->rating ? 'true' : 'false' }},
@@ -302,7 +302,7 @@
                                                                 }
                                                             }">
                                                                 <h4 class="text-lg font-semibold mb-2">{{ __('Your Rating') }}</h4>
-                                                                <p class="text-sm text-gray-600 mb-2">{{ optional($userRating)->rating ? __('You have already rated this project. To change it, remove your current rating and post a new one.') : __('Select a rating for this project.') }}</p>
+                                                                <p class="text-sm text-gray-400 mb-2">{{ optional($userRating)->rating ? __('You have already rated this project. To change it, remove your current rating and post a new one.') : __('Select a rating for this project.') }}</p>
                                 
                                                                 <form :action="hasUserRating ? '{{ route('ratings.destroy', $project) }}' : '{{ route('ratings.store', $project) }}'" method="POST" onsubmit="return hasUserRating ? confirm('Are you sure you want to remove your rating?') : true;">
                                                                     @csrf
@@ -335,11 +335,11 @@
                                                             </div>
                             @endif
                             <!-- Your Comment Section -->
-                            <div class="bg-gray-50 p-6 rounded-lg mb-6" x-data="{ commentInput: '' }">
+                            <div class="bg-gray-700 p-6 rounded-lg mb-6" x-data="{ commentInput: '' }">
                                 <h4 class="text-lg font-semibold mb-2">{{ __('Post a Comment') }}</h4>
                                 <form action="{{ route('comments.store', $project) }}" method="POST">
                                     @csrf
-                                    <textarea name="comment" rows="4" class="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="{{ __('Share your thoughts about this project...') }}" x-model="commentInput"></textarea>
+                                    <textarea name="comment" rows="4" class="w-full rounded-md shadow-sm border-gray-600 bg-gray-800 text-gray-300 focus:border-indigo-500 focus:ring-indigo-500" placeholder="{{ __('Share your thoughts about this project...') }}" x-model="commentInput"></textarea>
                                     <x-input-error class="mt-2" :messages="$errors->get('comment')" />
 
                                     <div class="flex items-center justify-end mt-4">
@@ -350,7 +350,7 @@
                                 </form>
                             </div>
                         @else
-                            <p class="text-gray-600 mb-6">{{ __('Log in to rate and comment.') }}</p>
+                            <p class="text-gray-400 mb-6">{{ __('Log in to rate and comment.') }}</p>
                         @endauth
 
                         <!-- Comments List -->
@@ -361,11 +361,11 @@
                                     <div class="flex-1">
                                         <div class="flex items-center justify-between">
                                             <div>
-                                                <a href="{{ route('users.show', $comment->user) }}" class="font-semibold text-gray-900">{{ $comment->user->username }}</a>
+                                                <a href="{{ route('users.show', $comment->user) }}" class="font-semibold text-gray-200">{{ $comment->user->username }}</a>
                                                 @if ($comment->user_id == $project->user_id)
                                                     <span class="ml-2 px-2 py-0.5 bg-indigo-100 text-indigo-800 text-xs font-semibold rounded-full">{{ __('Author') }}</span>
                                                 @endif
-                                                <span class="text-xs text-gray-500 ml-2">{{ $comment->created_at->diffForHumans() }}</span>
+                                                <span class="text-xs text-gray-400 ml-2">{{ $comment->created_at->diffForHumans() }}</span>
                                             </div>
                                             @canany(['update', 'delete'], $comment)
                                                 <div class="flex items-center space-x-2">
@@ -381,7 +381,7 @@
                                             @endcanany
                                         </div>
                                         <!-- Display mode -->
-                                        <p x-show="!isEditing" class="text-gray-700 mt-1" x-text="commentBody"></p>
+                                        <p x-show="!isEditing" class="text-gray-300 mt-1" x-text="commentBody"></p>
 
                                         <!-- Edit mode -->
                                         <form x-show="isEditing" method="POST" action="{{ route('comments.update', $comment) }}" @submit.prevent="fetch(event.target.action, {
@@ -408,20 +408,20 @@
                                         })">
                                             @csrf
                                             @method('patch')
-                                            <textarea x-model="commentBody" rows="3" class="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 mt-1"></textarea>
+                                            <textarea x-model="commentBody" rows="3" class="w-full rounded-md shadow-sm border-gray-600 bg-gray-800 text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 mt-1"></textarea>
                                             <div class="flex items-center gap-2 mt-2">
                                                 <button type="submit" class="px-3 py-1 bg-indigo-500 text-white text-xs rounded hover:bg-indigo-600" x-bind:disabled="commentBody.trim() === ''" :class="{ 'opacity-50 cursor-not-allowed': commentBody.trim() === '' }">{{ __('Save') }}</button>
-                                                <button type="button" @click="isEditing = false; commentBody = '{{ $comment->comment }}'" class="px-3 py-1 bg-gray-300 text-gray-700 text-xs rounded hover:bg-gray-400">{{ __('Cancel') }}</button>
+                                                <button type="button" @click="isEditing = false; commentBody = '{{ ($comment->comment) }}'" class="px-3 py-1 bg-gray-600 text-gray-300 text-xs rounded hover:bg-gray-500">{{ __('Cancel') }}</button>
                                             </div>
                                         </form>
 
                                         <!-- Confirmation Modal for Comment Deletion -->
                                         <div x-show="confirmingCommentDeletion" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-75" style="display: none;">
-                                            <div @click.away="confirmingCommentDeletion = null" class="bg-white rounded-lg p-6 shadow-xl w-1/3 mx-auto">
+                                            <div @click.away="confirmingCommentDeletion = null" class="bg-gray-800 rounded-lg p-6 shadow-xl w-1/3 mx-auto">
                                                 <h3 class="text-lg font-semibold mb-4">{{ __('Confirm Deletion') }}</h3>
                                                 <p class="mb-4">{{ __('Are you sure you want to delete this comment?') }}</p>
                                                 <div class="flex justify-end space-x-4">
-                                                    <button type="button" @click="confirmingCommentDeletion = null" class="px-4 py-2 bg-gray-300 rounded-md">{{ __('Cancel') }}</button>
+                                                    <button type="button" @click="confirmingCommentDeletion = null" class="px-4 py-2 bg-gray-600 text-gray-300 rounded-md">{{ __('Cancel') }}</button>
                                                     <form action="{{ route('comments.destroy', $comment) }}" method="POST">
                                                         @csrf
                                                         @method('DELETE')
@@ -433,18 +433,18 @@
                                     </div>
                                 </div>
                             @empty
-                                <p class="text-gray-500">{{ __('No comments yet!') }}</p>
+                                <p class="text-gray-400">{{ __('No comments yet!') }}</p>
                             @endforelse
                         </div>
                     </div>
 
                     <!-- Confirmation Modal -->
                     <div x-show="confirmingDelete !== null" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-75" style="display: none;">
-                        <div @click.away="confirmingDelete = null" class="bg-white rounded-lg p-6 shadow-xl w-1/3 mx-auto">
+                        <div @click.away="confirmingDelete = null" class="bg-gray-800 rounded-lg p-6 shadow-xl w-1/3 mx-auto">
                             <h3 class="text-lg font-semibold mb-4">{{ __('Confirm Deletion') }}</h3>
                             <p class="mb-4">{{ __('Are you sure you want to delete this project? This action cannot be undone.') }}</p>
                             <div class="flex justify-end space-x-4">
-                                <button type="button" @click="confirmingDelete = null" class="px-4 py-2 bg-gray-300 rounded-md">{{ __('Cancel') }}</button>
+                                <button type="button" @click="confirmingDelete = null" class="px-4 py-2 bg-gray-600 text-gray-300 rounded-md">{{ __('Cancel') }}</button>
                                 <button type="button" @click="document.getElementById('delete-project-form').submit()" class="px-4 py-2 bg-red-600 text-white rounded-md">{{ __('Delete') }}</button>
                             </div>
                         </div>

@@ -52,8 +52,15 @@
     "Profile": "Profils",
     "Log Out": "Izrakstīties",
     "Welcome to Craftify!": "Laipni lūgti Craftify!",
-    "Your ultimate destination for sharing and discovering inspiring craft projects.": "Vieta, kur jūsu kreativitāte iegūst formu...",
-    "Get Started": "Sākt Darbu",
+    "Your ultimate destination for sharing and discovering inspiring craft projects.": "Jūsu galamērķis, lai dalītos un atklātu iedvesmojošus amatniecības projektus.",
+    "Get Started": "Sākt darbu",
+    "Explore Projects": "Skatīt projektus",
+    "Featured Public Projects": "Populārākie publiskie projekti",
+    "View Project": "Skatīt projektu",
+    "Want to see more projects?": "Vēlaties redzēt vairāk projektu?",
+    "Register for free to unlock all features, explore unlimited projects, and share your own creations!": "Reģistrējieties bez maksas, lai piekļūtu visām funkcijām, izpētītu neierobežotu skaitu projektu un dalītos ar saviem darbiem!",
+    "Register Now!": "Reģistrēties tagad!",
+    "No public projects available yet.": "Pagaidām nav pieejamu publisku projektu.",
     "Or explore existing projects": "Vai izpētīt esošos projektus",
     "Already registered?": "Jau reģistrējies?",
     "Email": "E-pasts",
@@ -231,5 +238,7 @@
     "Min. Estimated Hours": "Min. paredzamās stundas",
     "Max. Estimated Hours": "Maks. paredzamās stundas",
     "Estimated Hours (Asc)": "Izstrādes stundas (augoši)",
-    "Estimated Hours (Desc)": "Izstrādes stundas (dilstoši)"
+    "Estimated Hours (Desc)": "Izstrādes stundas (dilstoši)",
+    "Home": "Sākumlapa",
+    "Management": "Pārvaldība"
 }

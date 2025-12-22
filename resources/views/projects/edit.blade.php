@@ -1,10 +1,10 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('Edit Project') }}
             </h2>
-            <a href="#" onclick="history.back()" class="inline-flex items-center px-2 py-1 bg-gray-200 border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-300">
+            <a href="#" onclick="history.back()" class="inline-flex items-center px-2 py-1 bg-gray-700 dark:bg-gray-700 border border-gray-600 dark:border-gray-600 rounded-md font-semibold text-xs text-gray-200 dark:text-gray-200 uppercase tracking-widest shadow-sm hover:bg-gray-600 dark:hover:bg-gray-600">
                 &laquo; {{ __('Back') }}
             </a>
         </div>
@@ -12,8 +12,8 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+            <div class="bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-200">
                     <form method="POST" action="{{ route('projects.update', $project) }}" enctype="multipart/form-data"
                         x-data="{
                             newImages: [],
@@ -87,12 +87,12 @@
                         </div>
                         <div class="mt-4">
                             <x-input-label for="description">{{ __('Description') }}<span class="text-red-500">*</span></x-input-label>
-                            <textarea id="description" name="description" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 @error('description') border-red-500 @enderror" required maxlength="10000">{{ old('description', $project->description) }}</textarea>
+                            <textarea id="description" name="description" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 @error('description') border-red-500 @enderror" required maxlength="10000">{{ old('description', $project->description) }}</textarea>
                             <x-input-error :messages="$errors->get('description')" class="mt-2" />
                         </div>
                         <div class="mt-4">
                             <x-input-label for="materials">{{ __('Materials') }}<span class="text-red-500">*</span></x-input-label>
-                            <textarea id="materials" name="materials" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 @error('materials') border-red-500 @enderror" required maxlength="5000">{{ old('materials', $project->materials) }}</textarea>
+                            <textarea id="materials" name="materials" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 @error('materials') border-red-500 @enderror" required maxlength="5000">{{ old('materials', $project->materials) }}</textarea>
                             <x-input-error :messages="$errors->get('materials')" class="mt-2" />
                         </div>
                         <div class="mt-4">
@@ -132,10 +132,10 @@
                             </div>
                             <!-- Search Input -->
                             <div @click.away="open = false" class="relative">
-                                <input id="categories-search" type="text" x-model="search" @focus="open = true" @input="open = true" placeholder="Search categories..." class="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 @error('categories') border-red-500 @enderror" maxlength="50">
-                                <div x-show="open && filteredOptions.length > 0" class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
+                                <input id="categories-search" type="text" x-model="search" @focus="open = true" @input="open = true" placeholder="Search categories..." class="w-full rounded-md shadow-sm border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 @error('categories') border-red-500 @enderror" maxlength="50">
+                                <div x-show="open && filteredOptions.length > 0" class="absolute z-10 w-full mt-1 bg-gray-700 border border-gray-600 rounded-md shadow-lg max-h-60 overflow-y-auto">
                                     <template x-for="option in filteredOptions" :key="option.id">
-                                        <div @click="selected.push(option); search = ''; open = false" class="cursor-pointer px-4 py-2 hover:bg-gray-100" x-text="option.name"></div>
+                                        <div @click="selected.push(option); search = ''; open = false" class="cursor-pointer px-4 py-2 text-gray-200 hover:bg-gray-600" x-text="option.name"></div>
                                     </template>
                                 </div>
                             </div>
@@ -195,20 +195,20 @@
                             </div>
                             <!-- Search Input -->
                             <div @click.away="open = false" class="relative">
-                                <input id="tools-search" type="text" x-model="search" @focus="open = true" @input="open = true" placeholder="Search or add a new tool..." class="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 @error('tools') border-red-500 @enderror" maxlength="50">
-                                <div x-show="open" class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
+                                <input id="tools-search" type="text" x-model="search" @focus="open = true" @input="open = true" placeholder="Search or add a new tool..." class="w-full rounded-md shadow-sm border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 @error('tools') border-red-500 @enderror" maxlength="50">
+                                <div x-show="open" class="absolute z-10 w-full mt-1 bg-gray-700 border border-gray-600 rounded-md shadow-lg max-h-60 overflow-y-auto">
                                     <template x-for="option in filteredOptions" :key="option.id">
-                                        <div @click="selected.push(option); search = ''; open = false" class="cursor-pointer px-4 py-2 hover:bg-gray-100">
+                                        <div @click="selected.push(option); search = ''; open = false" class="cursor-pointer px-4 py-2 text-gray-200 hover:bg-gray-600">
                                             <span x-text="option.name"></span>
                                             <template x-if="option.comment">
-                                                <span class="ml-1 text-xs text-gray-500" x-text="'(' + option.comment + ')'"></span>
+                                                <span class="ml-1 text-xs text-gray-400" x-text="'(' + option.comment + ')'"></span>
                                             </template>
                                         </div>
                                     </template>
                                     <!-- Create new tool UI -->
-                                    <div x-show="search && filteredOptions.length === 0" class="p-4 border-t">
-                                        <p class="mb-2">{{ __("Create new tool:") }} <strong x-text="search"></strong></p>
-                                        <input type="text" x-model="newToolComment" placeholder="{{ __("Optional comment...") }}" class="w-full text-sm rounded-md shadow-sm border-gray-300 mb-2" maxlength="50">
+                                    <div x-show="search && filteredOptions.length === 0" class="p-4 border-t border-gray-600">
+                                        <p class="mb-2 text-gray-200">{{ __("Create new tool:") }} <strong x-text="search"></strong></p>
+                                        <input type="text" x-model="newToolComment" placeholder="{{ __("Optional comment...") }}" class="w-full text-sm rounded-md shadow-sm border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 mb-2" maxlength="50">
                                         <button @click="createNewTool" type="button" class="w-full text-sm px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-500">{{ __("Create & Add") }}</button>
                                     </div>
                                 </div>
@@ -227,7 +227,7 @@
 
                             <!-- New Image Previews -->
                             <div class="mt-4" x-show="newImages.length > 0">
-                                <h4 class="font-semibold text-md text-gray-700">{{ __("New Previews") }}</h4>
+                                <h4 class="font-semibold text-md text-gray-200">{{ __("New Previews") }}</h4>
                                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-2">
                                     <template x-for="(image, index) in newImages" :key="index">
                                         <div class="relative group">
@@ -246,7 +246,7 @@
                             <!-- Current Images -->
                             @if ($project->images->isNotEmpty())
                                 <div class="mt-6">
-                                    <h4 class="font-semibold text-md text-gray-700">{{ __("Current Images") }}</h4>
+                                    <h4 class="font-semibold text-md text-gray-200">{{ __("Current Images") }}</h4>
                                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-2">
                                         @foreach ($project->images as $image)
                                             <div class="relative group" x-ref="image-{{ $image->id }}">
@@ -270,8 +270,8 @@
                         <!-- Is Public -->
                         <div class="mt-4">
                             <label for="is_public" class="inline-flex items-center">
-                                <input id="is_public" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="is_public" @checked(old('is_public', $project->is_public))>
-                                <span class="ms-2 text-sm text-gray-600">{{ __('Make Public') }}</span>
+                                <input id="is_public" type="checkbox" class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500" name="is_public" @checked(old('is_public', $project->is_public))>
+                                <span class="ms-2 text-sm text-gray-400">{{ __('Make Public') }}</span>
                             </label>
                         </div>
 

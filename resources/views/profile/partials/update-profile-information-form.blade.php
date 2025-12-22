@@ -1,10 +1,10 @@
 <section>
     <header>
-        <h2 class="text-lg font-medium text-gray-900">
+        <h2 class="text-lg font-medium text-gray-200">
             {{ __('Profile Information') }}
         </h2>
 
-        <p class="mt-1 text-sm text-gray-600">
+        <p class="mt-1 text-sm text-gray-400">
             {{ __("Update your account's profile information and email address.") }}
         </p>
     </header>
@@ -23,7 +23,7 @@
             <div class="mt-2 flex items-center gap-4">
                 <img src="{{ $user->profile_image_url }}" alt="{{ $user->name }}" class="h-20 w-20 rounded-full object-cover">
                 <div>
-                    <input id="profile_image" name="profile_image" type="file" class="block w-full text-sm text-gray-500
+                    <input id="profile_image" name="profile_image" type="file" class="block w-full text-sm text-gray-400
                         file:mr-4 file:py-2 file:px-4
                         file:rounded-md file:border-0
                         file:text-sm file:font-semibold
@@ -35,7 +35,7 @@
                     @if ($user->profile_image_id)
                         <div class="mt-2 flex items-center">
                             <input type="checkbox" name="remove_profile_image" id="remove_profile_image" value="1" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
-                            <label for="remove_profile_image" class="ml-2 text-sm text-gray-600">{{ __('Remove current image') }}</label>
+                            <label for="remove_profile_image" class="ml-2 text-sm text-gray-400">{{ __('Remove current image') }}</label>
                         </div>
                     @endif
                 </div>
@@ -67,10 +67,10 @@
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
                 <div>
-                    <p class="text-sm mt-2 text-gray-800">
+                    <p class="text-sm mt-2 text-gray-300">
                         {{ __('Your email address is unverified.') }}
 
-                        <button form="send-verification" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <button form="send-verification" class="underline text-sm text-gray-400 hover:text-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             {{ __('Click here to re-send the verification email.') }}
                         </button>
                     </p>
@@ -93,7 +93,7 @@
                     x-show="show"
                     x-transition
                     x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600"
+                    class="text-sm text-gray-400"
                 >{{ __('Saved.') }}</p>
             @endif
         </div>

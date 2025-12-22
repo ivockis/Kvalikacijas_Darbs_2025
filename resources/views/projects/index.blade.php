@@ -1,17 +1,17 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('My Projects') }}
         </h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+            <div class="bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-200">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="font-semibold text-lg text-gray-800">{{ __('My Projects') }}</h3>
-                        <a href="{{ route('projects.create') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                        <h3 class="font-semibold text-lg text-gray-800 dark:text-gray-200">{{ __('My Projects') }}</h3>
+                        <a href="{{ route('projects.create') }}" class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150">
                             {{ __('Add New Project') }}
                         </a>
                     </div>
@@ -19,12 +19,12 @@
                     <form id="filter-form" method="GET" action="{{ route('projects.index') }}" class="mb-6 flex flex-wrap gap-4 items-end">
                         <div class="flex-grow">
                             <x-input-label for="search" :value="__('Search by Title')" class="sr-only" />
-                            <x-text-input id="search" name="search" type="text" placeholder="{{ __('Search projects...') }}" value="{{ request('search') }}" class="w-full" />
+                            <x-text-input id="search" name="search" type="text" placeholder="{{ __('Search projects...') }}" value="{{ request('search') }}" class="w-full dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300" />
                         </div>
 
                         <div>
                             <x-input-label for="category_id" :value="__('Filter by Category')" class="sr-only" />
-                            <select id="category_id" name="category_id" class="block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <select id="category_id" name="category_id" class="block w-full rounded-md shadow-sm border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                                 <option value="">{{ __('All Categories') }}</option>
                                 @foreach($categories as $category)
                                     <option value="{{ $category->id }}" @selected(request('category_id') == $category->id)>{{ $category->name }}</option>
@@ -34,7 +34,7 @@
 
                         <div>
                             <x-input-label for="sort_by" :value="__('Sort By')" class="sr-only" />
-                            <select id="sort_by" name="sort_by" class="block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <select id="sort_by" name="sort_by" class="block w-full rounded-md shadow-sm border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                                 <option value="latest" @selected(request('sort_by') == 'latest')>{{ __('Latest') }}</option>
                                 <option value="oldest" @selected(request('sort_by') == 'oldest')>{{ __('Oldest') }}</option>
                                 <option value="title_asc" @selected(request('sort_by') == 'title_asc')>{{ __('Title (A-Z)') }}</option>

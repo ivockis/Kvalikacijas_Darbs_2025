@@ -16,8 +16,14 @@ use Illuminate\Support\Facades\Route;
 Route::get('/language/{locale}', [LanguageController::class, 'switch'])->name('language.switch');
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    $projects = App\Models\Project::where('is_public', true)
+                                  ->where('is_blocked', false)
+                                  ->with('user')
+                                  ->latest()
+                                  ->take(6) // Take only a few projects for the welcome page
+                                  ->get();
+    return view('welcome', compact('projects'));
+})->name('welcome');
 
 Route::get('/public-projects', [ProjectController::class, 'publicIndex'])->name('public.index');
 Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');

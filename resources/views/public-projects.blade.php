@@ -1,14 +1,14 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('Public Projects Gallery') }}
         </h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+            <div class="bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-200">
                     <form id="filter-form" method="GET" action="{{ route('public.index') }}" class="mb-6 flex flex-wrap gap-4 items-end">
                         <div class="flex-grow">
                             <x-input-label for="search" :value="__('Search by Title')" class="sr-only" />
@@ -17,7 +17,7 @@
 
                         <div>
                             <x-input-label for="category_id" :value="__('Filter by Category')" class="sr-only" />
-                            <select id="category_id" name="category_id" class="block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <select id="category_id" name="category_id" class="block w-full rounded-md shadow-sm border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                                 <option value="">{{ __('All Categories') }}</option>
                                 <option value="liked" @selected(request('category_id') == 'liked')>{{ __('Liked') }}</option>
                                 @foreach($categories as $category)
@@ -29,7 +29,7 @@
 
                         <div>
                             <x-input-label for="sort_by" :value="__('Sort By')" class="sr-only" />
-                            <select id="sort_by" name="sort_by" class="block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <select id="sort_by" name="sort_by" class="block w-full rounded-md shadow-sm border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                                 <option value="latest" @selected(request('sort_by') == 'latest')>{{ __('Latest') }}</option>
                                 <option value="oldest" @selected(request('sort_by') == 'oldest')>{{ __('Oldest') }}</option>
                                 <option value="title_asc" @selected(request('sort_by') == 'title_asc')>{{ __('Title (A-Z)') }}</option>
