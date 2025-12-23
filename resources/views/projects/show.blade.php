@@ -120,7 +120,7 @@
                                                                             <button @click.prevent="reason = option" type="button" class="px-3 py-1 text-xs text-gray-300 bg-gray-600 hover:bg-gray-500 rounded-full" x-text="option"></button>
                                                                         </template>
                                                                     </div>
-                                                                    <textarea name="reason" x-model="reason" rows="4" class="w-full rounded-md shadow-sm border-gray-600 bg-gray-700 text-gray-300 focus:border-indigo-500 focus:ring-indigo-500" required minlength="10" placeholder="{{ __('Or provide your own reason here...') }}"></textarea>
+                                                                    <textarea name="reason" x-model="reason" rows="4" class="w-full rounded-md shadow-sm border-gray-600 bg-gray-700 text-gray-300 focus:border-indigo-500 focus:ring-indigo-500" required minlength="10" maxlength="1000" placeholder="{{ __('Or provide your own reason here...') }}"></textarea>
                                                                 </div>
                                                             </div>
                                                             <div class="bg-gray-700 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
@@ -454,20 +454,5 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div
-        x-data="{ show: {{ session('status') === 'complaint-submitted' ? 'true' : 'false' }} }"
-        x-init="() => { if (show) setTimeout(() => show = false, 3000) }"
-        x-show="show"
-        x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0 transform translate-y-2"
-        x-transition:enter-end="opacity-100 transform translate-y-0"
-        x-transition:leave="transition ease-in duration-300"
-        x-transition:leave-start="opacity-100 transform translate-y-0"
-        x-transition:leave-end="opacity-0 transform translate-y-2"
-        class="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
-        style="display: none;"
-    >
-        {{ __('Report submitted successfully!') }}
     </div>
 </x-app-layout>
