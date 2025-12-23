@@ -3,16 +3,30 @@
         <p class="text-gray-600">{{ __('No projects created yet that match your criteria.') }}</p>
     @else
         @foreach ($projects as $project)
-            <div class="bg-gray-700 dark:bg-gray-700 rounded-lg shadow-md dark:shadow-lg flex flex-col justify-between transform transition duration-300 hover:scale-105">
-                <a href="{{ route('projects.show', $project) }}">
-                    <img src="{{ $project->cover_image_url }}" alt="{{ $project->title }} Cover Image" class="w-full h-48 object-cover rounded-t-lg">
-                </a>
+            <div class="group bg-gray-700 dark:bg-gray-700 rounded-lg shadow-md dark:shadow-lg flex flex-col justify-between transform transition duration-300 hover:scale-105">
+                <div class="relative">
+                    <a href="{{ route('projects.show', $project) }}">
+                        <img src="{{ $project->cover_image_url }}" alt="{{ $project->title }} Cover Image" class="w-full h-48 object-cover rounded-t-lg">
+                    </a>
+                    <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center space-x-2">
+                        <a href="{{ route('projects.edit', $project) }}" class="inline-flex items-center px-3 py-2 bg-indigo-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-600 focus:bg-indigo-600 active:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                            {{ __('Edit') }}
+                        </a>
+                        <form id="delete-form-{{ $project->id }}" action="{{ route('projects.destroy', $project) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="button" @click="confirmingDelete = {{ $project->id }}; deleteFormId = 'delete-form-{{ $project->id }}';" class="inline-flex items-center px-3 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 focus:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                {{ __('Delete') }}
+                            </button>
+                        </form>
+                    </div>
+                </div>
                 <div class="p-6">
                     <div>
                         <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
                             <a href="{{ route('projects.show', $project) }}" class="hover:underline">{{ $project->title }}</a>
                         </h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 overflow-hidden text-ellipsis line-clamp-2">{{ Str::limit($project->description, 100) }}</p>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 h-10 overflow-hidden text-ellipsis line-clamp-2">{{ Str::limit($project->description, 100) }}</p>
                         <div x-data="{ 
                                     liked: {{ Auth::check() && $project->likers->contains(Auth::id()) ? 'true' : 'false' }}, 
                                     likesCount: {{ $project->likers_count }},
@@ -46,13 +60,11 @@
 
                             </div>
                             <div class="flex flex-col items-end space-y-1">
+                                <p class="flex items-center">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    {{ $project->estimated_hours }} {{ __('H') }}
+                                </p>
                                 <div class="flex items-center space-x-2">
-                                    <button @click="toggleLike" class="flex items-center text-gray-500 hover:text-blue-500 focus:outline-none">
-                                        <svg class="w-4 h-4 mr-1" :class="{ 'text-blue-500': liked, 'text-gray-400': !liked }" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"></path>
-                                        </svg>
-                                    </button>
-                                    <span x-text="likesCount"></span>
                                     @if ($project->ratings_count > 0)
                                         <p class="flex items-center">
                                             <svg class="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
@@ -62,27 +74,17 @@
                                             <span class="ml-1 text-gray-500">({{ $project->ratings_count }})</span>
                                         </p>
                                     @endif
+                                    <button @click="toggleLike" class="flex items-center text-gray-500 hover:text-blue-500 focus:outline-none">
+                                        <svg class="w-4 h-4 mr-1" :class="{ 'text-blue-500': liked, 'text-gray-400': !liked }" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"></path>
+                                        </svg>
+                                    </button>
+                                    <span x-text="likesCount"></span>
                                 </div>
-                                <p class="flex items-center">
-                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    {{ $project->estimated_hours }} {{ __('H') }}
-                                </p>
                             </div>
                         </div>
                     </div>
-                    <div class="mt-4 flex justify-end space-x-2">
 
-                        <a href="{{ route('projects.edit', $project) }}" class="inline-flex items-center px-3 py-2 bg-indigo-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-600 focus:bg-indigo-600 active:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                            {{ __('Edit') }}
-                        </a>
-                        <form id="delete-form-{{ $project->id }}" action="{{ route('projects.destroy', $project) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="button" @click="confirmingDelete = {{ $project->id }}; deleteFormId = 'delete-form-{{ $project->id }}';" class="inline-flex items-center px-3 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 focus:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                {{ __('Delete') }}
-                            </button>
-                        </form>
-                    </div>
                 </div>
             </div>
         @endforeach

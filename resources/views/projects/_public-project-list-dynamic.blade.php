@@ -13,7 +13,7 @@
                             <h3 class="text-lg font-semibold text-gray-200 mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
                                 <a href="{{ route('projects.show', $project) }}" class="hover:underline">{{ $project->title }}</a>
                             </h3>
-                            <p class="text-gray-400 text-sm mb-4 overflow-hidden text-ellipsis line-clamp-2">{{ Str::limit($project->description, 100) }}</p>
+                            <p class="text-gray-400 text-sm mb-4 h-10 overflow-hidden text-ellipsis line-clamp-2">{{ Str::limit($project->description, 100) }}</p>
                             <div class="flex items-center justify-between mt-2">
                                 <div>
                                     <p class="text-xs text-gray-400">{{ __('Author:') }} <a href="{{ route('users.show', $project->user) }}" class="font-medium text-blue-400 hover:underline">{{ $project->user->name }}</a></p>
