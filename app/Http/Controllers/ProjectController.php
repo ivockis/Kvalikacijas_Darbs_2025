@@ -111,6 +111,7 @@ class ProjectController extends Controller
         $query = Auth::user()->projects()->select('projects.*') // Explicitly select all project columns to avoid SQLSTATE[42000] error
                         ->withCount('ratings') // Count the number of ratings
                         ->withAvg('ratings', 'rating') // Calculate the average rating
+                        ->withCount('likers') // Count the number of likers
                         ->groupBy('projects.id'); // Group by project to use having for average rating
 
         // Apply search filter

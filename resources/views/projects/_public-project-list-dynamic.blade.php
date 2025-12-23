@@ -14,8 +14,21 @@
                                 <a href="{{ route('projects.show', $project) }}" class="hover:underline">{{ $project->title }}</a>
                             </h3>
                             <p class="text-gray-400 text-sm mb-4 overflow-hidden text-ellipsis line-clamp-2">{{ Str::limit($project->description, 100) }}</p>
-                            <p class="text-xs text-gray-400">{{ __('Author:') }} <a href="{{ route('users.show', $project->user) }}" class="font-medium text-blue-400 hover:underline">{{ $project->user->name }}</a></p>
-                            <p class="text-xs text-gray-400">{{ __('Created:') }} {{ $project->created_at->format('d.m.Y') }}</p>
+                            <div class="flex items-center justify-between mt-2">
+                                <div>
+                                    <p class="text-xs text-gray-400">{{ __('Author:') }} <a href="{{ route('users.show', $project->user) }}" class="font-medium text-blue-400 hover:underline">{{ $project->user->name }}</a></p>
+                                    <p class="text-xs text-gray-400">{{ __('Created:') }} {{ $project->created_at->format('d.m.Y') }}</p>
+                                </div>
+                                @if ($project->ratings_count > 0)
+                                    <div class="flex items-center">
+                                        <svg class="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.538 1.118l-2.8-2.034a1 1 0 00-1.176 0l-2.8 2.034c-.783.57-1.838-.197-1.538-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.929 8.72c-.783-.57-.381-1.81.588-1.81h3.462a1 1 0 00.95-.69l1.07-3.292z"></path>
+                                        </svg>
+                                        <span class="ml-1 text-sm text-gray-300">{{ number_format($project->ratings_avg_rating, 1) }}</span>
+                                        <span class="ml-1 text-sm text-gray-500">({{ $project->ratings_count }})</span>
+                                    </div>
+                                @endif
+                            </div>
                         </div>
                         <div x-data="{ 
                                     liked: {{ Auth::check() && $project->likers->contains(Auth::id()) ? 'true' : 'false' }}, 
