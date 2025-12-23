@@ -12,7 +12,7 @@
                         projects: {{ json_encode($projects->items()) }},
                         links: {{ json_encode($projects->linkCollection()->toArray()) }},
                         search: '',
-                        status: '',
+                        status: 'pending_complaints',
                         sort_by: 'created_at',
                         sort_order: 'desc',
                         per_page: 10,
@@ -23,7 +23,7 @@
                         init() {
                             let params = new URLSearchParams(window.location.search);
                             this.search = params.get('search') || '';
-                            this.status = params.get('status') || '';
+                            this.status = params.get('status') || this.status;
                             this.sort_by = params.get('sort_by') || 'created_at';
                             this.sort_order = params.get('sort_order') || 'desc';
                             this.per_page = params.get('per_page') || 10;

@@ -19,7 +19,7 @@
                             <x-input-label for="category_id" :value="__('Filter by Category')" class="sr-only" />
                             <select id="category_id" name="category_id" class="block w-full rounded-md shadow-sm border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                                 <option value="">{{ __('All Categories') }}</option>
-                                <option value="liked" @selected(request('category_id') == 'liked')>{{ __('Liked') }}</option>
+                                <option value="liked" @selected(request('category_id') == 'liked')>{{ __('Saved') }}</option>
                                 @foreach($categories as $category)
                                     <option value="{{ $category->id }}" @selected(request('category_id') == $category->id)>{{ $category->name }}</option>
                                 @endforeach

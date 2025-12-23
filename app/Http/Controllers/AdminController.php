@@ -130,39 +130,26 @@ class AdminController extends Controller
                     
 
                             // Filtering by status
+                            $status = $request->input('status');
 
-                            if ($status = $request->input('status')) {
-
-                                if ($status === 'blocked') {
-
-                                    $query->where('is_blocked', true);
-
-                                } elseif ($status === 'active') {
-
-                                    $query->where('is_blocked', false);
-
-                                } elseif ($status === 'has_complaints') {
-
-                                    $query->whereHas('complaints');
-
-                                } elseif ($status === 'pending_complaints') { // New filter for projects with pending complaints
-
-                                    $query->whereHas('complaints', function ($q) {
-
-                                        $q->where('status', 'pending');
-
-                                    });
-
-                                } elseif ($status === 'resolved_complaints') { // New filter for projects with no pending complaints but some total complaints
-
-                                    $query->whereDoesntHave('complaints', function ($q) {
-
-                                        $q->where('status', 'pending');
-
-                                    })->whereHas('complaints');
-
-                                }
-
+                            if ($status === null && !$request->wantsJson()) {
+                                $status = 'pending_complaints';
+                            }
+                    
+                            if ($status === 'blocked') {
+                                $query->where('is_blocked', true);
+                            } elseif ($status === 'active') {
+                                $query->where('is_blocked', false);
+                            } elseif ($status === 'has_complaints') {
+                                $query->whereHas('complaints');
+                            } elseif ($status === 'pending_complaints') {
+                                $query->whereHas('complaints', function ($q) {
+                                    $q->where('status', 'pending');
+                                });
+                            } elseif ($status === 'resolved_complaints') {
+                                $query->whereDoesntHave('complaints', function ($q) {
+                                    $q->where('status', 'pending');
+                                })->whereHas('complaints');
                             }
 
                     
