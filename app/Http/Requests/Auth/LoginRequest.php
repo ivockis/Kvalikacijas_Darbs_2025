@@ -55,7 +55,7 @@ class LoginRequest extends FormRequest
             Auth::guard('web')->logout(); // Log out the blocked user
             RateLimiter::hit($this->throttleKey()); // Optionally hit rate limiter for blocked attempts
             throw ValidationException::withMessages([
-                'email' => 'Your account has been blocked.', // Custom message for blocked users
+                'email' => trans('auth.blocked'), // Custom message for blocked users
             ]);
         }
 

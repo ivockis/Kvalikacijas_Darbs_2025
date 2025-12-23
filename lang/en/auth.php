@@ -28,5 +28,6 @@ return [
     // Pievienojiet arī pārējos, ko izmantojat register.blade.php un login.blade.php
     'Surname' => 'Surname',
     'Username' => 'Username',
+    'blocked' => 'Your account has been blocked.',
 
 ];
