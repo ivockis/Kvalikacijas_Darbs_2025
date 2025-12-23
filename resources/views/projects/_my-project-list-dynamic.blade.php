@@ -43,13 +43,13 @@
                                 <p class="flex items-center">
                                     {{ __('Created:') }} <span class="ml-1">{{ $project->created_at->format('d.m.Y') }}</span>
                                 </p>
+
                             </div>
                             <div class="flex flex-col items-end space-y-1">
                                 <div class="flex items-center space-x-2">
-                                    <button @click="toggleLike" class="flex items-center text-gray-500 hover:text-red-500 focus:outline-none">
-                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" 
-                                             :class="{ 'text-red-500': liked, 'text-gray-400': !liked }">
-                                            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                                    <button @click="toggleLike" class="flex items-center text-gray-500 hover:text-blue-500 focus:outline-none">
+                                        <svg class="w-4 h-4 mr-1" :class="{ 'text-blue-500': liked, 'text-gray-400': !liked }" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"></path>
                                         </svg>
                                     </button>
                                     <span x-text="likesCount"></span>
@@ -71,9 +71,7 @@
                         </div>
                     </div>
                     <div class="mt-4 flex justify-end space-x-2">
-                        <a href="{{ route('projects.show', $project) }}" class="inline-flex items-center px-3 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-600 focus:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                            {{ __('View') }}
-                        </a>
+
                         <a href="{{ route('projects.edit', $project) }}" class="inline-flex items-center px-3 py-2 bg-indigo-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-600 focus:bg-indigo-600 active:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
                             {{ __('Edit') }}
                         </a>
