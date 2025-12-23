@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between no-print">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ $project->title }}
             </h2>
@@ -17,7 +17,7 @@
                     <div class="mb-6">
                         <div class="flex items-center justify-between">
                             <h3 class="text-2xl font-bold max-w-lg break-words">{{ $project->title }}</h3>
-                            <div class="flex items-center space-x-2">
+                            <div class="flex items-center space-x-2 no-print">
 
                                 <!-- Like Button -->
                                 @auth
@@ -141,7 +141,7 @@
                             </div>
                         </div>
                         <!-- Average Rating Display -->
-                        <div class="flex items-center space-x-2 mb-4">
+                        <div class="flex items-center space-x-2 mb-4 no-print">
                             <div class="flex items-center">
                                 @for ($i = 1; $i <= 5; $i++)
                                     <svg class="w-5 h-5 @if ($i <= round($averageRating ?? 0)) text-yellow-400 @else text-gray-300 @endif" fill="currentColor" viewBox="0 0 20 20">
@@ -243,7 +243,7 @@
                                  x-transition:leave="transition ease-in duration-200"
                                  x-transition:leave-start="opacity-100"
                                  x-transition:leave-end="opacity-0"
-                                 class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75"
+                                 class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 no-print"
                                  style="display: none;"
                                  @click.away="lightboxOpen = false"
                                  @keydown.escape.window="lightboxOpen = false">
@@ -275,7 +275,7 @@
                     @endif
 
                     <!-- Ratings and Comments Section -->
-                    <div class="mt-8 border-t border-gray-700 pt-8">
+                    <div class="mt-8 border-t border-gray-700 pt-8 no-print">
                         <h3 class="text-2xl font-bold mb-4">{{ __('Ratings & Comments') }}</h3>
 
 
@@ -356,82 +356,127 @@
                         <!-- Comments List -->
                         <div class="mt-8 space-y-6">
                             @forelse ($comments as $comment)
-                                <div class="flex space-x-4" id="comment-{{ $comment->id }}" x-data="{ isEditing: false, commentBody: '{{ $comment->comment }}', confirmingCommentDeletion: null }">
-                                    <img src="{{ $comment->user->profile_image_url }}" alt="{{ $comment->user->username }}" class="h-10 w-10 rounded-full object-cover">
-                                    <div class="flex-1">
-                                        <div class="flex items-center justify-between">
-                                            <div>
-                                                <a href="{{ route('users.show', $comment->user) }}" class="font-semibold text-gray-200">{{ $comment->user->username }}</a>
-                                                @if ($comment->user_id == $project->user_id)
-                                                    <span class="ml-2 px-2 py-0.5 bg-indigo-100 text-indigo-800 text-xs font-semibold rounded-full">{{ __('Author') }}</span>
-                                                @endif
-                                                <span class="text-xs text-gray-400 ml-2">{{ $comment->created_at->diffForHumans() }}</span>
-                                            </div>
-                                            @canany(['update', 'delete'], $comment)
-                                                <div class="flex items-center space-x-2">
-                                                    <!-- Edit Button -->
-                                                    @can('update', $comment)
-                                                        <button x-show="!isEditing" @click="isEditing = true" class="text-indigo-600 hover:text-indigo-900 text-sm">{{ __('Edit') }}</button>
-                                                    @endcan
-                                                    <!-- Delete Button -->
-                                                    @can('delete', $comment)
-                                                        <button x-show="!isEditing" @click="confirmingCommentDeletion = true" class="text-red-600 hover:text-red-900 text-sm">{{ __('Delete') }}</button>
-                                                    @endcan
+                                @php
+                                    $isProjectOwner = Auth::check() && (Auth::id() === $project->user_id);
+                                @endphp
+                                @if ($comment->is_visible || $isProjectOwner)
+                                    <div class="flex space-x-4" 
+                                         :class="{ 'opacity-50': !commentVisible && {{ $isProjectOwner ? 'true' : 'false' }} }" 
+                                         id="comment-{{ $comment->id }}" 
+                                         x-data="{ isEditing: false, commentBody: '{{ $comment->comment }}', confirmingCommentDeletion: null, commentVisible: {{ $comment->is_visible ? 'true' : 'false' }} }">
+                                        <img src="{{ $comment->user->profile_image_url }}" alt="{{ $comment->user->username }}" class="h-10 w-10 rounded-full object-cover">
+                                        <div class="flex-1">
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <a href="{{ route('users.show', $comment->user) }}" class="font-semibold text-gray-200">{{ $comment->user->username }}</a>
+                                                    @if ($comment->user_id == $project->user_id)
+                                                        <span class="ml-2 px-2 py-0.5 bg-indigo-100 text-indigo-800 text-xs font-semibold rounded-full">{{ __('Author') }}</span>
+                                                    @endif
+                                                    <span class="text-xs text-gray-400 ml-2">{{ $comment->created_at->diffForHumans() }}</span>
+                                                    <span x-show="!commentVisible && {{ $isProjectOwner ? 'true' : 'false' }}" class="ml-2 px-2 py-0.5 bg-red-100 text-red-800 text-xs font-semibold rounded-full">{{ __('Hidden') }}</span>
                                                 </div>
-                                            @endcanany
-                                        </div>
-                                        <!-- Display mode -->
-                                        <p x-show="!isEditing" class="text-gray-300 mt-1" x-text="commentBody"></p>
+                                                <div class="flex items-center space-x-2">
+                                                    @canany(['update', 'delete'], $comment)
+                                                        {{-- Edit Button --}}
+                                                        @can('update', $comment)
+                                                            <button x-show="!isEditing" @click="isEditing = true" class="text-indigo-600 hover:text-indigo-900 text-sm">{{ __('Edit') }}</button>
+                                                        @endcan
+                                                        {{-- Delete Button --}}
+                                                        @can('delete', $comment)
+                                                            <button x-show="!isEditing" @click="confirmingCommentDeletion = true" class="text-red-600 hover:text-red-900 text-sm">{{ __('Delete') }}</button>
+                                                        @endcan
+                                                    @endcanany
 
-                                        <!-- Edit mode -->
-                                        <form x-show="isEditing" method="POST" action="{{ route('comments.update', $comment) }}" @submit.prevent="fetch(event.target.action, {
-                                            method: 'PATCH',
-                                            headers: {
-                                                'Content-Type': 'application/json',
-                                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                                'Accept': 'application/json'
-                                            },
-                                            body: JSON.stringify({ comment: commentBody })
-                                        }).then(response => {
-                                            if (response.ok) {
-                                                isEditing = false;
-                                                // Optionally, you can show a success message here
-                                            } else {
-                                                // Handle errors (e.g., show validation errors)
-                                                response.json().then(data => {
-                                                    alert(data.message || 'Error updating comment.');
-                                                });
-                                            }
-                                        }).catch(error => {
-                                            console.error('Error:', error);
-                                            alert('An error occurred.');
-                                        })">
-                                            @csrf
-                                            @method('patch')
-                                            <textarea x-model="commentBody" rows="3" class="w-full rounded-md shadow-sm border-gray-600 bg-gray-800 text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 mt-1"></textarea>
-                                            <div class="flex items-center gap-2 mt-2">
-                                                <button type="submit" class="px-3 py-1 bg-indigo-500 text-white text-xs rounded hover:bg-indigo-600" x-bind:disabled="commentBody.trim() === ''" :class="{ 'opacity-50 cursor-not-allowed': commentBody.trim() === '' }">{{ __('Save') }}</button>
-                                                <button type="button" @click="isEditing = false; commentBody = '{{ ($comment->comment) }}'" class="px-3 py-1 bg-gray-600 text-gray-300 text-xs rounded hover:bg-gray-500">{{ __('Cancel') }}</button>
+                                                    @auth
+                                                        @if ($isProjectOwner)
+                                                            <div x-data="{
+                                                                toggleVisibility() {
+                                                                    fetch('{{ route('comments.update', $comment) }}', {
+                                                                        method: 'PATCH',
+                                                                        headers: {
+                                                                            'Content-Type': 'application/json',
+                                                                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                                                            'Accept': 'application/json'
+                                                                        },
+                                                                        body: JSON.stringify({ is_visible: !this.commentVisible })
+                                                                    }).then(response => {
+                                                                        if (response.ok) {
+                                                                            this.commentVisible = !this.commentVisible;
+                                                                            // Optionally, show a success message
+                                                                        } else {
+                                                                            response.json().then(data => {
+                                                                                alert(data.message || 'Error toggling comment visibility.');
+                                                                            });
+                                                                        }
+                                                                    }).catch(error => {
+                                                                        console.error('Error:', error);
+                                                                        alert('An error occurred.');
+                                                                    });
+                                                                }
+                                                            }">
+                                                                <button @click="toggleVisibility()"
+                                                                        class="text-sm font-medium"
+                                                                        :class="commentVisible ? 'text-orange-500 hover:text-orange-600' : 'text-green-500 hover:text-green-600'"
+                                                                        x-text="commentVisible ? '{{ __('Hide') }}' : '{{ __('Show') }}'">
+                                                                </button>
+                                                            </div>
+                                                        @endif
+                                                    @endauth
+                                                </div>
                                             </div>
-                                        </form>
+                                            <!-- Display mode -->
+                                            <p x-show="!isEditing" class="text-gray-300 mt-1" x-text="commentBody"></p>
 
-                                        <!-- Confirmation Modal for Comment Deletion -->
-                                        <div x-show="confirmingCommentDeletion" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-75" style="display: none;">
-                                            <div @click.away="confirmingCommentDeletion = null" class="bg-gray-800 rounded-lg p-6 shadow-xl w-1/3 mx-auto">
-                                                <h3 class="text-lg font-semibold mb-4">{{ __('Confirm Deletion') }}</h3>
-                                                <p class="mb-4">{{ __('Are you sure you want to delete this comment?') }}</p>
-                                                <div class="flex justify-end space-x-4">
-                                                    <button type="button" @click="confirmingCommentDeletion = null" class="px-4 py-2 bg-gray-600 text-gray-300 rounded-md">{{ __('Cancel') }}</button>
-                                                    <form action="{{ route('comments.destroy', $comment) }}" method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-md">{{ __('Delete') }}</button>
-                                                    </form>
+                                            <!-- Edit mode -->
+                                            <form x-show="isEditing" method="POST" action="{{ route('comments.update', $comment) }}" @submit.prevent="fetch(event.target.action, {
+                                                method: 'PATCH',
+                                                headers: {
+                                                    'Content-Type': 'application/json',
+                                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                                    'Accept': 'application/json'
+                                                },
+                                                body: JSON.stringify({ comment: commentBody })
+                                            }).then(response => {
+                                                if (response.ok) {
+                                                    isEditing = false;
+                                                    // Optionally, you can show a success message here
+                                                } else {
+                                                    // Handle errors (e.g., show validation errors)
+                                                    response.json().then(data => {
+                                                        alert(data.message || 'Error updating comment.');
+                                                    });
+                                                }
+                                            }).catch(error => {
+                                                console.error('Error:', error);
+                                                alert('An error occurred.');
+                                            })">
+                                                @csrf
+                                                @method('patch')
+                                                <textarea x-model="commentBody" rows="3" class="w-full rounded-md shadow-sm border-gray-600 bg-gray-800 text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 mt-1"></textarea>
+                                                <div class="flex items-center gap-2 mt-2">
+                                                    <button type="submit" class="px-3 py-1 bg-indigo-500 text-white text-xs rounded hover:bg-indigo-600" x-bind:disabled="commentBody.trim() === ''" :class="{ 'opacity-50 cursor-not-allowed': commentBody.trim() === '' }">{{ __('Save') }}</button>
+                                                    <button type="button" @click="isEditing = false; commentBody = '{{ ($comment->comment) }}'" class="px-3 py-1 bg-gray-600 text-gray-300 text-xs rounded hover:bg-gray-500">{{ __('Cancel') }}</button>
+                                                </div>
+                                            </form>
+
+                                            <!-- Confirmation Modal for Comment Deletion -->
+                                            <div x-show="confirmingCommentDeletion" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-75 no-print" style="display: none;">
+                                                <div @click.away="confirmingCommentDeletion = null" class="bg-gray-800 rounded-lg p-6 shadow-xl w-1/3 mx-auto">
+                                                    <h3 class="text-lg font-semibold mb-4">{{ __('Confirm Deletion') }}</h3>
+                                                    <p class="mb-4">{{ __('Are you sure you want to delete this comment?') }}</p>
+                                                    <div class="flex justify-end space-x-4">
+                                                        <button type="button" @click="confirmingCommentDeletion = null" class="px-4 py-2 bg-gray-600 text-gray-300 rounded-md">{{ __('Cancel') }}</button>
+                                                        <form action="{{ route('comments.destroy', $comment) }}" method="POST">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-md">{{ __('Delete') }}</button>
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                @endif
                             @empty
                                 <p class="text-gray-400">{{ __('No comments yet!') }}</p>
                             @endforelse
@@ -439,7 +484,7 @@
                     </div>
 
                     <!-- Confirmation Modal -->
-                    <div x-show="confirmingDelete !== null" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-75" style="display: none;">
+                    <div x-show="confirmingDelete !== null" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-75 no-print" style="display: none;">
                         <div @click.away="confirmingDelete = null" class="bg-gray-800 rounded-lg p-6 shadow-xl w-1/3 mx-auto">
                             <h3 class="text-lg font-semibold mb-4">{{ __('Confirm Deletion') }}</h3>
                             <p class="mb-4">{{ __('Are you sure you want to delete this project? This action cannot be undone.') }}</p>

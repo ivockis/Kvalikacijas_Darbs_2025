@@ -90,7 +90,8 @@
                                     <option value="">{{ __('All') }}</option>
                                     <option value="blocked">{{ __('Blocked') }}</option>
                                     <option value="active">{{ __('Active') }}</option>
-                                    <option value="has_complaints">{{ __('Has Complaints') }}</option>
+                                    <option value="pending_complaints">{{ __('Pending Complaints') }}</option>
+                                    <option value="resolved_complaints">{{ __('Resolved Complaints') }}</option>
                                 </select>
                             </div>
                             <div>
@@ -112,7 +113,7 @@
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Project') }}</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Author') }}</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Status') }}</th>
-                                    <th @click="sort_by = 'complaints_count'; sort_order = sort_order === 'asc' ? 'desc' : 'asc'" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer">{{ __('Complaints') }}</th>
+                                    <th @click="sort_by = 'total_complaints_count'; sort_order = sort_order === 'asc' ? 'desc' : 'asc'" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer">{{ __('Complaints') }}</th>
                                     <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">{{ __('Is Blocked') }}</th>
                                 </tr>
                             </thead>
@@ -136,11 +137,14 @@
                                             <span x-show="!project.is_blocked" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">{{ __('Active') }}</span>
                                         </td>
                                         <td class="px-6 py-4">
-                                            <template x-if="project.complaints_count > 0">
-                                                <a :href="`/admin/projects/${project.id}/complaints`" class="text-blue-600 hover:underline" x-text="project.complaints_count"></a>
+                                            <template x-if="project.total_complaints_count > 0">
+                                                <a :href="`/admin/projects/${project.id}/complaints`" 
+                                                   :class="{ 'text-green-600': project.pending_complaints_count === 0, 'text-red-600': project.pending_complaints_count > 0 }"
+                                                   class="hover:underline" 
+                                                   x-text="project.total_complaints_count"></a>
                                             </template>
-                                            <template x-if="project.complaints_count === 0">
-                                                <span x-text="project.complaints_count"></span>
+                                            <template x-if="project.total_complaints_count === 0">
+                                                <span x-text="project.total_complaints_count"></span>
                                             </template>
                                         </td>
                                         <td class="px-6 py-4 text-center relative">

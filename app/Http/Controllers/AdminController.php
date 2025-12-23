@@ -93,71 +93,115 @@ class AdminController extends Controller
 
              */
 
-            public function projectsIndex(Request $request)
+                        public function projectsIndex(Request $request)
 
-            {
+                        {
 
-                $query = Project::with('user')->withCount('complaints'); // Eager load relationships
-        
-                // Search functionality
+                            $query = Project::with('user')
 
-                if ($search = $request->input('search')) {
+                                            ->withCount('complaints as total_complaints_count') // Keep total count if needed
 
-                    $query->where(function ($q) use ($search) {
+                                            ->withCount(['complaints as pending_complaints_count' => function ($query) {
 
-                        $q->where('title', 'like', '%' . $search . '%')
-                          ->orWhereHas('user', function ($userQuery) use ($search) {
-                              $userQuery->where('username', 'like', '%' . $search . '%');
-                          });
-                    });
+                                                $query->where('status', 'pending');
 
-                }
-        
-                // Filtering by status
+                                            }]); // Eager load relationships
 
-                if ($status = $request->input('status')) {
+                    
 
-                    if ($status === 'blocked') {
+                            // Search functionality
 
-                        $query->where('is_blocked', true);
+                            if ($search = $request->input('search')) {
 
-                    } elseif ($status === 'active') {
+                                $query->where(function ($q) use ($search) {
 
-                        $query->where('is_blocked', false);
+                                    $q->where('title', 'like', '%' . $search . '%')
 
-                    } elseif ($status === 'has_complaints') {
-                        $query->whereHas('complaints');
-                    }
+                                      ->orWhereHas('user', function ($userQuery) use ($search) {
 
-                }
-        
-                // Sorting
+                                          $userQuery->where('username', 'like', '%' . $search . '%');
 
-                $sortBy = $request->input('sort_by', 'created_at');
+                                      });
 
-                $sortOrder = $request->input('sort_order', 'desc');
+                                });
 
-                if ($sortBy === 'complaints_count') {
-                    $query->orderBy('complaints_count', $sortOrder);
-                } else {
-                    $query->orderBy($sortBy, $sortOrder);
-                }
+                            }
 
-        
-                $perPage = $request->input('per_page', 10);
+                    
 
-                $projects = $query->paginate($perPage)->withQueryString();
+                            // Filtering by status
 
-        
-                if ($request->wantsJson()) {
+                            if ($status = $request->input('status')) {
 
-                    return $projects;
+                                if ($status === 'blocked') {
 
-                }
-        
-                return view('admin.projects.index', compact('projects'));
+                                    $query->where('is_blocked', true);
 
-            }
+                                } elseif ($status === 'active') {
+
+                                    $query->where('is_blocked', false);
+
+                                } elseif ($status === 'has_complaints') {
+
+                                    $query->whereHas('complaints');
+
+                                } elseif ($status === 'pending_complaints') { // New filter for projects with pending complaints
+
+                                    $query->whereHas('complaints', function ($q) {
+
+                                        $q->where('status', 'pending');
+
+                                    });
+
+                                } elseif ($status === 'resolved_complaints') { // New filter for projects with no pending complaints but some total complaints
+
+                                    $query->whereDoesntHave('complaints', function ($q) {
+
+                                        $q->where('status', 'pending');
+
+                                    })->whereHas('complaints');
+
+                                }
+
+                            }
+
+                    
+
+                            // Sorting
+
+                            $sortBy = $request->input('sort_by', 'created_at');
+
+                            $sortOrder = $request->input('sort_order', 'desc');
+
+                            if ($sortBy === 'total_complaints_count' || $sortBy === 'pending_complaints_count') {
+
+                                $query->orderBy($sortBy, $sortOrder);
+
+                            } else {
+
+                                $query->orderBy($sortBy, $sortOrder);
+
+                            }
+
+                    
+
+                            $perPage = $request->input('per_page', 10);
+
+                            $projects = $query->paginate($perPage)->withQueryString();
+
+                    
+
+                            if ($request->wantsJson()) {
+
+                                return $projects;
+
+                            }
+
+                    
+
+                            return view('admin.projects.index', compact('projects'));
+
+                        }
 
         
 

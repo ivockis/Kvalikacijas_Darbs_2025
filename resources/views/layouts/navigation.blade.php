@@ -11,7 +11,7 @@
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex no-print">
                     @php
                         $isHomeActive = request()->routeIs('welcome');
                     @endphp
@@ -82,7 +82,7 @@
             <!-- Right Side Of Navbar -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <!-- Language Switcher -->
-                <div class="flex items-center">
+                <div class="flex items-center no-print">
                     <a href="{{ route('language.switch', 'en') }}" class="text-sm font-semibold {{ app()->getLocale() == 'en' ? 'text-white underline' : 'text-gray-400 hover:text-white' }}">EN</a>
                     <span class="mx-1 text-gray-600">|</span>
                     <a href="{{ route('language.switch', 'lv') }}" class="text-sm font-semibold {{ app()->getLocale() == 'lv' ? 'text-white underline' : 'text-gray-400 hover:text-white' }}">LV</a>

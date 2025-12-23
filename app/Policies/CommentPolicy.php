@@ -63,4 +63,12 @@ class CommentPolicy
     {
         return false;
     }
+
+    /**
+     * Determine whether the user can toggle the visibility of the comment.
+     */
+    public function toggleVisibility(User $user, Comment $comment): bool
+    {
+        return $user->id === $comment->project->user_id;
+    }
 }

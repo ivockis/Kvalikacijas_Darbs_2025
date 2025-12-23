@@ -1,3 +1,47 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@media print {
+    .no-print {
+        display: none !important;
+    }
+
+    /* Adjust main content for printing */
+    body {
+        background-color: #fff !important; /* White background for print */
+        color: #000 !important; /* Black text for print */
+    }
+
+    /* Ensure project content is visible and takes full width */
+    .py-12 {
+        padding: 0 !important;
+    }
+
+    .max-w-7xl, .sm\:px-6, .lg\:px-8 {
+        max-width: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .bg-gray-800 { /* Or whatever the main project content background is */
+        background-color: #fff !important;
+        color: #000 !important;
+        box-shadow: none !important;
+        border: none !important;
+        border-radius: 0 !important;
+    }
+
+    .dark\:text-gray-200 { /* Override dark mode text color for print */
+        color: #000 !important;
+    }
+
+    .text-gray-400 { /* General text, might need to be black */
+        color: #000 !important;
+    }
+
+    /* Headings */
+    h2, h3, h4 {
+        color: #000 !important;
+    }
+}

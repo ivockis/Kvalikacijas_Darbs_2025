@@ -59,7 +59,7 @@
                 {{ $slot }}
             </main>
 
-            <footer class="bg-gray-800 text-gray-400 text-center py-4 text-sm mt-8">
+            <footer class="bg-gray-800 text-gray-400 text-center py-4 text-sm mt-8 no-print">
                 &copy; 2025 Craftify - Ivo Aļļēns
             </footer>
         </div>
