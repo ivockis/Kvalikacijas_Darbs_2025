@@ -137,6 +137,15 @@ class ProjectController extends Controller
             case 'oldest':
                 $query->oldest('projects.created_at');
                 break;
+            case 'estimated_hours_asc':
+                $query->orderBy('estimated_hours', 'asc');
+                break;
+            case 'estimated_hours_desc':
+                $query->orderBy('estimated_hours', 'desc');
+                break;
+            case 'most_liked':
+                $query->orderByDesc('likers_count');
+                break;
             case 'highest_rated':
                 $query->orderByDesc('ratings_avg_rating')->having('ratings_count', '>', 0); // Order by average rating
                 break;
