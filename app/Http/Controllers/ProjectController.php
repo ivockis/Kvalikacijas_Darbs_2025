@@ -24,6 +24,7 @@ class ProjectController extends Controller
                         ->where('is_public', true)
                         ->where('is_blocked', false)
                         ->with('user')
+                        ->withCount('likers') // Count the number of likers
                         ->withCount('ratings') // Count the number of ratings
                         ->withAvg('ratings', 'rating') // Calculate the average rating
                         ->groupBy('projects.id'); // Group by project to use having for average rating

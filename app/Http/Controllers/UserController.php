@@ -17,6 +17,9 @@ class UserController extends Controller
             ->where('is_public', true)
             ->where('is_blocked', false)
             ->with('coverImage') // Eager load cover image for efficiency
+            ->withCount('likers') // Count the number of likes
+            ->withCount('ratings') // Count the number of ratings
+            ->withAvg('ratings', 'rating') // Get the average rating
             ->latest()
             ->paginate(9); // Paginate for better performance
 

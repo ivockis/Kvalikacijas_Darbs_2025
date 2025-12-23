@@ -37,10 +37,10 @@
                                             this.likesCount = data.likes_count;
                                         }
                                     }" class="flex items-center space-x-2">
-                                        <button @click="toggleLike" class="flex items-center space-x-1 text-gray-500 hover:text-red-500 focus:outline-none">
-                                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" 
-                                                 :class="{ 'text-red-500': liked, 'text-gray-400': !liked }">
-                                                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                                        <button @click="toggleLike" class="flex items-center space-x-1 text-gray-500 hover:text-blue-500 focus:outline-none">
+                                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20" 
+                                                 :class="{ 'text-blue-500': liked, 'text-gray-400': !liked }">
+                                                <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"></path>
                                             </svg>
                                         </button>
                                         <span x-text="likesCount" class="text-gray-400 font-medium"></span>
