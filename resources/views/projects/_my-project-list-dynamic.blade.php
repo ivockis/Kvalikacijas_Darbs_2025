@@ -13,8 +13,62 @@
                             <a href="{{ route('projects.show', $project) }}" class="hover:underline">{{ $project->title }}</a>
                         </h3>
                         <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 overflow-hidden text-ellipsis line-clamp-2">{{ Str::limit($project->description, 100) }}</p>
-                        <p class="text-xs text-gray-400 dark:text-gray-300">{{ __('Created:') }} {{ $project->created_at->format('d.m.Y') }}</p>
-                        <p class="text-xs text-gray-400 dark:text-gray-300">{{ __('Public:') }} {{ $project->is_public ? __('Yes') : __('No') }}</p>
+                        <div x-data="{ 
+                                    liked: {{ Auth::check() && $project->likers->contains(Auth::id()) ? 'true' : 'false' }}, 
+                                    likesCount: {{ $project->likers_count }},
+                                    async toggleLike() {
+                                        @auth
+                                            const response = await fetch('{{ route('projects.like', $project) }}', {
+                                                method: 'POST',
+                                                headers: {
+                                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                                    'Accept': 'application/json'
+                                                }
+                                            });
+                                            const data = await response.json();
+                                            this.liked = data.liked;
+                                            this.likesCount = data.likes_count;
+                                        @else
+                                            window.location.href = '{{ route('login') }}';
+                                        @endauth
+                                    }
+                                }" class="flex justify-between items-start text-xs text-gray-400 dark:text-gray-300 mb-2">
+                            <div class="flex flex-col items-start space-y-1">
+                                <p class="flex items-center">
+                                    {{ __('Author:') }} <a href="{{ route('users.show', $project->user) }}" class="font-medium text-blue-400 hover:underline ml-1">{{ $project->user->name }}</a>
+                                </p>
+                                <p class="flex items-center">
+                                    {{ __('Public:') }} <span class="ml-1">{{ $project->is_public ? __('Yes') : __('No') }}</span>
+                                </p>
+                                <p class="flex items-center">
+                                    {{ __('Created:') }} <span class="ml-1">{{ $project->created_at->format('d.m.Y') }}</span>
+                                </p>
+                            </div>
+                            <div class="flex flex-col items-end space-y-1">
+                                <div class="flex items-center space-x-2">
+                                    <button @click="toggleLike" class="flex items-center text-gray-500 hover:text-red-500 focus:outline-none">
+                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" 
+                                             :class="{ 'text-red-500': liked, 'text-gray-400': !liked }">
+                                            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    </button>
+                                    <span x-text="likesCount"></span>
+                                    @if ($project->ratings_count > 0)
+                                        <p class="flex items-center">
+                                            <svg class="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.538 1.118l-2.8-2.034a1 1 0 00-1.176 0l-2.8 2.034c-.783.57-1.838-.197-1.538-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.929 8.72c-.783-.57-.381-1.81.588-1.81h3.462a1 1 0 00.95-.69l1.07-3.292z"></path>
+                                            </svg>
+                                            <span class="ml-1">{{ number_format($project->ratings_avg_rating, 1) }}</span>
+                                            <span class="ml-1 text-gray-500">({{ $project->ratings_count }})</span>
+                                        </p>
+                                    @endif
+                                </div>
+                                <p class="flex items-center">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    {{ $project->estimated_hours }} {{ __('H') }}
+                                </p>
+                            </div>
+                        </div>
                     </div>
                     <div class="mt-4 flex justify-end space-x-2">
                         <a href="{{ route('projects.show', $project) }}" class="inline-flex items-center px-3 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-600 focus:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
