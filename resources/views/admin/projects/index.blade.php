@@ -176,16 +176,6 @@
                                 </div>
                                 <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                                     <div>
-                                        <p class="text-sm text-gray-700">
-                                            {{ __('Showing') }}
-                                            <span x-text="projects.length > 0 ? links.find(l => l.active).label - per_page * (Math.ceil(links.find(l => l.active).label/per_page)-1) + 1 : 0"></span>
-                                            {{ __('to') }}
-                                            <span x-text="links.find(l => l.active).label"></span>
-                                            {{ __('of') }}
-                                            <span x-text="links.reduce((acc, link) => Math.max(acc, link.label), 0)"></span>
-                                            {{ __('results') }}
-                                        </p>
-                                    </div>
                                     <div>
                                         <span class="relative z-0 inline-flex shadow-sm rounded-md">
                                             <template x-for="(link, index) in links" :key="index">

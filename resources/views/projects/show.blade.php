@@ -339,7 +339,7 @@
                                 <h4 class="text-lg font-semibold mb-2">{{ __('Post a Comment') }}</h4>
                                 <form action="{{ route('comments.store', $project) }}" method="POST">
                                     @csrf
-                                    <textarea name="comment" rows="4" class="w-full rounded-md shadow-sm border-gray-600 bg-gray-800 text-gray-300 focus:border-indigo-500 focus:ring-indigo-500" placeholder="{{ __('Share your thoughts about this project...') }}" x-model="commentInput"></textarea>
+                                    <textarea name="comment" rows="4" class="w-full rounded-md shadow-sm border-gray-600 bg-gray-800 text-gray-300 focus:border-indigo-500 focus:ring-indigo-500" placeholder="{{ __('Share your thoughts about this project...') }}" maxlength="2000" x-model="commentInput"></textarea>
                                     <x-input-error class="mt-2" :messages="$errors->get('comment')" />
 
                                     <div class="flex items-center justify-end mt-4">
@@ -452,7 +452,7 @@
                                             })">
                                                 @csrf
                                                 @method('patch')
-                                                <textarea x-model="commentBody" rows="3" class="w-full rounded-md shadow-sm border-gray-600 bg-gray-800 text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 mt-1"></textarea>
+                                                <textarea x-model="commentBody" rows="3" class="w-full rounded-md shadow-sm border-gray-600 bg-gray-800 text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 mt-1" maxlength="2000"></textarea>
                                                 <div class="flex items-center gap-2 mt-2">
                                                     <button type="submit" class="px-3 py-1 bg-indigo-500 text-white text-xs rounded hover:bg-indigo-600" x-bind:disabled="commentBody.trim() === ''" :class="{ 'opacity-50 cursor-not-allowed': commentBody.trim() === '' }">{{ __('Save') }}</button>
                                                     <button type="button" @click="isEditing = false; commentBody = '{{ ($comment->comment) }}'" class="px-3 py-1 bg-gray-600 text-gray-300 text-xs rounded hover:bg-gray-500">{{ __('Cancel') }}</button>
