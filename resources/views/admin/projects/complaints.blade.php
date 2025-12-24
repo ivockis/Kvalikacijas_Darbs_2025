@@ -1,14 +1,14 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-white dark:text-white leading-tight">
             {{ __('Complaints for Project: ') }} <a href="{{ route('projects.show', $project) }}" class="text-blue-600 hover:underline">{{ $project->title }}</a>
         </h2>
     </x-slot>
 
-    <div class="py-12">
+        <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="mb-4">
-                <a href="{{ route('admin.projects.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-200 border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-300">
+                <a href="{{ route('admin.projects.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md font-semibold text-xs text-gray-700 dark:text-gray-200 uppercase tracking-widest shadow-sm hover:bg-gray-300 dark:hover:bg-gray-600">
                     &laquo; {{ __('Back to Project List') }}
                 </a>
             </div>
@@ -79,9 +79,9 @@
                         @empty
                             <p>{{ __('No resolved complaints for this project.') }}</p>
                         @endforelse
-                    </div>
                 </div>
             </div>
+        </div>
         </div>
     </div>
 </x-app-layout>
