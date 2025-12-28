@@ -55,7 +55,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     @foreach ($projects as $project)
                         <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 flex flex-col">
-                            <a href="{{ route('projects.show', $project) }}">
+                            <a href="{{ route('projects.show', [$project, 'from' => 'welcome']) }}">
                                 <img src="{{ $project->cover_image_url }}" alt="{{ $project->title }}" class="w-full h-48 object-cover">
                             </a>
                             <div class="p-6 flex flex-col flex-grow">
@@ -67,7 +67,6 @@
                                 </div>
                                 <div class="flex items-center justify-between mt-auto">
                                     <span class="text-gray-500 text-xs">{{ __('Author') }}: {{ $project->user->username }}</span>
-                                    <a href="{{ route('projects.show', $project) }}" class="text-indigo-400 hover:text-indigo-300 text-sm font-semibold">{{ __('View Project') }}</a>
                                 </div>
                             </div>
                         </div>

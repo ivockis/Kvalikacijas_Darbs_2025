@@ -5,7 +5,7 @@
         @foreach ($projects as $project)
             <div class="group bg-gray-700 dark:bg-gray-700 rounded-lg shadow-md dark:shadow-lg flex flex-col justify-between transform transition duration-300 hover:scale-105">
                 <div class="relative">
-                    <a href="{{ route('projects.show', $project) }}">
+                    <a href="{{ route('projects.show', [$project, 'from' => 'mine']) }}">
                         <img src="{{ $project->cover_image_url }}" alt="{{ $project->title }} Cover Image" class="w-full h-48 object-cover rounded-t-lg">
                     </a>
                     <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center space-x-2">
@@ -24,7 +24,7 @@
                 <div class="p-6">
                     <div>
                         <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
-                            <a href="{{ route('projects.show', $project) }}" class="hover:underline">{{ $project->title }}</a>
+                            <a href="{{ route('projects.show', [$project, 'from' => 'mine']) }}" class="hover:underline">{{ $project->title }}</a>
                         </h3>
                         <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 h-10 overflow-hidden text-ellipsis line-clamp-2">{{ Str::limit($project->description, 100) }}</p>
                         <div x-data="{ 

@@ -66,7 +66,15 @@ class CommentController extends Controller
                 return response()->json(['message' => 'Comment updated successfully!', 'comment' => $comment]);
             }
 
-            return redirect()->route('projects.show', $comment->project)->with('status', 'comment-updated');
+            $routeParams = ['project' => $comment->project];
+            if ($request->filled('from')) {
+                $routeParams['from'] = $request->input('from');
+            }
+            if ($request->filled('from_id')) {
+                $routeParams['from_id'] = $request->input('from_id');
+            }
+
+            return redirect()->route('projects.show', $routeParams)->with('status', 'comment-updated');
         }
     }
 

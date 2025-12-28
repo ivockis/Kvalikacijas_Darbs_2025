@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-white dark:text-white leading-tight">
-            {{ __('Complaints for Project: ') }} <a href="{{ route('projects.show', $project) }}" class="text-blue-600 hover:underline">{{ $project->title }}</a>
+            {{ __('Complaints for Project: ') }} <a href="{{ route('projects.show', [$project, 'from' => 'admin_complaints', 'from_id' => $project->id]) }}" class="text-blue-600 hover:underline">{{ $project->title }}</a>
         </h2>
     </x-slot>
 

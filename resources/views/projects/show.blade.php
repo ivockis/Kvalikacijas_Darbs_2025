@@ -4,7 +4,55 @@
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ $project->title }}
             </h2>
-            <a href="{{ route('public.index') }}" class="inline-flex items-center px-2 py-1 bg-gray-600 border border-gray-500 rounded-md font-semibold text-xs text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-500">
+            @php
+                $backUrl = route('public.index'); // Default fallback
+
+                switch (request('from')) {
+                    case 'welcome':
+                        $backUrl = route('welcome');
+                        break;
+                    case 'public_index':
+                        $backUrl = route('public.index');
+                        break;
+                    case 'mine':
+                        $backUrl = route('projects.index');
+                        break;
+                    case 'user_profile':
+                        // Ensure from_id exists and is numeric to avoid errors
+                        if (request('from_id') && is_numeric(request('from_id'))) {
+                            $backUrl = route('users.show', ['user' => request('from_id')]);
+                        } else {
+                            $backUrl = route('public.index'); // Fallback if from_id is missing or invalid
+                        }
+                        break;
+                    case 'admin_complaints':
+                        // Ensure from_id exists and is numeric
+                        if (request('from_id') && is_numeric(request('from_id'))) {
+                            $backUrl = route('admin.projects.complaints', ['project' => request('from_id')]);
+                        } else {
+                            $backUrl = route('admin.projects.index'); // Fallback if from_id is missing or invalid
+                        }
+                        break;
+                    // Add other cases here as needed
+                    default:
+                        // If 'from' is not set or not recognized, try to use previous URL with fallback
+                        $previousUrl = url()->previous();
+                        $currentUrl = url()->current();
+
+                        if (str_starts_with($previousUrl, $currentUrl) || !$previousUrl || str_starts_with($previousUrl, route('projects.show', $project, false))) {
+                            // If the owner is viewing, go to their list.
+                            if (Auth::check() && Auth::id() === $project->user_id) {
+                                $backUrl = route('projects.index');
+                            } else {
+                                $backUrl = route('public.index');
+                            }
+                        } else {
+                            $backUrl = $previousUrl;
+                        }
+                        break;
+                }
+            @endphp
+            <a href="{{ $backUrl }}" class="inline-flex items-center px-2 py-1 bg-gray-600 border border-gray-500 rounded-md font-semibold text-xs text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-500">
                 &laquo; {{ __('Back') }}
             </a>
         </div>
@@ -442,7 +490,11 @@
                                                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
                                                     'Accept': 'application/json'
                                                 },
-                                                body: JSON.stringify({ comment: commentBody })
+                                                body: JSON.stringify({ 
+                                                    comment: commentBody,
+                                                    from: '{{ request('from') }}',
+                                                    from_id: '{{ request('from_id') }}'
+                                                })
                                             }).then(response => {
                                                 if (response.ok) {
                                                     isEditing = false;
