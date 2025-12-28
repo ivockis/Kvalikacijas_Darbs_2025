@@ -49,9 +49,6 @@
                                 }" class="flex justify-between items-start text-xs text-gray-400 dark:text-gray-300 mb-2">
                             <div class="flex flex-col items-start space-y-1">
                                 <p class="flex items-center">
-                                    {{ __('Author:') }} <a href="{{ route('users.show', $project->user) }}" class="font-medium text-blue-400 hover:underline ml-1">{{ $project->user->name }}</a>
-                                </p>
-                                <p class="flex items-center">
                                     {{ __('Public:') }} <span class="ml-1">{{ $project->is_public ? __('Yes') : __('No') }}</span>
                                 </p>
                                 <p class="flex items-center">
