@@ -18,20 +18,24 @@
         @method('patch')
 
         <!-- Profile Image Section -->
-        <div>
+        <div x-data="{ fileName: '{{ __('No file chosen') }}' }">
             <x-input-label for="profile_image" :value="__('Profile Image')" />
             <div class="mt-2 flex items-center gap-4">
-                <img src="{{ $user->profile_image_url }}" alt="{{ $user->name }}" class="h-20 w-20 rounded-full object-cover">
+                <img id="profile_image_preview" src="{{ $user->profile_image_url }}" alt="{{ $user->name }}" class="h-20 w-20 rounded-full object-cover">
                 <div>
-                    <input id="profile_image" name="profile_image" type="file" class="block w-full text-sm text-gray-400
-                        file:mr-4 file:py-2 file:px-4
-                        file:rounded-md file:border-0
-                        file:text-sm file:font-semibold
-                        file:bg-indigo-50 file:text-indigo-700
-                        hover:file:bg-indigo-100"
-                        onchange="document.getElementById('profile_image_preview').src = window.URL.createObjectURL(this.files[0])">
+                    <div class="flex items-center mt-1">
+                        <label for="profile_image" class="cursor-pointer inline-flex items-center px-4 py-2 bg-indigo-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-600 active:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                            {{ __('Choose file') }}
+                        </label>
+                        <input id="profile_image" name="profile_image" type="file" class="hidden"
+                               @change="fileName = $event.target.files.length > 0 ? $event.target.files[0].name : '{{ __('No file chosen') }}';
+                                         if ($event.target.files.length > 0) {
+                                             document.getElementById('profile_image_preview').src = window.URL.createObjectURL($event.target.files[0])
+                                         }" accept="image/jpeg,image/png">
+                        <span class="ms-3 text-sm text-gray-400" x-text="fileName"></span>
+                    </div>
                     <x-input-error class="mt-2" :messages="$errors->get('profile_image')" />
-                    
+
                     @if ($user->profile_image_id)
                         <div class="mt-2 flex items-center">
                             <input type="checkbox" name="remove_profile_image" id="remove_profile_image" value="1" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
@@ -55,13 +59,13 @@
         </div>
 
         <div>
-            <x-input-label for="username" :value="__('Username')" />
+            <x-input-label for="username">{{ __('Username') }}<span class="text-red-500">*</span></x-input-label>
             <x-text-input id="username" name="username" type="text" class="mt-1 block w-full" :value="old('username', $user->username)" required autocomplete="username" maxlength="30" />
             <x-input-error class="mt-2" :messages="$errors->get('username')" />
         </div>
 
         <div>
-            <x-input-label for="email" :value="__('Email')" />
+            <x-input-label for="email">{{ __('Email') }}<span class="text-red-500">*</span></x-input-label>
             <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" maxlength="255" />
             <x-input-error class="mt-2" :messages="$errors->get('email')" />
 

@@ -35,7 +35,7 @@
                                 }" class="flex justify-between items-start text-xs text-gray-400 dark:text-gray-300 mb-2">
                             <div class="flex flex-col items-start space-y-1">
                                 <p class="flex items-center">
-                                    {{ __('Author:') }} <a href="{{ route('users.show', $project->user) }}" class="font-medium text-blue-400 hover:underline ml-1">{{ $project->user->name }}</a>
+                                    {{ __('Author:') }} <a href="{{ route('users.show', $project->user) }}" class="font-medium text-blue-400 hover:underline ml-1">{{ $project->user->username }}</a>
                                 </p>
                                 <p class="flex items-center">
                                     {{ __('Created:') }} <span class="ml-1">{{ $project->created_at->format('d.m.Y') }}</span>

@@ -219,10 +219,19 @@
                         <!-- Images Section -->
                         <div>
                             <!-- Image Upload -->
-                            <div class="mt-4">
-                                <x-input-label for="images">{{ __('Upload New Images') }}<span class="text-red-500">*</span></x-input-label>
-                                <input id="images" name="images[]" type="file" class="block mt-1 w-full @error('images') border-red-500 @enderror" multiple @change="handleImageSelect($event)">
-                                <span x-text="imageErrors.images[0]" x-show="imageErrors.images" class="text-red-500 text-sm mt-1"></span>
+                            <div class="mt-4" x-data="{ fileInputText: '{{ __('No file chosen') }}' }">
+                                <x-input-label for="images">{{ __('Upload New Images') }}</x-input-label>
+                                <div class="mt-1">
+                                    <label for="images" class="cursor-pointer inline-flex items-center px-4 py-2 bg-indigo-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-600 active:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                        {{ __('Choose file_plural') }}
+                                    </label>
+                                    <input id="images" name="images[]" type="file" class="hidden" multiple 
+                                           @change="handleImageSelect($event);
+                                                   fileInputText = $event.target.files.length > 0 ? '{{ __('files selected') }}'.replace('{count}', $event.target.files.length) : '{{ __('No file chosen') }}'"
+                                           accept="image/jpeg,image/png">
+                                    <span class="ms-3 text-sm text-gray-400" x-text="fileInputText"></span>
+                                </div>
+                                <span x-text="imageErrors.images" x-show="imageErrors.images" class="text-red-500 text-sm mt-1"></span>
                             </div>
 
                             <!-- New Image Previews -->
@@ -268,12 +277,14 @@
                         </div>
                         
                         <!-- Is Public -->
-                        <div class="mt-4">
-                            <label for="is_public" class="inline-flex items-center">
-                                <input id="is_public" type="checkbox" class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500" name="is_public" @checked(old('is_public', $project->is_public))>
-                                <span class="ms-2 text-sm text-gray-400">{{ __('Make Public') }}</span>
-                            </label>
-                        </div>
+                        @if (!$project->is_blocked)
+                            <div class="mt-4">
+                                <label for="is_public" class="inline-flex items-center">
+                                    <input id="is_public" type="checkbox" class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500" name="is_public" @checked(old('is_public', $project->is_public))>
+                                    <span class="ms-2 text-sm text-gray-400">{{ __('Make Public') }}</span>
+                                </label>
+                            </div>
+                        @endif
 
                         <div class="flex items-center justify-end mt-4">
                             <x-primary-button class="ms-4">

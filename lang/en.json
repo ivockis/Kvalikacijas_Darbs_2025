@@ -134,7 +134,6 @@
     "Optional Comment": "Optional Comment",
     "Tool": "Tool",
     "Comment": "Comment",
-    "Projects": "Projects",
     "Approved": "Approved",
     "Actions": "Actions",
     "Toggle Approval": "Toggle Approval",
@@ -186,5 +185,13 @@
     "A new verification link has been sent to the email address you provided during registration.": "A new verification link has been sent to the email address you provided during registration.",
     "Resend Verification Email": "Resend Verification Email",
     "Hide": "Hide",
-    "Show": "Show"
+    "Show": "Show",
+    "No public projects available that match your criteria.": "No public projects available that match your criteria.",
+    "No projects created yet that match your criteria.": "No projects created yet that match your criteria.",
+    "validation.unique.title": "You already have a project registered with this title.",
+    "Project is blocked": "Project is blocked",
+    "Choose file": "Choose file",
+    "No file chosen": "No file chosen",
+    "Choose file_plural": "Choose files",
+    "files selected": "{count} files selected"
 }

@@ -234,7 +234,17 @@
                         <!-- Images -->
                         <div class="mt-4">
                             <x-input-label for="images">{{ __('Images') }}<span class="text-red-500">*</span></x-input-label>
-                            <input id="images" type="file" name="images[]" class="block mt-1 w-full" multiple @change="handleImageSelect($event)" x-bind:class="{ 'border-red-500': formErrors.images }">
+                            <div class="mt-1" x-data="{ fileInputText: '{{ __('No file chosen') }}' }" >
+                                <label for="images" class="cursor-pointer inline-flex items-center px-4 py-2 bg-indigo-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-600 active:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                    {{ __('Choose file_plural') }}
+                                </label>
+                                <input id="images" type="file" name="images[]" class="hidden" multiple 
+                                       @change="handleImageSelect($event); 
+                                               fileInputText = $event.target.files.length > 0 ? '{{ __('files selected') }}'.replace('{count}', $event.target.files.length) : '{{ __('No file chosen') }}'"
+                                       accept="image/jpeg,image/png">
+                                <span class="ms-3 text-sm text-gray-400" x-text="fileInputText"></span>
+                            </div>
+
                             <span x-text="formErrors.images[0]" x-show="formErrors.images" class="text-red-500 text-sm mt-1"></span>
                             <span x-text="formErrors['images.0']" x-show="formErrors['images.0']" class="text-red-500 text-sm mt-1"></span>
 

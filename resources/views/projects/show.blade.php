@@ -4,7 +4,7 @@
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ $project->title }}
             </h2>
-            <a href="#" onclick="history.back()" class="inline-flex items-center px-2 py-1 bg-gray-600 border border-gray-500 rounded-md font-semibold text-xs text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-500">
+            <a href="{{ route('public.index') }}" class="inline-flex items-center px-2 py-1 bg-gray-600 border border-gray-500 rounded-md font-semibold text-xs text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-500">
                 &laquo; {{ __('Back') }}
             </a>
         </div>
@@ -16,7 +16,14 @@
                 <div class="p-6 text-gray-200" x-data="{ confirmingDelete: null }">
                     <div class="mb-6">
                         <div class="flex items-center justify-between">
-                            <h3 class="text-2xl font-bold max-w-lg break-words">{{ $project->title }}</h3>
+                            <div class="flex items-center">
+                                <h3 class="text-2xl font-bold max-w-lg break-words">{{ $project->title }}</h3>
+                                @if ($project->is_blocked && Auth::id() === $project->user_id)
+                                    <span class="ml-4 px-2 py-1 bg-red-600 text-white text-xs font-semibold rounded-full">
+                                        {{ __('Project is blocked') }}
+                                    </span>
+                                @endif
+                            </div>
                             <div class="flex items-center space-x-2 no-print">
 
                                 <!-- Like Button -->

@@ -72,7 +72,7 @@ class ProjectController extends Controller
                 $query->orderBy('estimated_hours', 'desc');
                 break;
             case 'most_liked':
-                $query->withCount('likers')->orderByDesc('likers_count');
+                $query->orderByDesc('likers_count');
                 break;
             case 'highest_rated':
                 $query->orderByDesc('ratings_avg_rating')->having('ratings_count', '>', 0); // Order by average rating

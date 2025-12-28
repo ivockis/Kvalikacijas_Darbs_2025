@@ -56,17 +56,15 @@
                 </div>
 
                 <!-- Profile Picture -->
-                <div class="mt-4">
+                <div class="mt-4" x-data="{ fileName: '{{ __('No file chosen') }}' }">
                     <x-input-label for="profile_picture" :value="__('Profile Picture (optional)')" />
-                    <input id="profile_picture" name="profile_picture" type="file" class="mt-1 block w-full text-sm text-gray-400
-                        file:mr-4 file:py-2 file:px-4
-                        file:rounded-md file:border-0
-                        file:text-sm file:font-semibold
-                        file:bg-indigo-500 file:text-white
-                        hover:file:bg-indigo-600
-                        dark:file:bg-indigo-700 dark:hover:file:bg-indigo-800
-                        dark:text-gray-300"
-                    />
+                    <div class="mt-1 flex items-center">
+                        <label for="profile_picture" class="cursor-pointer inline-flex items-center px-4 py-2 bg-indigo-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-600 active:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                            {{ __('Choose file') }}
+                        </label>
+                        <input id="profile_picture" name="profile_picture" type="file" class="hidden" @change="fileName = $event.target.files.length > 0 ? $event.target.files[0].name : '{{ __('No file chosen') }}'" accept="image/jpeg,image/png">
+                        <span class="ms-3 text-sm text-gray-400" x-text="fileName"></span>
+                    </div>
                     <x-input-error :messages="$errors->get('profile_picture')" class="mt-2" />
                 </div>
 
