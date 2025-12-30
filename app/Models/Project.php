@@ -83,12 +83,14 @@ class Project extends Model
             throw new \InvalidArgumentException("Image #{$newCoverImage->id} does not belong to Project #{$this->id}.");
         }
 
-        // Set all other images for this project to not be the cover
-        $this->images()->where('id', '!=', $newCoverImage->id)->update(['is_cover' => false]);
+        \Illuminate\Support\Facades\DB::transaction(function () use ($newCoverImage) {
+            // Set all images for this project to not be the cover image
+            $this->images()->update(['is_cover' => false]);
 
-        // Set the new image as the cover
-        $newCoverImage->is_cover = true;
-        $newCoverImage->save();
+            // Set the new image as the cover image
+            $newCoverImage->is_cover = true;
+            $newCoverImage->save();
+        });
     }
 
     /**

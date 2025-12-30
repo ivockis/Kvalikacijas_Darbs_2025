@@ -320,7 +320,7 @@ class ProjectController extends Controller
             'tools.*' => 'exists:tools,id',
             'images' => 'nullable|array|max:10',
             'images.*' => 'mimes:jpeg,png,jpg',
-            'cover_image_selection' => 'nullable|string', // Changed to nullable for debugging
+            'cover_image_selection' => 'nullable|string',
         ]);
 
         $project->update([
@@ -343,7 +343,7 @@ class ProjectController extends Controller
             $project->tools()->detach();
         }
 
-        $newImagePaths = [];
+        $newImageIds = [];
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $imageFile) {
                 $path = $imageFile->store('project-images', 'public');
@@ -351,33 +351,41 @@ class ProjectController extends Controller
                     'path' => $path,
                     'is_cover' => false,
                 ]);
-                $newImagePaths[] = $projectImage->id;
+                $newImageIds[] = $projectImage->id;
             }
         }
 
         // Handle cover image selection
         if ($request->filled('cover_image_selection')) {
             $selection = $request->input('cover_image_selection');
-            
+
             if (str_starts_with($selection, 'new_')) {
-                // Selected a newly uploaded image as cover
+                // A newly uploaded image was selected as cover
                 $newImageIndex = (int) substr($selection, 4);
-                if (isset($newImagePaths[$newImageIndex])) {
-                    $newCoverImage = Image::find($newImagePaths[$newImageIndex]);
+                if (isset($newImageIds[$newImageIndex])) {
+                    $newCoverImageId = $newImageIds[$newImageIndex];
+                    $newCoverImage = Image::find($newCoverImageId);
                     if ($newCoverImage) {
-                        $project->setCoverImage($newCoverImage);
+                        $project->setCoverImage($newCoverImage); // This part was already working
                     }
                 }
             } elseif (str_starts_with($selection, 'existing_')) {
-                // Selected an existing image as cover
+                // An existing image was selected as cover
                 $existingImageId = (int) substr($selection, 9);
-                $existingCoverImage = $project->images()->find($existingImageId);
-                if ($existingCoverImage) {
-                    $project->setCoverImage($existingCoverImage);
-                }
+                
+                \Illuminate\Support\Facades\DB::transaction(function () use ($project, $existingImageId) {
+                    // 1. Unset all images for this project as cover
+                    $project->images()->update(['is_cover' => false]);
+                    
+                    // 2. Set the selected existing image as the new cover
+                    $newCover = $project->images()->find($existingImageId);
+                    if ($newCover) {
+                        $newCover->is_cover = true;
+                        $newCover->save();
+                    }
+                });
             }
         }
-
 
         return redirect(route('projects.index'))->with('status', 'project-updated');
     }
