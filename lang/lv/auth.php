@@ -5,4 +5,5 @@ return [
     'password' => 'Norādītā parole ir nepareiza.',
     'throttle' => 'Pārāk daudz pieteikšanās mēģinājumu. Lūdzu, mēģiniet vēlreiz pēc :seconds sekundēm.',
     'blocked' => 'Jūsu konts ir bloķēts.',
+    'success_login' => 'Esat veiksmīgi pieslēdzies.',
 ];

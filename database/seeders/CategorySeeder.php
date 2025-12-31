@@ -13,11 +13,11 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         $categories = [
-            'Woodworking', 'Jewelry Making', 'Knitting', 'Crochet', 'Painting',
-            'Sculpting', 'Pottery', 'Sewing', 'Embroidery', 'Quilting',
-            'Origami', 'Calligraphy', 'Candle Making', 'Soap Making', 'Leather Craft',
-            'Paper Craft', 'Glass Blowing', 'Metalwork', 'Weaving', 'Photography',
-            'Digital Art', 'Baking', 'Gardening', 'Home Decor', 'Fashion Design', 'For Kids',
+            'categories.woodworking', 'categories.jewelry_making', 'categories.knitting', 'categories.crochet', 'categories.painting',
+            'categories.sculpting', 'categories.pottery', 'categories.sewing', 'categories.embroidery', 'categories.quilting',
+            'categories.origami', 'categories.calligraphy', 'categories.candle_making', 'categories.soap_making', 'categories.leather_craft',
+            'categories.paper_craft', 'categories.glass_blowing', 'categories.metalwork', 'categories.weaving', 'categories.photography',
+            'categories.digital_art', 'categories.baking', 'categories.gardening', 'categories.home_decor', 'categories.fashion_design', 'categories.for_kids',
         ];
 
         foreach ($categories as $category) {

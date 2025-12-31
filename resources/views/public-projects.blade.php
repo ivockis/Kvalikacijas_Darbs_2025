@@ -21,7 +21,7 @@
                                 <option value="">{{ __('All Categories') }}</option>
                                 <option value="liked" @selected(request('category_id') == 'liked')>{{ __('Saved') }}</option>
                                 @foreach($categories as $category)
-                                    <option value="{{ $category->id }}" @selected(request('category_id') == $category->id)>{{ $category->name }}</option>
+                                    <option value="{{ $category->id }}" @selected(request('category_id') == $category->id)>{{ __($category->name) }}</option>
                                 @endforeach
                             </select>
                         </div>

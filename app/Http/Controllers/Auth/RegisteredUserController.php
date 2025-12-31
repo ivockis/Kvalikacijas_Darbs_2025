@@ -64,6 +64,8 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
+        session()->flash('success', __('auth.success_login'));
+
         return redirect(route('public.index', absolute: false));
     }
 }

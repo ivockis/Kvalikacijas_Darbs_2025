@@ -29,5 +29,6 @@ return [
     'Surname' => 'Surname',
     'Username' => 'Username',
     'blocked' => 'Your account has been blocked.',
+    'success_login' => 'You have successfully logged in.',
 
 ];

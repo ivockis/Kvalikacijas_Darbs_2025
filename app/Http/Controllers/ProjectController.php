@@ -180,7 +180,10 @@ class ProjectController extends Controller
 
     public function create()
     {
-        $categories = Category::all();
+        $categories = Category::all()->map(function ($category) {
+            $category->name = __($category->name);
+            return $category;
+        });
         $tools = Tool::all();
         return view('projects.create', compact('categories', 'tools'));
     }
@@ -294,8 +297,16 @@ class ProjectController extends Controller
     public function edit(Project $project)
     {
         $this->authorize('update', $project);
-        $categories = Category::all();
+        $categories = Category::all()->map(function ($category) {
+            $category->name = __($category->name);
+            return $category;
+        });
         $tools = Tool::all();
+        $project->load('categories'); // Make sure categories are loaded
+        $project->categories->transform(function ($category) {
+            $category->name = __($category->name);
+            return $category;
+        });
         return view('projects.edit', compact('project', 'categories', 'tools'));
     }
 

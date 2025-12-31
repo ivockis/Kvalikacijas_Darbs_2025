@@ -94,41 +94,24 @@ class AdminController extends Controller
              */
 
                         public function projectsIndex(Request $request)
-
                         {
-
-                            $query = Project::with('user')
-
+                            $query = Project::where('is_public', true) // Always filter for public projects
+                                            ->with('user')
                                             ->withCount('complaints as total_complaints_count') // Keep total count if needed
-
                                             ->withCount(['complaints as pending_complaints_count' => function ($query) {
-
                                                 $query->where('status', 'pending');
-
                                             }]); // Eager load relationships
-
                     
-
                             // Search functionality
-
                             if ($search = $request->input('search')) {
-
                                 $query->where(function ($q) use ($search) {
-
                                     $q->where('title', 'like', '%' . $search . '%')
-
                                       ->orWhereHas('user', function ($userQuery) use ($search) {
-
                                           $userQuery->where('username', 'like', '%' . $search . '%');
-
                                       });
-
                                 });
-
                             }
-
                     
-
                             // Filtering by status
                             $status = $request->input('status');
 

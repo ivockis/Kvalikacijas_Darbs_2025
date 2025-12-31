@@ -28,6 +28,8 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        session()->flash('success', __('auth.success_login'));
+
         return redirect()->intended(route('public.index', absolute: false));
     }
 

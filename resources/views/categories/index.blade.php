@@ -11,7 +11,7 @@
                 <div class="overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900" 
                         x-data="{
-                            categories: {{ $categories->map(fn($cat) => [...$cat->toArray(), 'editing' => false, 'originalName' => $cat->name]) }},
+                            categories: {{ $categories->map(fn($cat) => ['id' => $cat->id, 'name' => $cat->name, 'projects_count' => $cat->projects_count, 'editing' => false, 'originalName' => $cat->name, 'translatedName' => __($cat->name)]) }},
                             newCategoryName: '',
                             errors: {},
                             notification: { show: false, message: '', type: 'success' },
@@ -40,6 +40,7 @@
                                     const created = await response.json();
                                     created.editing = false;
                                     created.originalName = created.name;
+                                    created.translatedName = created.name; // For new categories, name is not a key
                                     this.categories.unshift(created);
                                     this.newCategoryName = '';
                                     this.showNotification('{{ __("Category added successfully.") }}');
@@ -63,6 +64,8 @@
                                     }
                                     const updated = await response.json();
                                     category.originalName = updated.name;
+                                    category.name = updated.name;
+                                    category.translatedName = updated.name; // For updated categories, name is not a key
                                     category.editing = false;
                                     this.showNotification('{{ __("Category updated successfully.") }}');
                                 } catch (error) {
@@ -130,7 +133,7 @@
                                     <template x-for="category in categories" :key="category.id">
                                         <tr>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <div x-show="!category.editing" x-text="category.name"></div>
+                                                <div x-show="!category.editing" x-text="category.translatedName"></div>
                                                 <input x-show="category.editing" type="text" x-model="category.name" class="w-full rounded-md shadow-sm border-gray-300 text-sm p-1" maxlength="50">
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" x-text="category.projects_count"></td>
