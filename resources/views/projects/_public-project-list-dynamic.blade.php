@@ -1,7 +1,7 @@
 @if ($projects->isEmpty())
     <p class="text-gray-400">{{ __('No public projects available that match your criteria.') }}</p>
 @else
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         @foreach ($projects as $project)
             <div class="bg-gray-700 rounded-lg shadow-md flex flex-col justify-between transform transition duration-300 hover:scale-105">
                 <a href="{{ route('projects.show', [$project, 'from' => 'public_index']) }}">

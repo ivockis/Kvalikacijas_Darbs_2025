@@ -144,6 +144,15 @@
             @endauth
         </div>
 
+        <!-- Language Switcher -->
+        <div class="pt-4 pb-1 border-t border-gray-600">
+            <div class="flex items-center px-4">
+                <a href="{{ route('language.switch', 'en') }}" class="text-sm font-semibold {{ app()->getLocale() == 'en' ? 'text-white underline' : 'text-gray-400 hover:text-white' }}">EN</a>
+                <span class="mx-1 text-gray-600">|</span>
+                <a href="{{ route('language.switch', 'lv') }}" class="text-sm font-semibold {{ app()->getLocale() == 'lv' ? 'text-white underline' : 'text-gray-400 hover:text-white' }}">LV</a>
+            </div>
+        </div>
+
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-600">
             @auth
