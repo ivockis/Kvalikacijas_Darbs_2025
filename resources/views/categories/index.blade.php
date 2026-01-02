@@ -138,7 +138,7 @@
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" x-text="category.projects_count"></td>
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                                                <button x-show="!category.editing" @click="category.editing = true" class="text-indigo-600 hover:text-indigo-900">{{ __('Edit') }}</button>
+                                                <button x-show="!category.editing" @click="category.editing = true; category.name = category.translatedName" class="text-indigo-600 hover:text-indigo-900">{{ __('Edit') }}</button>
                                                 <button x-show="category.editing" @click="updateCategory(category)" class="text-green-600 hover:text-green-900">{{ __('Save') }}</button>
                                                 <button x-show="category.editing" @click="category.editing = false; category.name = category.originalName" class="text-gray-500 hover:text-gray-900">{{ __('Cancel') }}</button>
                                                 <button @click="confirmingDelete = category.id" :disabled="category.projects_count > 0" :class="{ 'text-gray-400 cursor-not-allowed': category.projects_count > 0, 'text-red-600 hover:text-red-900': category.projects_count === 0 }">{{ __('Delete') }}</button>

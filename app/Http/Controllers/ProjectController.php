@@ -207,6 +207,8 @@ class ProjectController extends Controller
             'tools.*' => 'exists:tools,id',
             'images' => 'required|array|min:1|max:10',
             'images.*' => 'mimes:jpeg,png,jpg',
+        ], [
+            'title.unique' => __('You already have a registered project with this name.'),
         ]);
 
         $project = Auth::user()->projects()->create([
@@ -332,6 +334,8 @@ class ProjectController extends Controller
             'images' => 'nullable|array|max:10',
             'images.*' => 'mimes:jpeg,png,jpg',
             'cover_image_selection' => 'nullable|string',
+        ], [
+            'title.unique' => __('You already have a registered project with this name.'),
         ]);
 
         $project->update([

@@ -278,5 +278,7 @@
     "categories.home_decor": "Mājas dekors",
     "categories.fashion_design": "Modes dizains",
     "categories.for_kids": "Bērniem",
-    "Saved": "Saglabātie"
+    "Saved": "Saglabātie",
+    "You cannot perform this action because you are the last active administrator.": "Darbību nav iespējams veikt, jo jūs esat pēdējais aktīvais administrators.",
+    "You already have a registered project with this name.": "Jums jau ir reģistrēts projekts ar šādu nosaukumu."
 }
