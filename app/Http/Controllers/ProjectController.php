@@ -12,96 +12,118 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Validation\Rule;
 
+/**
+ * Controller responsible for managing project-related operations.
+ * This includes displaying projects, handling CRUD operations,
+ * managing likes, and handling image uploads.
+ */
 class ProjectController extends Controller
 {
-    use AuthorizesRequests;
+    use AuthorizesRequests; // Enables authorization checks using policies.
 
+    /**
+     * Displays a list of public projects with filtering, sorting, and pagination.
+     * This method is accessible to all users, including guests.
+     *
+     * @param Request $request The HTTP request, potentially containing search, filter, and sort parameters.
+     * @return \Illuminate\View\View|\Illuminate\Http\JsonResponse Returns a view with projects or JSON for AJAX requests.
+     */
     public function publicIndex(Request $request)
     {
-        $categories = Category::all(); // Get all categories for the filter dropdown
+        // Fetches all categories to populate the filter dropdown in the view.
+        $categories = Category::all();
 
-        $query = Project::select('projects.*') // Explicitly select all project columns to avoid SQLSTATE[42000] error
-                        ->where('is_public', true)
-                        ->where('is_blocked', false)
-                        ->with('user')
-                        ->withCount('likers') // Count the number of likers
-                        ->withCount('ratings') // Count the number of ratings
-                        ->withAvg('ratings', 'rating') // Calculate the average rating
-                        ->groupBy('projects.id'); // Group by project to use having for average rating
+        // Initializes a query builder for Project models.
+        // Explicitly selects 'projects.*' to avoid potential column ambiguity issues
+        // when using aggregate functions and grouping.
+        $query = Project::select('projects.*')
+                        ->where('is_public', true)  // Only show projects marked as public.
+                        ->where('is_blocked', false) // Exclude blocked projects.
+                        ->with('user')              // Eager load the associated user for each project to prevent N+1 query problem.
+                        ->withCount('likers')       // Adds a 'likers_count' column to the results, counting users who liked the project.
+                        ->withCount('ratings')      // Adds a 'ratings_count' column, counting how many ratings each project has.
+                        ->withAvg('ratings', 'rating') // Adds a 'ratings_avg_rating' column, calculating the average rating.
+                        ->groupBy('projects.id');   // Groups results by project ID to allow `having` clauses for aggregates.
 
-        // Apply search filter
+        // Applies a search filter based on the project title.
         if ($search = $request->input('search')) {
             $query->where('title', 'like', '%' . $search . '%');
         }
 
-        // Apply category filter
+        // Applies a category filter.
         if ($categoryId = $request->input('category_id')) {
+            // Checks for a special 'liked' category ID for authenticated users.
             if ($categoryId === 'liked') {
                 if (Auth::check()) {
+                    // Filters to show only projects liked by the current authenticated user.
                     $query->whereHas('likers', function ($q) {
                         $q->where('user_id', Auth::id());
                     });
                 } else {
-                    // If not authenticated, 'liked' filter means nothing,
-                    // so return no projects or handle as appropriate.
-                    // For now, let's just make it return no projects.
-                    $query->whereRaw('1 = 0'); // Always false condition
+                    // If not authenticated, the 'liked' filter is effectively meaningless,
+                    // so an always-false condition is applied to return no projects.
+                    $query->whereRaw('1 = 0');
                 }
             } else {
+                // Filters projects based on selected category ID.
                 $query->whereHas('categories', function ($q) use ($categoryId) {
                     $q->where('categories.id', $categoryId);
                 });
             }
         }
 
-        // Apply minimum rating filter
+        // Applies a minimum average rating filter.
         if ($minRating = $request->input('min_rating')) {
-            $query->having('ratings_avg_rating', '>=', $minRating)
-                  ->having('ratings_count', '>', 0); // Only show projects with at least one rating
+            $query->having('ratings_avg_rating', '>=', $minRating) // Filters projects with an average rating greater than or equal to `minRating`.
+                  ->having('ratings_count', '>', 0);               // Ensures only projects with at least one rating are considered.
         }
 
-        // Apply sorting
+        // Applies sorting based on user's selection.
         switch ($request->input('sort_by')) {
             case 'oldest':
-                $query->oldest('projects.created_at'); // Specify table for clarity
+                $query->oldest('projects.created_at'); // Sorts by oldest projects first.
                 break;
             case 'estimated_hours_asc':
-                $query->orderBy('estimated_hours', 'asc');
+                $query->orderBy('estimated_hours', 'asc'); // Sorts by estimated hours in ascending order.
                 break;
             case 'estimated_hours_desc':
-                $query->orderBy('estimated_hours', 'desc');
+                $query->orderBy('estimated_hours', 'desc'); // Sorts by estimated hours in descending order.
                 break;
             case 'most_liked':
-                $query->orderByDesc('likers_count');
+                $query->orderByDesc('likers_count'); // Sorts by the number of likes in descending order.
                 break;
             case 'highest_rated':
-                $query->orderByDesc('ratings_avg_rating')->having('ratings_count', '>', 0); // Order by average rating
+                $query->orderByDesc('ratings_avg_rating')->having('ratings_count', '>', 0); // Sorts by highest average rating.
                 break;
             case 'most_rated':
-                $query->orderByDesc('ratings_count'); // Order by number of ratings
+                $query->orderByDesc('ratings_count'); // Sorts by the number of ratings in descending order.
                 break;
             case 'title_asc':
-                $query->orderBy('title', 'asc');
+                $query->orderBy('title', 'asc'); // Sorts by title in ascending alphabetical order.
                 break;
             case 'title_desc':
-                $query->orderBy('title', 'desc');
+                $query->orderBy('title', 'desc'); // Sorts by title in descending alphabetical order.
                 break;
-            default: // latest
-                $query->latest('projects.created_at'); // Specify table for clarity
+            default: // Default sorting is by latest created projects.
+                $query->latest('projects.created_at');
                 break;
         }
 
+        // Determines the number of projects per page for pagination.
         $perPage = $request->input('per_page', 25);
         if ($perPage === 'all') {
-            $perPage = 999; // A large number to simulate "all"
+            $perPage = 999; // A large number to simulate "all" projects if requested.
         }
 
+        // Executes the query and paginates the results, preserving query string parameters.
         $projects = $query->paginate($perPage)->withQueryString();
 
+        // Handles AJAX requests for dynamic content loading.
         if ($request->ajax()) {
             return view('projects._public-project-list-dynamic', compact('projects', 'categories'))->render();
         }
 
+        // Returns the main public projects view with the fetched data.
         return view('public-projects', compact('projects', 'categories'));
     }
 
