@@ -265,7 +265,7 @@
                                                         <button type="button" @click="deleteImage({{ $image->id }}, $refs['image-{{ $image->id }}'])" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
                                                     </template>
                                                     <label class="absolute bottom-1 left-1 cursor-pointer text-white px-2 py-1 rounded-md text-xs" :class="selectedCover === 'existing_{{ $image->id }}' ? 'bg-indigo-600' : 'bg-gray-700 opacity-0 group-hover:opacity-100'">
-                                                        <input type="radio" name="cover_image_selection" :value="'existing_' + {{ $image->id }}" x-model="selectedCover" class="hidden" :disabled="selectedCover === 'existing_{{ $image->id }}'">
+                                                        <input type="radio" name="cover_image_selection" :value="'existing_' + {{ $image->id }}" x-model="selectedCover" class="hidden">
                                                         <span x-text="selectedCover === 'existing_{{ $image->id }}' ? '{{ __("Current Cover") }}' : '{{ __("Set Cover") }}'"></span>
                                                     </label>
                                                 </div>

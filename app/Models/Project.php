@@ -154,6 +154,10 @@ class Project extends Model
             // Set all other images for this project to not be the cover image.
             $this->images()->update(['is_cover' => false]);
 
+            // Refresh the model instance to get the latest data from the database,
+            // including the change from the mass update above.
+            $newCoverImage->refresh();
+
             // Set the new image as the cover image.
             $newCoverImage->is_cover = true;
             $newCoverImage->save();

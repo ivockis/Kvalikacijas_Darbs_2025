@@ -250,18 +250,38 @@ class ProjectController extends Controller
         }
 
         if ($request->hasFile('images')) {
-            $coverIndex = 0; // Default to the first image
-            if ($request->filled('cover_image_selection')) {
-                // 'new_2' -> '2'
-                $coverIndex = (int) str_replace('new_', '', $request->input('cover_image_selection'));
-            }
-            
-            foreach ($request->file('images') as $index => $imageFile) {
+            $coverFilename = $request->input('cover_image_selection');
+            $coverImageId = null;
+
+            $imageFiles = $request->file('images');
+            // This is necessary if the keys are not sequential, to process in a predictable order.
+            ksort($imageFiles); 
+
+            foreach ($imageFiles as $imageFile) {
+                $isCover = false;
+                if ($coverFilename && $imageFile->getClientOriginalName() === $coverFilename) {
+                    $isCover = true;
+                }
+
                 $path = $imageFile->store('project-images', 'public');
-                $project->images()->create([
+                $newImage = $project->images()->create([
                     'path' => $path,
-                    'is_cover' => ($index === $coverIndex)
+                    'is_cover' => $isCover
                 ]);
+
+                if ($isCover) {
+                    $coverImageId = $newImage->id;
+                }
+            }
+
+            // Fallback: If no cover was set (e.g., selection was invalid or not provided),
+            // and we have images, set the first one as the cover.
+            if (!$coverImageId && $project->images()->count() > 0) {
+                $firstImage = $project->images()->orderBy('id')->first();
+                if ($firstImage) {
+                    $firstImage->is_cover = true;
+                    $firstImage->save();
+                }
             }
         }
 
@@ -395,32 +415,24 @@ class ProjectController extends Controller
         // Handle cover image selection
         if ($request->filled('cover_image_selection')) {
             $selection = $request->input('cover_image_selection');
+            $selectedImageId = null;
 
             if (str_starts_with($selection, 'new_')) {
                 // A newly uploaded image was selected as cover
                 $newImageIndex = (int) substr($selection, 4);
                 if (isset($newImageIds[$newImageIndex])) {
-                    $newCoverImageId = $newImageIds[$newImageIndex];
-                    $newCoverImage = Image::find($newCoverImageId);
-                    if ($newCoverImage) {
-                        $project->setCoverImage($newCoverImage); // This part was already working
-                    }
+                    $selectedImageId = $newImageIds[$newImageIndex];
                 }
             } elseif (str_starts_with($selection, 'existing_')) {
                 // An existing image was selected as cover
-                $existingImageId = (int) substr($selection, 9);
-                
-                \Illuminate\Support\Facades\DB::transaction(function () use ($project, $existingImageId) {
-                    // 1. Unset all images for this project as cover
-                    $project->images()->update(['is_cover' => false]);
-                    
-                    // 2. Set the selected existing image as the new cover
-                    $newCover = $project->images()->find($existingImageId);
-                    if ($newCover) {
-                        $newCover->is_cover = true;
-                        $newCover->save();
-                    }
-                });
+                $selectedImageId = (int) substr($selection, 9);
+            }
+
+            if ($selectedImageId) {
+                $newCoverImage = Image::find($selectedImageId);
+                if ($newCoverImage && $newCoverImage->project_id === $project->id) {
+                    $project->setCoverImage($newCoverImage);
+                }
             }
         }
 

@@ -23,7 +23,7 @@
                             // Image state
                             newImages: [],
                             imageFiles: [],
-                            selectedCoverIndex: null, // Initialized to null
+                            selectedCoverFilename: null, // Use filename instead of index
 
                             // Categories state
                             categories: {
@@ -56,30 +56,32 @@
                             handleImageSelect(event) {
                                 const files = Array.from(event.target.files);
                                 if ((this.imageFiles.length + files.length) > 10) {
-                                    this.formErrors.images = ['{{ __("You can only upload a maximum of 10 images.") }}']; // Set the error message
-                                    event.target.value = ''; // Clear the input field
+                                    this.formErrors.images = ['{{ __("You can only upload a maximum of 10 images.") }}'];
+                                    event.target.value = '';
                                     return;
                                 }
-                                this.formErrors.images = null; // Clear any previous error message
+                                this.formErrors.images = null;
                                 for (const file of files) {
                                     this.imageFiles.push(file);
                                     let reader = new FileReader();
                                     reader.onload = (e) => this.newImages.push(e.target.result);
                                     reader.readAsDataURL(file);
                                 }
-                                if (this.selectedCoverIndex === null && this.newImages.length > 0) {
-                                    this.selectedCoverIndex = 0; // Automatically set first image as cover
+                                // If no cover is selected yet, default to the first image
+                                if (this.selectedCoverFilename === null && this.imageFiles.length > 0) {
+                                    this.selectedCoverFilename = this.imageFiles[0].name;
                                 }
                             },
                             removeNewImage(index) {
+                                const removedFilename = this.imageFiles[index].name;
                                 this.newImages.splice(index, 1);
                                 this.imageFiles.splice(index, 1);
-                                if (this.newImages.length === 0) { // If no images left
-                                    this.selectedCoverIndex = null;
-                                } else if (this.selectedCoverIndex === index) { // If deleted cover
-                                    this.selectedCoverIndex = 0; // Set first remaining as new cover
-                                } else if (this.selectedCoverIndex > index) { // If deleted before cover
-                                    this.selectedCoverIndex--;
+                                
+                                if (this.imageFiles.length === 0) {
+                                    this.selectedCoverFilename = null;
+                                } else if (this.selectedCoverFilename === removedFilename) {
+                                    // If the removed image was the cover, set the new first image as cover
+                                    this.selectedCoverFilename = this.imageFiles[0].name;
                                 }
                             },
 
@@ -106,29 +108,24 @@
                             // Main Form Submission
                             submitForm() {
                                 this.formErrors = {}; // Clear previous errors
-                                // Create a new FormData object from the form
                                 const formData = new FormData(this.$refs.createForm);
                                 
-                                // Manually remove default image input if files were selected via Alpine
                                 if (this.imageFiles.length > 0) {
                                     formData.delete('images[]');
                                 }
 
-                                // Append categories and tools
                                 this.categories.selected.forEach(cat => formData.append('categories[]', cat.id));
                                 this.tools.selected.forEach(tool => formData.append('tools[]', tool.id));
 
-                                // Append image files
                                 this.imageFiles.forEach((file, index) => {
                                     formData.append(`images[${index}]`, file);
                                 });
 
-                                // Append cover selection
-                                if (this.selectedCoverIndex !== null) {
-                                    formData.append('cover_image_selection', `new_${this.selectedCoverIndex}`);
+                                // Append cover filename
+                                if (this.selectedCoverFilename) {
+                                    formData.append('cover_image_selection', this.selectedCoverFilename);
                                 }
 
-                                // Use fetch to submit the form
                                 fetch('{{ route('projects.store') }}', {
                                     method: 'POST',
                                     body: formData,
@@ -142,13 +139,13 @@
                                         window.location.href = '{{ route('projects.index') }}';
                                     } else {
                                         return response.json().then(result => {
-                                            this.formErrors = {}; // Clear previous errors
+                                            this.formErrors = {};
                                             this.formErrors = result.errors;
                                         });
                                     }
                                 })
                                 .catch(error => {
-                                    this.formErrors = {'general': ['{{ __("An unexpected error occurred.") }}']}; // Display a general error
+                                    this.formErrors = {'general': ['{{ __("An unexpected error occurred.") }}']};
                                     console.error('Submit Error:', error);
                                 });
                             }
@@ -254,9 +251,9 @@
                                         <div class="relative group">
                                             <img :src="image" class="rounded-lg shadow-md w-full h-32 object-cover">
                                             <button type="button" @click="removeNewImage(index)" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
-                                            <label class="absolute bottom-1 left-1 cursor-pointer text-white px-2 py-1 rounded-md text-xs" :class="selectedCoverIndex === index ? 'bg-indigo-600' : 'bg-gray-700 opacity-0 group-hover:opacity-100'">
-                                                <input type="radio" name="cover_image_selection" :value="index" x-model.number="selectedCoverIndex" class="hidden">
-                                                <span x-text="selectedCoverIndex === index ? '{{ __("Cover") }}' : '{{ __("Set Cover") }}'"></span>
+                                            <label class="absolute bottom-1 left-1 cursor-pointer text-white px-2 py-1 rounded-md text-xs" :class="selectedCoverFilename === imageFiles[index].name ? 'bg-indigo-600' : 'bg-gray-700 opacity-0 group-hover:opacity-100'">
+                                                <input type="radio" name="cover_image_selection" :value="imageFiles[index].name" x-model="selectedCoverFilename" class="hidden">
+                                                <span x-text="selectedCoverFilename === imageFiles[index].name ? '{{ __("Cover") }}' : '{{ __("Set Cover") }}'"></span>
                                             </label>
                                         </div>
                                     </template>
