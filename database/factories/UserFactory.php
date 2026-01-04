@@ -28,7 +28,7 @@ class UserFactory extends Factory
             'surname' => fake()->lastName(),
             'username' => fake()->unique()->userName(),
             'email' => fake()->unique()->safeEmail(),
-            'password' => static::$password ??= Hash::make('Password1!'),
+            'password' => static::$password ??= Hash::make('password'),
             'is_admin' => false,
             'is_blocked' => false,
             'profile_image_id' => null, // Will be set by seeder

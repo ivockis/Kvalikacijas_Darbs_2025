@@ -1,0 +1,240 @@
+Date : 2026-01-02 23:47:18
+Directory : c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025
+Total : 159 files,  20443 codes, 1533 comments, 1396 blanks, all 23372 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| JSON       |          6 |     12,916 |          0 |          6 |     12,922 |
+| PHP        |        144 |      7,291 |      1,524 |      1,326 |     10,141 |
+| JavaScript |          6 |        123 |          6 |         31 |        160 |
+| Markdown   |          1 |         42 |          0 |         23 |         65 |
+| PostCSS    |          1 |         36 |          3 |          9 |         48 |
+| XML        |          1 |         35 |          0 |          1 |         36 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                                           | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                                              |        159 |     20,443 |      1,533 |      1,396 |     23,372 |
+| . (Files)                                                                                                                                      |          9 |     12,520 |          1 |         35 |     12,556 |
+| app                                                                                                                                            |         44 |      1,799 |        650 |        464 |      2,913 |
+| app\Http                                                                                                                                       |         26 |      1,267 |        340 |        309 |      1,916 |
+| app\Http\Controllers                                                                                                                           |         21 |      1,096 |        284 |        264 |      1,644 |
+| app\Http\Controllers (Files)                                                                                                                   |         12 |        843 |        222 |        194 |      1,259 |
+| app\Http\Controllers\Auth                                                                                                                      |          9 |        253 |         62 |         70 |        385 |
+| app\Http\Middleware                                                                                                                            |          3 |         51 |         15 |         16 |         82 |
+| app\Http\Requests                                                                                                                              |          2 |        120 |         41 |         29 |        190 |
+| app\Http\Requests (Files)                                                                                                                      |          1 |         61 |         19 |         14 |         94 |
+| app\Http\Requests\Auth                                                                                                                         |          1 |         59 |         22 |         15 |         96 |
+| app\Models                                                                                                                                     |          9 |        258 |        162 |         80 |        500 |
+| app\Policies                                                                                                                                   |          6 |        220 |        129 |         61 |        410 |
+| app\Providers                                                                                                                                  |          1 |         32 |         13 |          6 |         51 |
+| app\View                                                                                                                                       |          2 |         22 |          6 |          8 |         36 |
+| app\View\Components                                                                                                                            |          2 |         22 |          6 |          8 |         36 |
+| bootstrap                                                                                                                                      |          2 |         26 |          1 |          5 |         32 |
+| config                                                                                                                                         |         10 |        509 |        558 |        194 |      1,261 |
+| database                                                                                                                                       |         24 |        732 |        171 |        127 |      1,030 |
+| database\factories                                                                                                                             |          5 |        118 |         66 |         26 |        210 |
+| database\migrations                                                                                                                            |         13 |        296 |         80 |         60 |        436 |
+| database\seeders                                                                                                                               |          6 |        318 |         25 |         41 |        384 |
+| lang                                                                                                                                           |          9 |        742 |         61 |         33 |        836 |
+| lang (Files)                                                                                                                                   |          2 |        507 |          0 |          2 |        509 |
+| lang\en                                                                                                                                        |          4 |        193 |         61 |         24 |        278 |
+| lang\lv                                                                                                                                        |          3 |         42 |          0 |          7 |         49 |
+| public                                                                                                                                         |          1 |         10 |          4 |          7 |         21 |
+| resources                                                                                                                                      |         47 |      3,442 |         33 |        339 |      3,814 |
+| resources\css                                                                                                                                  |          1 |         36 |          3 |          9 |         48 |
+| resources\js                                                                                                                                   |          3 |         89 |          5 |         24 |        118 |
+| resources\views                                                                                                                                |         43 |      3,317 |         25 |        306 |      3,648 |
+| resources\views (Files)                                                                                                                        |          2 |        144 |          0 |         12 |        156 |
+| resources\views\admin                                                                                                                          |          3 |        451 |          0 |         26 |        477 |
+| resources\views\admin\projects                                                                                                                 |          2 |        272 |          0 |         15 |        287 |
+| resources\views\admin\users                                                                                                                    |          1 |        179 |          0 |         11 |        190 |
+| resources\views\auth                                                                                                                           |          6 |        222 |          0 |         48 |        270 |
+| resources\views\categories                                                                                                                     |          1 |        153 |          0 |          7 |        160 |
+| resources\views\components                                                                                                                     |         16 |        254 |          2 |         42 |        298 |
+| resources\views\layouts                                                                                                                        |          3 |        287 |          0 |         25 |        312 |
+| resources\views\profile                                                                                                                        |          4 |        212 |          0 |         39 |        251 |
+| resources\views\profile (Files)                                                                                                                |          1 |         35 |          0 |          5 |         40 |
+| resources\views\profile\partials                                                                                                               |          3 |        177 |          0 |         34 |        211 |
+| resources\views\projects                                                                                                                       |          6 |      1,310 |         23 |         90 |      1,423 |
+| resources\views\tools                                                                                                                          |          1 |        182 |          0 |         12 |        194 |
+| resources\views\users                                                                                                                          |          1 |        102 |          0 |          5 |        107 |
+| routes                                                                                                                                         |          3 |        104 |          6 |         34 |        144 |
+| tests                                                                                                                                          |         10 |        559 |         48 |        158 |        765 |
+| tests (Files)                                                                                                                                  |          1 |          6 |          1 |          4 |         11 |
+| tests\Feature                                                                                                                                  |          8 |        543 |         44 |        150 |        737 |
+| tests\Feature (Files)                                                                                                                          |          2 |        138 |         10 |         39 |        187 |
+| tests\Feature\Admin                                                                                                                            |          1 |         74 |          8 |         24 |        106 |
+| tests\Feature\Auth                                                                                                                             |          5 |        331 |         26 |         87 |        444 |
+| tests\Unit                                                                                                                                     |          1 |         10 |          3 |          4 |         17 |
++------------------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                                                                       | language   | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\README.md                                                                    | Markdown   |         42 |          0 |         23 |         65 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Http\Controllers\AdminController.php                                     | PHP        |        128 |         91 |         31 |        250 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Http\Controllers\Auth\AuthenticatedSessionController.php                 | PHP        |         29 |          9 |         12 |         50 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Http\Controllers\Auth\ConfirmablePasswordController.php                  | PHP        |         28 |          6 |          7 |         41 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Http\Controllers\Auth\EmailVerificationNotificationController.php        | PHP        |         16 |          3 |          6 |         25 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Http\Controllers\Auth\EmailVerificationPromptController.php              | PHP        |         15 |          3 |          4 |         22 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Http\Controllers\Auth\NewPasswordController.php                          | PHP        |         40 |         14 |          8 |         62 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Http\Controllers\Auth\PasswordController.php                             | PHP        |         21 |          3 |          6 |         30 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Http\Controllers\Auth\PasswordResetLinkController.php                    | PHP        |         33 |         13 |          9 |         55 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Http\Controllers\Auth\RegisteredUserController.php                       | PHP        |         52 |          8 |         12 |         72 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Http\Controllers\Auth\VerifyEmailController.php                          | PHP        |         19 |          3 |          6 |         28 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Http\Controllers\CategoryController.php                                  | PHP        |         45 |          0 |         16 |         61 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Http\Controllers\CommentController.php                                   | PHP        |         59 |         13 |         20 |         92 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Http\Controllers\ComplaintController.php                                 | PHP        |         30 |          7 |          8 |         45 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Http\Controllers\Controller.php                                          | PHP        |          5 |          1 |          3 |          9 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Http\Controllers\ImageController.php                                     | PHP        |         37 |          6 |         15 |         58 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Http\Controllers\LanguageController.php                                  | PHP        |         15 |          0 |          3 |         18 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Http\Controllers\ProfileController.php                                   | PHP        |         65 |         14 |         18 |         97 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Http\Controllers\ProjectController.php                                   | PHP        |        349 |         43 |         55 |        447 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Http\Controllers\RatingController.php                                    | PHP        |         34 |         27 |         11 |         72 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Http\Controllers\ToolController.php                                      | PHP        |         56 |         16 |         10 |         82 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Http\Controllers\UserController.php                                      | PHP        |         20 |          4 |          4 |         28 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Http\Middleware\AdminMiddleware.php                                      | PHP        |         15 |          5 |          4 |         24 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Http\Middleware\CheckUserBlocked.php                                     | PHP        |         19 |          5 |          8 |         32 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Http\Middleware\LanguageMiddleware.php                                   | PHP        |         17 |          5 |          4 |         26 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Http\Requests\Auth\LoginRequest.php                                      | PHP        |         59 |         22 |         15 |         96 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Http\Requests\ProfileUpdateRequest.php                                   | PHP        |         61 |         19 |         14 |         94 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Models\Category.php                                                      | PHP        |         13 |          0 |          6 |         19 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Models\Comment.php                                                       | PHP        |         25 |          0 |          7 |         32 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Models\Complaint.php                                                     | PHP        |         17 |          0 |          7 |         24 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Models\Image.php                                                         | PHP        |         16 |          0 |          7 |         23 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Models\Material.php                                                      | PHP        |          6 |          1 |          4 |         11 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Models\Project.php                                                       | PHP        |         81 |         98 |         21 |        200 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Models\Rating.php                                                        | PHP        |         22 |          0 |          7 |         29 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Models\Tool.php                                                          | PHP        |         16 |          0 |          7 |         23 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Models\User.php                                                          | PHP        |         62 |         63 |         14 |        139 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Policies\CategoryPolicy.php                                              | PHP        |         36 |         21 |         10 |         67 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Policies\CommentPolicy.php                                               | PHP        |         40 |         24 |         11 |         75 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Policies\ImagePolicy.php                                                 | PHP        |         36 |         21 |         10 |         67 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Policies\ProjectPolicy.php                                               | PHP        |         36 |         21 |         10 |         67 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Policies\RatingPolicy.php                                                | PHP        |         36 |         21 |         10 |         67 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Policies\ToolPolicy.php                                                  | PHP        |         36 |         21 |         10 |         67 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\Providers\AppServiceProvider.php                                         | PHP        |         32 |         13 |          6 |         51 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\View\Components\AppLayout.php                                            | PHP        |         11 |          3 |          4 |         18 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\app\View\Components\GuestLayout.php                                          | PHP        |         11 |          3 |          4 |         18 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\bootstrap\app.php                                                            | PHP        |         22 |          1 |          3 |         26 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\bootstrap\providers.php                                                      | PHP        |          4 |          0 |          2 |          6 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\composer.json                                                                | JSON       |         90 |          0 |          1 |         91 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\composer.lock                                                                | JSON       |      8,464 |          0 |          1 |      8,465 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\config\app.php                                                               | PHP        |         22 |         82 |         23 |        127 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\config\auth.php                                                              | PHP        |         28 |         74 |         14 |        116 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\config\cache.php                                                             | PHP        |         64 |         35 |         19 |        118 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\config\database.php                                                          | PHP        |        118 |         43 |         23 |        184 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\config\filesystems.php                                                       | PHP        |         36 |         32 |         13 |         81 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\config\logging.php                                                           | PHP        |         79 |         33 |         21 |        133 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\config\mail.php                                                              | PHP        |         57 |         43 |         19 |        119 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\config\queue.php                                                             | PHP        |         62 |         45 |         19 |        126 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\config\services.php                                                          | PHP        |         20 |         11 |          8 |         39 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\config\session.php                                                           | PHP        |         23 |        160 |         35 |        218 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\database\factories\CategoryFactory.php                                       | PHP        |         14 |         10 |          4 |         28 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\database\factories\ImageFactory.php                                          | PHP        |         22 |         13 |          5 |         40 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\database\factories\ProjectFactory.php                                        | PHP        |         26 |         13 |          5 |         44 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\database\factories\ToolFactory.php                                           | PHP        |         22 |         13 |          5 |         40 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\database\factories\UserFactory.php                                           | PHP        |         34 |         17 |          7 |         58 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\database\migrations\2025_12_11_212925_create_users_table.php                 | PHP        |         26 |          6 |          4 |         36 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\database\migrations\2025_12_11_213018_create_images_table.php                | PHP        |         21 |          6 |          4 |         31 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\database\migrations\2025_12_11_213353_create_projects_table.php              | PHP        |         25 |          6 |          4 |         35 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\database\migrations\2025_12_11_213430_create_complaints_table.php            | PHP        |         23 |          7 |          5 |         35 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\database\migrations\2025_12_11_213517_create_categories_table.php            | PHP        |         19 |          6 |          4 |         29 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\database\migrations\2025_12_11_213600_create_tools_table.php                 | PHP        |         21 |          6 |          4 |         31 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\database\migrations\2025_12_11_213648_create_likes_table.php                 | PHP        |         20 |          6 |          4 |         30 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\database\migrations\2025_12_11_213737_create_project_tool_table.php          | PHP        |         19 |          6 |          4 |         29 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\database\migrations\2025_12_11_213820_create_category_project_table.php      | PHP        |         19 |          6 |          4 |         29 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\database\migrations\2025_12_11_213924_add_foreign_keys_to_tables.php         | PHP        |         40 |          7 |         10 |         57 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\database\migrations\2025_12_20_150402_create_ratings_table.php               | PHP        |         22 |          6 |          5 |         33 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\database\migrations\2025_12_20_150455_create_comments_table.php              | PHP        |         22 |          6 |          4 |         32 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\database\migrations\2025_12_30_000000_create_password_reset_tokens_table.php | PHP        |         19 |          6 |          4 |         29 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\database\seeders\CategorySeeder.php                                          | PHP        |         20 |          3 |          5 |         28 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\database\seeders\DatabaseSeeder.php                                          | PHP        |         18 |          3 |          5 |         26 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\database\seeders\ImageSeeder.php                                             | PHP        |         27 |          7 |          7 |         41 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\database\seeders\ProjectSeeder.php                                           | PHP        |        169 |          5 |         12 |        186 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\database\seeders\ToolSeeder.php                                              | PHP        |         44 |          3 |          4 |         51 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\database\seeders\UserSeeder.php                                              | PHP        |         40 |          4 |          8 |         52 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\lang\en.json                                                                 | JSON       |        223 |          0 |          1 |        224 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\lang\en\auth.php                                                             | PHP        |         19 |         11 |          5 |         35 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\lang\en\pagination.php                                                       | PHP        |          5 |         10 |          5 |         20 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\lang\en\passwords.php                                                        | PHP        |          8 |         10 |          5 |         23 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\lang\en\validation.php                                                       | PHP        |        161 |         30 |          9 |        200 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\lang\lv.json                                                                 | JSON       |        284 |          0 |          1 |        285 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\lang\lv\auth.php                                                             | PHP        |          8 |          0 |          2 |         10 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\lang\lv\passwords.php                                                        | PHP        |          8 |          0 |          2 |         10 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\lang\lv\validation.php                                                       | PHP        |         26 |          0 |          3 |         29 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\package-lock.json                                                            | JSON       |      3,834 |          0 |          1 |      3,835 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\package.json                                                                 | JSON       |         21 |          0 |          1 |         22 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\phpunit.xml                                                                  | XML        |         35 |          0 |          1 |         36 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\postcss.config.js                                                            | JavaScript |          6 |          0 |          1 |          7 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\public\index.php                                                             | PHP        |         10 |          4 |          7 |         21 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\css\app.css                                                        | PostCSS    |         36 |          3 |          9 |         48 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\js\app.js                                                          | JavaScript |          5 |          0 |          5 |         10 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\js\bootstrap.js                                                    | JavaScript |          3 |          0 |          1 |          4 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\js\project-filters.js                                              | JavaScript |         81 |          5 |         18 |        104 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\admin\projects\complaints.blade.php                          | PHP        |         84 |          0 |          4 |         88 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\admin\projects\index.blade.php                               | PHP        |        188 |          0 |         11 |        199 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\admin\users\index.blade.php                                  | PHP        |        179 |          0 |         11 |        190 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\auth\confirm-password.blade.php                              | PHP        |         22 |          0 |          6 |         28 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\auth\forgot-password.blade.php                               | PHP        |         25 |          0 |          5 |         30 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\auth\login.blade.php                                         | PHP        |         43 |          0 |          9 |         52 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\auth\register.blade.php                                      | PHP        |         70 |          0 |         14 |         84 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\auth\reset-password.blade.php                                | PHP        |         36 |          0 |          8 |         44 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\auth\verify-email.blade.php                                  | PHP        |         26 |          0 |          6 |         32 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\categories\index.blade.php                                   | PHP        |        153 |          0 |          7 |        160 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\components\application-logo.blade.php                        | PHP        |          1 |          0 |          0 |          1 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\components\auth-session-status.blade.php                     | PHP        |          6 |          0 |          2 |          8 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\components\danger-button.blade.php                           | PHP        |          3 |          0 |          1 |          4 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\components\dropdown-link.blade.php                           | PHP        |          1 |          0 |          1 |          2 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\components\dropdown.blade.php                                | PHP        |         31 |          0 |          5 |         36 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\components\input-error.blade.php                             | PHP        |          8 |          0 |          2 |         10 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\components\input-label.blade.php                             | PHP        |          4 |          0 |          2 |          6 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\components\modal.blade.php                                   | PHP        |         73 |          2 |          4 |         79 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\components\nav-link.blade.php                                | PHP        |          9 |          0 |          3 |         12 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\components\per-page-selector.blade.php                       | PHP        |          8 |          0 |          0 |          8 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\components\primary-button.blade.php                          | PHP        |          3 |          0 |          1 |          4 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\components\project-filters.blade.php                         | PHP        |          3 |          0 |          1 |          4 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\components\responsive-nav-link.blade.php                     | PHP        |          9 |          0 |          3 |         12 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\components\secondary-button.blade.php                        | PHP        |          3 |          0 |          1 |          4 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\components\text-input.blade.php                              | PHP        |          2 |          0 |          2 |          4 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\components\tool-manager.blade.php                            | PHP        |         90 |          0 |         14 |        104 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\layouts\app.blade.php                                        | PHP        |         85 |          0 |         10 |         95 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\layouts\guest.blade.php                                      | PHP        |         26 |          0 |          5 |         31 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\layouts\navigation.blade.php                                 | PHP        |        176 |          0 |         10 |        186 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\profile\edit.blade.php                                       | PHP        |         35 |          0 |          5 |         40 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\profile\partials\delete-user-form.blade.php                  | PHP        |         45 |          0 |         11 |         56 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\profile\partials\update-password-form.blade.php              | PHP        |         41 |          0 |          8 |         49 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\profile\partials\update-profile-information-form.blade.php   | PHP        |         91 |          0 |         15 |        106 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\projects\_my-project-list-dynamic.blade.php                  | PHP        |        107 |          0 |          7 |        114 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\projects\_public-project-list-dynamic.blade.php              | PHP        |         76 |          0 |          3 |         79 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\projects\create.blade.php                                    | PHP        |        251 |         13 |         20 |        284 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\projects\edit.blade.php                                      | PHP        |        288 |          0 |         11 |        299 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\projects\index.blade.php                                     | PHP        |         61 |          0 |          7 |         68 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\projects\show.blade.php                                      | PHP        |        527 |         10 |         42 |        579 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\public-projects.blade.php                                    | PHP        |         56 |          0 |          9 |         65 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\tools\index.blade.php                                        | PHP        |        182 |          0 |         12 |        194 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\users\show.blade.php                                         | PHP        |        102 |          0 |          5 |        107 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\resources\views\welcome.blade.php                                            | PHP        |         88 |          0 |          3 |         91 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\routes\auth.php                                                              | PHP        |         43 |          0 |         17 |         60 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\routes\console.php                                                           | PHP        |          6 |          0 |          3 |          9 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\routes\web.php                                                               | PHP        |         55 |          6 |         14 |         75 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\tailwind.config.js                                                           | JavaScript |         18 |          1 |          4 |         23 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\tests\Feature\Admin\UserManagementTest.php                                   | PHP        |         74 |          8 |         24 |        106 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\tests\Feature\Auth\AuthenticationTest.php                                    | PHP        |         67 |          7 |         18 |         92 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\tests\Feature\Auth\PasswordConfirmationTest.php                              | PHP        |         32 |          0 |         13 |         45 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\tests\Feature\Auth\PasswordResetTest.php                                     | PHP        |         88 |          5 |         25 |        118 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\tests\Feature\Auth\PasswordUpdateTest.php                                    | PHP        |         41 |          0 |         11 |         52 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\tests\Feature\Auth\RegistrationTest.php                                      | PHP        |        103 |         14 |         20 |        137 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\tests\Feature\ExampleTest.php                                                | PHP        |         11 |          4 |          5 |         20 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\tests\Feature\ProfileTest.php                                                | PHP        |        127 |          6 |         34 |        167 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\tests\TestCase.php                                                           | PHP        |          6 |          1 |          4 |         11 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\tests\Unit\ExampleTest.php                                                   | PHP        |         10 |          3 |          4 |         17 |
+| c:\Users\ivo.allens\Documents\LU\Craftify\Kvalikacijas_Darbs_2025\vite.config.js                                                               | JavaScript |         10 |          0 |          2 |         12 |
+| Total                                                                                                                                          |            |     20,443 |      1,533 |      1,396 |     23,372 |
++------------------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
